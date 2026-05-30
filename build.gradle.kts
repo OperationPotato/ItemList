@@ -64,6 +64,10 @@ dependencies {
 }
 
 loom {
+	runConfigs["client"].apply {
+		ideConfigGenerated(true)
+	}
+
 	accessWidenerPath = file("src/main/resources/skyblock-item-list.classtweaker")
 }
 

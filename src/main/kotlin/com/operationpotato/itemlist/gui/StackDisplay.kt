@@ -1,5 +1,7 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.Settings
+import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
@@ -17,8 +19,8 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
-import tech.thatgravyboat.skyblockapi.utils.text.TextProperties.stripped
 import kotlin.math.roundToInt
 
 class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory) :
@@ -27,7 +29,7 @@ class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory)
 	var stack: ItemStack = ItemStack.EMPTY
 	var scale: Float = 1f
 
-	val stackName: String by lazy { stack.hoverName.stripped.lowercase() }
+	val stackName: String = stack.cleanName.lowercase()
 	val loreLines: List<String> by lazy { stack.getRawLore().map { it.lowercase() } }
 
 	fun getTooltipLines(): List<Component> {
@@ -52,7 +54,11 @@ class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory)
 			if (isHovered) graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
 			)
-			graphics.fakeItem(stack, 0, 0)
+			if (scale > 1f && Settings.nonPixelatedItemScale) {
+				ScaledItemRenderer.extract(graphics, stack, 0, 0)
+			} else {
+				graphics.fakeItem(stack, 0, 0)
+			}
 			if (isHovered) graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_FRONT, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
 			)

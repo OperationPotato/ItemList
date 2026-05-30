@@ -2,8 +2,10 @@ package com.operationpotato.itemlist
 
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.gui.ItemPanel
+import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
+import net.fabricmc.fabric.api.client.rendering.v1.PictureInPictureRendererRegistry
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
@@ -26,6 +28,8 @@ object SkyBlockItemList : ClientModInitializer {
 		ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 		ScreenEvents.AFTER_INIT.register(latePhase, ::addItemListWidget)
 		ClientPlayConnectionEvents.JOIN.register { _, _, _ -> resetWidget() }
+
+		PictureInPictureRendererRegistry.register { ScaledItemRenderer(it.bufferSource()) }
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
