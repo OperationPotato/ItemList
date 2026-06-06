@@ -27,8 +27,11 @@ object SkyBlockMobsRepo : RepoItemCache<String>("Mobs") {
 
 		val stackName = Component.literal("${data.name} ($suffix)")
 			.style { withItalic(false) }
-		val stack = LazyItemStack(Items.PLAYER_HEAD) {
-			this[DataComponents.PROFILE] = ResolvableProfile { put("textures", Property("textures", data.texture)) }
+		// TODO: replace barrier with mob item when it's available
+		val stack = LazyItemStack(Items.BARRIER.takeIf { data.texture == null } ?: Items.PLAYER_HEAD) {
+			if (data.texture != null) {
+				this[DataComponents.PROFILE] = ResolvableProfile { put("textures", Property("textures", data.texture)) }
+			}
 			this[DataComponents.CUSTOM_NAME] = stackName
 		}
 		return stack

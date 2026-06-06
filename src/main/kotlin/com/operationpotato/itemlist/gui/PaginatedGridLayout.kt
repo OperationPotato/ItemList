@@ -101,6 +101,10 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 		getPageLayout(activePage)?.visitWidgets(consumer)
 	}
 
+	fun getPageWidgets(): List<AbstractWidget> {
+		return getPageLayout(activePage)?.children ?: listOf()
+	}
+
 	override fun arrangeElements() {
 		val layout = getPageLayout(activePage) ?: return
 		if (layout.hasBeenArranged) return
@@ -147,7 +151,14 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 	}
 
 	class MarkedGridLayout(x: Int, y: Int) : GridLayout(x, y) {
+		val children: List<AbstractWidget> by lazy { getWidgets() }
 		var hasBeenArranged: Boolean = false
+
+		fun getWidgets(): List<AbstractWidget> {
+			val newChildren = mutableListOf<AbstractWidget>()
+			this.visitWidgets(newChildren::add)
+			return newChildren
+		}
 
 		override fun arrangeElements() {
 			super.arrangeElements()

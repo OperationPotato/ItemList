@@ -102,7 +102,8 @@ java {
 
 tasks.register<Jar>("apiJar") {
 	description = "Assembles a jar with only API classes"
-	archiveClassifier.set("api")
+	archiveBaseName = "${rootProject.name}-api"
+	destinationDirectory = layout.buildDirectory.dir("libs/api")
 	from(sourceSets.main.get().output) {
 		include("com/operationpotato/itemlist/api/**")
 	}
@@ -110,7 +111,9 @@ tasks.register<Jar>("apiJar") {
 
 tasks.register<Jar>("apiSourcesJar") {
 	description = "Assembles a jar with only API sources"
-	archiveClassifier.set("api-sources")
+	archiveBaseName = "${rootProject.name}-api"
+	archiveClassifier.set("sources")
+	destinationDirectory = layout.buildDirectory.dir("libs/api")
 	from(sourceSets.main.get().allSource) {
 		include("com/operationpotato/itemlist/api/**")
 	}
@@ -121,10 +124,11 @@ tasks.named("assemble") {
 }
 
 publishing {
+	val isFullRelease = System.getenv("IS_FULL_RELEASE") == "true"
 	repositories {
 		maven {
-			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/OperationPotato/ItemList")
+			val repo = if (isFullRelease) "releases" else "snapshots"
+			url = uri("https://maven.operationpotato.com/$repo")
 			credentials {
 				username = System.getenv("MAVEN_USER")
 				password = System.getenv("MAVEN_TOKEN")
@@ -132,13 +136,14 @@ publishing {
 		}
 	}
 	publications {
-		register<MavenPublication>("gpr") {
+		register<MavenPublication>("api") {
 			pom {
 				name.set("ItemList-API")
 				url.set("https://github.com/OperationPotato/ItemList")
-				if (System.getenv("IS_FULL_RELEASE") != "true") {
+				if (!isFullRelease) {
 					version += "-SNAPSHOT"
 				}
+				artifactId = "${rootProject.name}-api"
 			}
 			artifact(tasks.named("apiJar"))
 			artifact(tasks.named("apiSourcesJar"))
