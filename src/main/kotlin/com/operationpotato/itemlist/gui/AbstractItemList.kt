@@ -82,7 +82,11 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		return height
 	}
 
-	override fun children(): List<GuiEventListener> = getItems()
+	override fun children(): List<GuiEventListener> {
+		val activeChildren = mutableListOf<GuiEventListener>()
+		layout.visitPageWidgets { activeChildren.add(it) }
+		return activeChildren
+	}
 
 	fun scrollPage(scrollDown: Boolean) {
 		if (scrollDown) {
