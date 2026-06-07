@@ -9,4 +9,5 @@ object Settings {
 	var nonPixelatedItemScale = true // Currently a bit laggy when actively scaling, else runs fine
 	var lastSearch: String = ""
 	var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.ALL
+	var outsideSkyBlock: Boolean = true // Set to false when actual config, I like test in singleplayer
 }

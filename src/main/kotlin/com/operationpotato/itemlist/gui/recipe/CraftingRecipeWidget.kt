@@ -1,0 +1,45 @@
+package com.operationpotato.itemlist.gui.recipe
+
+import com.operationpotato.itemlist.SkyBlockItemList
+import com.operationpotato.itemlist.gui.StackDisplay
+import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
+import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
+import net.minecraft.client.gui.components.ImageWidget
+import net.minecraft.client.gui.layouts.GridLayout
+import net.minecraft.client.gui.layouts.SpacerElement
+import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
+
+// Genuinely I wrote some pure shit here :3
+class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe, 176, 86, "Crafting Recipe") {
+
+	init {
+		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/crafting")))
+
+		addTitle()
+
+		val grid = GridLayout()
+		grid.spacing(2)
+
+		recipe.inputs.forEachIndexed { index, ingredient ->
+			val stack = ingredient.toItem() ?: ItemStack.EMPTY
+			val element = if (!stack.isEmpty) {
+				StackDisplay(stack, null, true)
+			} else {
+				SpacerElement(StackDisplay.STACK_SIZE, StackDisplay.STACK_SIZE)
+			}
+			grid.addChild(element, index / 3, index % 3)
+		}
+
+		grid.addChild(SpacerElement(38, 0), 1, 3)
+
+		val outputStack = recipe.result.toItem() ?: ItemStack.EMPTY
+		if (!outputStack.isEmpty) {
+			grid.addChild(StackDisplay(outputStack, null, true), 1, 4)
+		}
+
+		container.addChild(grid, container.topLeftAlignment(30, 17))
+
+		container.arrangeElements()
+	}
+}

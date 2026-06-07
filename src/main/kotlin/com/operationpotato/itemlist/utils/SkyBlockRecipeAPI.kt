@@ -1,0 +1,54 @@
+package com.operationpotato.itemlist.utils
+
+import com.operationpotato.itemlist.utils.RepoLibUtils.toSkyBlockId
+import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.repolib.api.recipes.*
+import tech.thatgravyboat.repolib.api.recipes.ingredient.*
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+
+object SkyBlockRecipeAPI {
+
+	var meow = 0
+
+	private val recipesByOutput: Map<SkyBlockId, List<Recipe<*>>> by lazy {
+		val typesToSearch = listOf(
+			Recipe.Type.CRAFTING,
+			Recipe.Type.FORGE,
+			Recipe.Type.KAT,
+			Recipe.Type.SHOP
+		)
+
+		val grouped = mutableMapOf<SkyBlockId, MutableList<Recipe<*>>>()
+
+		typesToSearch.flatMap { type ->
+			RepoAPI.recipes().getRecipes(type)
+		}.forEach { recipe ->
+			if (recipe.type() == Recipe.Type.SHOP) {
+				val a = (recipe as ShopRecipe).inputs.size
+				if (a > meow) meow = a
+			}
+			val outputId = getRecipeOutputId(recipe)
+			if (outputId != null) {
+				grouped.getOrPut(outputId) { mutableListOf() }.add(recipe)
+			}
+		}
+
+		println(meow)
+
+		grouped
+	}
+
+	fun getRecipesForId(id: SkyBlockId): List<Recipe<*>> {
+		return recipesByOutput[id] ?: emptyList()
+	}
+
+	private fun getRecipeOutputId(recipe: Recipe<*>): SkyBlockId? {
+		return when (recipe) {
+			is CraftingRecipe -> recipe.result()
+			is ForgeRecipe -> recipe.result()
+			is ShopRecipe -> recipe.result()
+			is KatRecipe -> recipe.output()
+			else -> null
+		}?.toSkyBlockId()
+	}
+}

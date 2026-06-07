@@ -33,7 +33,7 @@ object SkyBlockItemList : ClientModInitializer {
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
-		if (!LocationAPI.isOnSkyBlock) return
+		if (!LocationAPI.isOnSkyBlock && !Settings.outsideSkyBlock) return
 		if (screen is AbstractContainerScreen<*>) {
 			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
 			val width = w - screen.right
@@ -78,4 +78,6 @@ object SkyBlockItemList : ClientModInitializer {
 	fun resetWidget() {
 		instance = null
 	}
+
+	fun id(path: String): Identifier = Identifier.fromNamespaceAndPath("skyblock-item-list", path)
 }
