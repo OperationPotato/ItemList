@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.utils
 
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
 import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
 import tech.thatgravyboat.repolib.api.recipes.KatRecipe
 import tech.thatgravyboat.repolib.api.recipes.Recipe
@@ -16,6 +17,16 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.PotionIngredient
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 object RepoLibUtils {
+
+	fun Recipe<*>.result(): CraftingIngredient? {
+		return when (this) {
+			is ShopRecipe -> this.result()
+			is KatRecipe -> this.output()
+			is CraftingRecipe -> this.result()
+			is ForgeRecipe -> this.result()
+			else -> null
+		}
+	}
 
 	fun CraftingIngredient.toSkyBlockId(): SkyBlockId? {
 		if (this is EmptyIngredient) return null

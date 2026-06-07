@@ -3,6 +3,9 @@ package com.operationpotato.itemlist.api.impl
 import com.google.common.collect.Ordering
 import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.Plugin
+import com.operationpotato.itemlist.api.RecipeButtonManager
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
@@ -13,14 +16,31 @@ import net.minecraft.world.effect.MobEffectInstance
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import java.util.*
 
 @ApiStatus.Internal
 class DefaultPlugin : Plugin {
 	override fun registerExclusionZones(exclusionZoneManager: ExclusionZoneManager) {
 		exclusionZoneManager.addProvider(InventoryScreen::class.java, ::provide)
 		exclusionZoneManager.addProvider(CreativeModeInventoryScreen::class.java, ::provide)
+	}
+
+	override fun registerRecipeButtons(manager: RecipeButtonManager) {
+		manager.addProvider { stack ->
+			Optional.of(
+				Button.builder(Text.of("+")) {
+					// TODO: add favouriting here or smth
+					println("meowing at ${stack.cleanName}")
+				}.apply {
+					tooltip(Tooltip.create(Text.of("Favourite")))
+					size(10, 10)
+				}.build()
+			)
+		}
 	}
 
 	fun provide(screen: AbstractContainerScreen<*>): List<Rect2i> {

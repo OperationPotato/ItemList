@@ -16,7 +16,7 @@ class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe
 	init {
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/crafting")))
 
-		addTitle()
+		addExtra()
 
 		val grid = GridLayout()
 		grid.spacing(2)

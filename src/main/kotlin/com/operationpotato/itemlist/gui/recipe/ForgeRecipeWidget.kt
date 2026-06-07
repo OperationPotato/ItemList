@@ -26,7 +26,7 @@ class ForgeRecipeWidget(recipe: ForgeRecipe) : AbstractRecipeWidget(recipe, 176,
 		//  Maybe switch to a 3x3
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/forge")))
 
-		addTitle()
+		addExtra()
 
 		val inputGrid = GridLayout()
 		inputGrid.spacing(2)

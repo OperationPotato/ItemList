@@ -1,9 +1,11 @@
 package com.operationpotato.itemlist.gui.recipe
 
+import com.operationpotato.itemlist.api.impl.PluginManager
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.FrameLayout
+import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
 import tech.thatgravyboat.repolib.api.recipes.Recipe
@@ -11,13 +13,12 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 
-// TODO: some compat to let mods easily add their own buttons onto here (SkyOcean Crafthelper would become more peak)
-abstract class AbstractRecipeWidget(recipe: Recipe<*>, width: Int, height: Int, val title: String? = null) :
+abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: Int, val title: String? = null) :
 	AbstractWidget(0, 0, width, height, Text.of(title ?: "Recipe Widget")) {
 
 	protected val container = FrameLayout(0, 0, width, height)
 
-	protected fun addTitle() {
+	protected fun addExtra() {
 		title?.let {
 			container.addChild(
 				StringWidget(Text.of(it, TextColor.GRAY), McFont.self),
@@ -27,6 +28,16 @@ abstract class AbstractRecipeWidget(recipe: Recipe<*>, width: Int, height: Int, 
 					.paddingTop(5)
 			)
 		}
+
+		val buttons = PluginManager.getRecipeButtons(recipe)
+		val verticalButtons = LinearLayout.vertical().spacing(5).apply {
+			buttons.forEach { button -> addChild(button) }
+		}
+		container.addChild(
+			verticalButtons,
+			container.newChildLayoutSettings().alignVerticallyBottom().alignHorizontallyRight()
+				.paddingBottom(5).paddingRight(5)
+		)
 	}
 
 	override fun setX(x: Int) {

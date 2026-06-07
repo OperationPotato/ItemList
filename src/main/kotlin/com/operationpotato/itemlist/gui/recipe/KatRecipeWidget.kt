@@ -28,7 +28,7 @@ class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86,
 		val texture = if (hasExtraItems) "recipe/kat_extra" else "recipe/kat"
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id(texture)))
 
-		addTitle()
+		addExtra()
 
 		val (inputX, inputY) = if (hasExtraItems) 20 to 35 else 35 to 35
 		container.addChild(

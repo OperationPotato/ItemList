@@ -16,7 +16,7 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 	init {
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/shop")))
 
-		addTitle()
+		addExtra()
 
 		val inputGrid = GridLayout()
 		inputGrid.spacing(2)
