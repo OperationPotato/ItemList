@@ -10,7 +10,6 @@ import net.minecraft.client.gui.layouts.SpacerElement
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
 
-// Genuinely I wrote some pure shit here :3
 class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe, 176, 86, "Crafting Recipe") {
 
 	init {

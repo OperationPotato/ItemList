@@ -20,7 +20,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 
-// TODO: maybe some ugly slider to add the pet level and adjust the coins (however that formula works) & output level
 class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86, "Kat Recipe") {
 
 	init {
