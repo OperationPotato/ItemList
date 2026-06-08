@@ -30,6 +30,8 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>)
 		parent?.let { McClient.setScreen(parent) } ?: super.onClose()
 	}
 
+	override fun isInGameUi() = true
+
 	companion object {
 		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
 			val targetId = stack.getSkyBlockId() ?: return
