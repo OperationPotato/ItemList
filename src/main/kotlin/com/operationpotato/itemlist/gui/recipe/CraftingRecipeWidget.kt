@@ -1,7 +1,6 @@
 package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.SkyBlockItemList
-import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.components.ImageWidget
@@ -23,9 +22,9 @@ class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe
 		recipe.inputs.forEachIndexed { index, ingredient ->
 			val stack = ingredient.toItem() ?: ItemStack.EMPTY
 			val element = if (!stack.isEmpty) {
-				StackDisplay(stack, null, true)
+				IngredientDisplay(stack)
 			} else {
-				SpacerElement(StackDisplay.STACK_SIZE, StackDisplay.STACK_SIZE)
+				SpacerElement(IngredientDisplay.STACK_SIZE, IngredientDisplay.STACK_SIZE)
 			}
 			grid.addChild(element, index / 3, index % 3)
 		}
@@ -34,7 +33,7 @@ class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe
 
 		val outputStack = recipe.result.toItem() ?: ItemStack.EMPTY
 		if (!outputStack.isEmpty) {
-			grid.addChild(StackDisplay(outputStack, null, true), 1, 4)
+			grid.addChild(IngredientDisplay(outputStack), 1, 4)
 		}
 
 		container.addChild(grid, container.topLeftAlignment(30, 17))

@@ -32,7 +32,7 @@ class ForgeRecipeWidget(recipe: ForgeRecipe) : AbstractRecipeWidget(recipe, 176,
 
 		recipe.getInputItemStacks().forEachIndexed { index, stack ->
 			val element = if (!stack.isEmpty) {
-				StackDisplay(stack, null, true)
+				IngredientDisplay(stack)
 			} else {
 				SpacerElement(StackDisplay.STACK_SIZE, StackDisplay.STACK_SIZE)
 			}
@@ -49,11 +49,11 @@ class ForgeRecipeWidget(recipe: ForgeRecipe) : AbstractRecipeWidget(recipe, 176,
 			val lore = listOf(Text.of("Time: ${recipe.time.formatDuration()}", TextColor.GRAY))
 			set(DataComponents.LORE, ItemLore(lore, lore))
 		}
-		container.addChild(StackDisplay(timeStack, null), container.topLeftAlignment(103, 52))
+		container.addChild(IngredientDisplay(timeStack), container.topLeftAlignment(103, 52))
 
 		val outputStack = recipe.result.toItem() ?: ItemStack.EMPTY
 		if (!outputStack.isEmpty) {
-			container.addChild(StackDisplay(outputStack, null, true), container.topLeftAlignment(134, 35))
+			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(134, 35))
 		}
 
 		container.arrangeElements()

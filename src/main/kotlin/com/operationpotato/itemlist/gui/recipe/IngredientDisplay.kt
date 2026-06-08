@@ -1,9 +1,5 @@
-package com.operationpotato.itemlist.gui
+package com.operationpotato.itemlist.gui.recipe
 
-import com.operationpotato.itemlist.Settings
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
-import com.operationpotato.itemlist.utils.ScaledItemRenderer
-import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -14,30 +10,16 @@ import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
-import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
-import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
-class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory) :
+class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true) :
 	AbstractWidget(0, 0, STACK_SIZE, STACK_SIZE, Component.empty()) {
-
-	var stack: ItemStack = ItemStack.EMPTY
-	var scale: Float = 1f
-
-	val stackName: String by lazy { stack.cleanName.lowercase() }
-	val loreLines: List<String> by lazy { stack.getRawLore().map { it.lowercase() } }
-
-	private fun createStackIfEmpty() {
-		if (stack.isEmpty) stack = lazyStack.create()
-	}
 
 	fun getTooltipLines(): List<Component> {
 		val tooltipStyle = if (McClient.options.advancedItemTooltips) {
@@ -54,19 +36,17 @@ class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory)
 		mouseY: Int,
 		a: Float
 	) {
-		createStackIfEmpty()
+		if (stack.isEmpty) return
 
 		graphics.pushPop {
 			graphics.translate(x, y)
-			graphics.scale(scale, scale)
 			if (isHovered) graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
 			)
-			if (scale > 1f && Settings.nonPixelatedItemScale) {
-				ScaledItemRenderer.extract(graphics, stack, 0, 0)
-			} else {
-				graphics.fakeItem(stack, 0, 0)
-			}
+
+			graphics.fakeItem(stack, 0, 0)
+			if (showStackSize) graphics.itemDecorations(McFont.self, stack, 0, 0)
+
 			if (isHovered) graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_FRONT, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
 			)
@@ -81,16 +61,6 @@ class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory)
 		if (event.button() == 0) {
 			RecipeScreen.openRecipeForItem(stack, McScreen.self)
 		}
-	}
-
-	fun scale(scaledSize: Int) {
-		setSize(scaledSize, scaledSize)
-		this.scale = scaledSize / STACK_SIZE.toFloat()
-	}
-
-	fun matchesSearch(searches: List<String>): Boolean {
-		createStackIfEmpty()
-		return searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}

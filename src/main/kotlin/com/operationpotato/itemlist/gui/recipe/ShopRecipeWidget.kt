@@ -23,7 +23,7 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 
 		recipe.getInputItemStacks().forEachIndexed { index, stack ->
 			val element = if (!stack.isEmpty) {
-				StackDisplay(stack, null, true)
+				IngredientDisplay(stack)
 			} else {
 				SpacerElement(StackDisplay.STACK_SIZE, StackDisplay.STACK_SIZE)
 			}
@@ -34,7 +34,7 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 
 		val outputStack = recipe.result.toItem() ?: ItemStack.EMPTY
 		if (!outputStack.isEmpty) {
-			container.addChild(StackDisplay(outputStack, null, true), container.topLeftAlignment(134, 35))
+			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(134, 35))
 		}
 
 		container.arrangeElements()

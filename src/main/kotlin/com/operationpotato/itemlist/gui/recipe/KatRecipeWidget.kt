@@ -31,13 +31,13 @@ class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86,
 
 		val (inputX, inputY) = if (hasExtraItems) 20 to 35 else 35 to 35
 		container.addChild(
-			StackDisplay(recipe.input.toItem() ?: ItemStack.EMPTY, null),
+			IngredientDisplay(recipe.input.toItem() ?: ItemStack.EMPTY),
 			container.topLeftAlignment(inputX, inputY)
 		)
 
 		val (coinsX, coinsY) = if (hasExtraItems) 46 to 35 else 61 to 35
 		container.addChild(
-			StackDisplay(Currency.Coin.withAmount(recipe.coins), null),
+			IngredientDisplay(Currency.Coin.withAmount(recipe.coins), false),
 			container.topLeftAlignment(coinsX, coinsY)
 		)
 
@@ -47,7 +47,7 @@ class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86,
 
 			recipe.getInputItemStacks(withCoins = false).forEachIndexed { index, stack ->
 				val element = if (!stack.isEmpty) {
-					StackDisplay(stack, null, true)
+					IngredientDisplay(stack)
 				} else {
 					SpacerElement(StackDisplay.STACK_SIZE, StackDisplay.STACK_SIZE)
 				}
@@ -66,12 +66,12 @@ class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86,
 			set(DataComponents.LORE, ItemLore(lore, lore))
 		}
 		val (timeX, timeY) = if (hasExtraItems) 101 to 52 else 90 to 52
-		container.addChild(StackDisplay(timeStack, null), container.topLeftAlignment(timeX, timeY))
+		container.addChild(IngredientDisplay(timeStack), container.topLeftAlignment(timeX, timeY))
 
 		val outputStack = recipe.output.toItem() ?: ItemStack.EMPTY
 		val (outputX, outputY) = if (hasExtraItems) 135 to 35 else 124 to 35
 		if (!outputStack.isEmpty) {
-			container.addChild(StackDisplay(outputStack, null, true), container.topLeftAlignment(outputX, outputY))
+			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(outputX, outputY))
 		}
 
 		container.arrangeElements()
