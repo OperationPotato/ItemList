@@ -2,8 +2,11 @@ package com.operationpotato.itemlist.utils
 
 import com.operationpotato.itemlist.utils.RepoLibUtils.toSkyBlockId
 import tech.thatgravyboat.repolib.api.RepoAPI
-import tech.thatgravyboat.repolib.api.recipes.*
-import tech.thatgravyboat.repolib.api.recipes.ingredient.*
+import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
+import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
+import tech.thatgravyboat.repolib.api.recipes.KatRecipe
+import tech.thatgravyboat.repolib.api.recipes.Recipe
+import tech.thatgravyboat.repolib.api.recipes.ShopRecipe
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 object SkyBlockRecipeAPI {
