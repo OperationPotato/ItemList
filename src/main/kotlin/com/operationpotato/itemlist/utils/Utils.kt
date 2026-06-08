@@ -6,8 +6,6 @@ import net.minecraft.client.renderer.Rect2i
 
 object Utils {
 
-	val centeredLayoutSettings: LayoutSettings = LayoutSettings.defaults().alignVerticallyMiddle().alignHorizontallyCenter()
-
 	val Rect2i.right: Int
 		get() = this.x + this.width
 
