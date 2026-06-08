@@ -21,7 +21,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
 object SkyBlockItemList : ClientModInitializer {
-	val latePhase = Identifier.fromNamespaceAndPath("skyblock-item-list", "late")
+	val latePhase = id("late")
 	var instance: ItemPanel? = null
 
 	override fun onInitializeClient() {
