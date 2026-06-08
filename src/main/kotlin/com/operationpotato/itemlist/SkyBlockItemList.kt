@@ -17,6 +17,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.resources.Identifier
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
 object SkyBlockItemList : ClientModInitializer {
@@ -33,7 +34,7 @@ object SkyBlockItemList : ClientModInitializer {
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
-		if (!LocationAPI.isOnSkyBlock && !Settings.outsideSkyBlock) return
+		if (!LocationAPI.isOnSkyBlock && !McClient.isDev) return
 		if (screen is AbstractContainerScreen<*>) {
 			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
 			val width = w - screen.right
