@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui.recipe
 
+import com.operationpotato.itemlist.SkyBlockItemList.logger
 import com.operationpotato.itemlist.utils.SkyBlockRecipeAPI
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
@@ -50,7 +51,7 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>)
 					is KatRecipe -> KatRecipeWidget(it)
 					is ShopRecipe -> ShopRecipeWidget(it)
 					else -> {
-						println("Unknown recipe ${it::class.simpleName}") // TODO: use an actual logger
+						logger.warn("Unknown recipe ${it::class.simpleName}")
 						null
 					}
 				}

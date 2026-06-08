@@ -11,8 +11,6 @@ import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 
 object SkyBlockRecipeAPI {
 
-	var meow = 0
-
 	private val recipesByOutput: Map<SkyBlockId, List<Recipe<*>>> by lazy {
 		val typesToSearch = listOf(
 			Recipe.Type.CRAFTING,
@@ -26,17 +24,11 @@ object SkyBlockRecipeAPI {
 		typesToSearch.flatMap { type ->
 			RepoAPI.recipes().getRecipes(type)
 		}.forEach { recipe ->
-			if (recipe.type() == Recipe.Type.SHOP) {
-				val a = (recipe as ShopRecipe).inputs.size
-				if (a > meow) meow = a
-			}
 			val outputId = getRecipeOutputId(recipe)
 			if (outputId != null) {
 				grouped.getOrPut(outputId) { mutableListOf() }.add(recipe)
 			}
 		}
-
-		println(meow)
 
 		grouped
 	}

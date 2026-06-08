@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist
 
+import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
@@ -16,12 +17,14 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.resources.Identifier
+import org.slf4j.Logger
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
 object SkyBlockItemList : ClientModInitializer {
 	val latePhase = id("late")
+	val logger: Logger = LogUtils.getLogger()
 	var instance: ItemPanel? = null
 
 	override fun onInitializeClient() {
