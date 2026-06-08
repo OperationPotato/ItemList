@@ -1,8 +1,6 @@
 package com.operationpotato.itemlist.utils
 
 import net.minecraft.client.gui.layouts.FrameLayout
-import net.minecraft.client.gui.layouts.Layout
-import net.minecraft.client.gui.layouts.LayoutElement
 import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.client.renderer.Rect2i
 
