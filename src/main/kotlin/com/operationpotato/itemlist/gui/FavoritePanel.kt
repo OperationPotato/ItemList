@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
@@ -20,9 +19,6 @@ class FavoritePanel(x: Int, y: Int, width: Int, height: Int) :
 	fun updatePosition() {
 		listWidget.setPosition(x, y + 10)
 		listWidget.setSize(width - 2, height - 20)
-		listWidget.positioningCallback = {
-			McClient.runOrNextTick {}
-		}
 		listWidget.itemSize = Settings.itemSize
 		listWidget.scaleChildren()
 		listWidget.updatePositionsAsync()
