@@ -56,7 +56,7 @@ class DefaultPlugin : Plugin {
 						it.setTooltip(unfavTooltip)
 					}
 				}.apply {
-					tooltip(if (isFav) favTooltip else unfavTooltip)
+					tooltip(if (isFav) unfavTooltip else favTooltip)
 					size(10, 10)
 				}.build()
 			)
