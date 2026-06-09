@@ -1,6 +1,7 @@
-package com.operationpotato.itemlist.gui
+package com.operationpotato.itemlist.gui.favorites
 
 import com.operationpotato.itemlist.Settings
+import com.operationpotato.itemlist.gui.AbstractItemList
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -12,9 +13,9 @@ import net.minecraft.network.chat.Component
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
-class FavoritePanel(x: Int, y: Int, width: Int, height: Int) :
+class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) :
 	AbstractContainerWidget(x, y, width, height, Component.empty(), defaultSettings(0)) {
-	val listWidget = FavoriteListWidget(width - AbstractItemList.PADDING, height - 20)
+	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height - 20)
 
 	fun updatePosition() {
 		listWidget.setPosition(x, y + 10)

@@ -1,9 +1,8 @@
-package com.operationpotato.itemlist.favorite
+package com.operationpotato.itemlist.favorites
 
 import com.google.gson.JsonParser
 import com.mojang.serialization.JsonOps
 import com.operationpotato.itemlist.SkyBlockItemList
-import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient

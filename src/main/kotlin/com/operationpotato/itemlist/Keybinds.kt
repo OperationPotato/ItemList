@@ -1,6 +1,6 @@
 package com.operationpotato.itemlist
 
-import com.operationpotato.itemlist.favorite.FavoritesManager
+import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping

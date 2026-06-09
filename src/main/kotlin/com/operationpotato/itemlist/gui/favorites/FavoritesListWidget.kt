@@ -1,13 +1,15 @@
-package com.operationpotato.itemlist.gui
+package com.operationpotato.itemlist.gui.favorites
 
-import com.operationpotato.itemlist.favorite.FavoritesManager
+import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.gui.AbstractItemList
+import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.RepoLibUtils.result
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import com.operationpotato.itemlist.utils.Utils.toLazy
 
-class FavoriteListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
+class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
 
 	override fun getItems(): List<StackDisplay> {
 		val displays = mutableListOf<StackDisplay>()

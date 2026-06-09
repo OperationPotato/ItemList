@@ -2,9 +2,9 @@ package com.operationpotato.itemlist
 
 import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
-import com.operationpotato.itemlist.favorite.FavoritesManager
-import com.operationpotato.itemlist.gui.FavoritePanel
+import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.ItemPanel
+import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
@@ -30,7 +30,7 @@ object SkyBlockItemList : ClientModInitializer {
 	val latePhase = id("late")
 	val logger: Logger = LogUtils.getLogger()
 	var instance: ItemPanel? = null
-	var favoriteInstance: FavoritePanel? = null
+	var favoriteInstance: FavoritesPanel? = null
 
 	override fun onInitializeClient() {
 		FavoritesManager.load()
@@ -63,7 +63,7 @@ object SkyBlockItemList : ClientModInitializer {
 
 			Screens.getWidgets(screen).add(itemPanel)
 
-			val favPanel = favoriteInstance ?: FavoritePanel(0, 0, 0, 0)
+			val favPanel = favoriteInstance ?: FavoritesPanel(0, 0, 0, 0)
 			favoriteInstance = favPanel
 
 			favPanel.setPosition(0, 0)

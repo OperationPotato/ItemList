@@ -1,4 +1,4 @@
-package com.operationpotato.itemlist.favorite
+package com.operationpotato.itemlist.favorites
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder

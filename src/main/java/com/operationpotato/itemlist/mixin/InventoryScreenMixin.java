@@ -1,8 +1,8 @@
 package com.operationpotato.itemlist.mixin;
 
 import com.operationpotato.itemlist.SkyBlockItemList;
-import com.operationpotato.itemlist.gui.FavoritePanel;
 import com.operationpotato.itemlist.gui.ItemPanel;
+import com.operationpotato.itemlist.gui.favorites.FavoritesPanel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -18,7 +18,7 @@ public class InventoryScreenMixin {
 	public void skyblockItemList$onButtonClick(CallbackInfo ci) {
 		ItemPanel itemPanel = SkyBlockItemList.INSTANCE.getInstance();
 		if (itemPanel != null) itemPanel.updateWidth();
-		FavoritePanel favoritesPanel = SkyBlockItemList.INSTANCE.getFavoriteInstance();
+		FavoritesPanel favoritesPanel = SkyBlockItemList.INSTANCE.getFavoriteInstance();
 		if (favoritesPanel != null) favoritesPanel.updateWidth();
 	}
 }

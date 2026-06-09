@@ -6,7 +6,7 @@ import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.HoveredItemManager
 import com.operationpotato.itemlist.api.Plugin
 import com.operationpotato.itemlist.api.RecipeButtonManager
-import com.operationpotato.itemlist.favorite.FavoritesManager
+import com.operationpotato.itemlist.favorites.FavoritesManager
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.screens.Screen
