@@ -53,7 +53,6 @@ class DefaultPlugin : Plugin {
 						it.message = unfavText
 						it.setTooltip(unfavTooltip)
 					}
-					SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
 				}.apply {
 					tooltip(if (isFav) unfavTooltip else favTooltip)
 					size(10, 10)

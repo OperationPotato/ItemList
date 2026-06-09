@@ -71,7 +71,6 @@ object Keybinds {
 				} else {
 					FavoritesManager.addFavoriteItem(it)
 				}
-				SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
 				return true
 			} ?: itemStack.getMobId()?.let {
 				if (FavoritesManager.isFavoriteMob(it)) {
@@ -79,7 +78,6 @@ object Keybinds {
 				} else {
 					FavoritesManager.addFavoriteMob(it)
 				}
-				SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
 				return true
 			}
 			return false

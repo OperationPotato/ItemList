@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui.favorites
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.Settings
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
 import com.operationpotato.itemlist.gui.StackDisplay
@@ -14,18 +15,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import kotlin.jvm.optionals.getOrNull
 
 class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
+	var children: List<StackDisplay> = emptyList()
 
-	override fun keyPressed(event: KeyEvent): Boolean {
-		val mousePos = McClient.mouse
-		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
-		if (child is RecipeStackDisplay && Keybinds.favoriteItem.matches(event)) {
-			FavoritesManager.removeFavoriteRecipe(child.recipe)
-			return true
-		}
-		return super.keyPressed(event)
+	init {
+		updateChildren()
 	}
 
-	override fun getItems(): List<StackDisplay> {
+	fun updateChildren() {
 		val displays = mutableListOf<StackDisplay>()
 
 		FavoritesManager.favorites.favoriteItems.forEach { id ->
@@ -49,8 +45,20 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 			}
 		}
 
-		return displays
+		children = displays
+		scaleChildren()
 	}
 
+	override fun keyPressed(event: KeyEvent): Boolean {
+		val mousePos = McClient.mouse
+		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
+		if (child is RecipeStackDisplay && Keybinds.favoriteItem.matches(event)) {
+			FavoritesManager.removeFavoriteRecipe(child.recipe)
+			return true
+		}
+		return super.keyPressed(event)
+	}
+
+	override fun getItems(): List<StackDisplay> = children
 	override fun getAllItems(): List<StackDisplay> = getItems()
 }

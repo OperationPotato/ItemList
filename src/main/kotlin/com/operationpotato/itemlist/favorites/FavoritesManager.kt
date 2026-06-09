@@ -26,6 +26,7 @@ object FavoritesManager {
 	}
 
 	fun save() {
+		updateFavorites()
 		try {
 			Files.createDirectories(file.parent)
 			Favorites.CODEC.encodeStart(JsonOps.INSTANCE, favorites).result().ifPresent {
@@ -34,6 +35,11 @@ object FavoritesManager {
 		} catch (e: Exception) {
 			SkyBlockItemList.logger.error("Failed to save favorites.", e)
 		}
+	}
+
+	fun updateFavorites() {
+		SkyBlockItemList.favoriteInstance?.listWidget?.updateChildren()
+		SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
 	}
 
 	fun addFavoriteItem(id: SkyBlockId) {
