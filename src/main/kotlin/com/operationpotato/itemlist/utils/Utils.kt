@@ -3,6 +3,9 @@ package com.operationpotato.itemlist.utils
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LayoutSettings
 import net.minecraft.client.renderer.Rect2i
+import net.minecraft.core.component.TypedDataComponent
+import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 
 object Utils {
 
@@ -39,5 +42,15 @@ object Utils {
 			if (minutes > 0) add("${minutes}m")
 			if (seconds > 0) add("${seconds}s")
 		}.joinToString(", ")
+	}
+
+	fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
+		for ((type, value) in this@toLazy.componentsPatch.entrySet()) {
+			if (value.isEmpty) {
+				this.remove(type)
+			} else {
+				this.set(TypedDataComponent.createUnchecked(type, value.get()))
+			}
+		}
 	}
 }

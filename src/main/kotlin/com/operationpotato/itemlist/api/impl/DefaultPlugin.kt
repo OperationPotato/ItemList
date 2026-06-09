@@ -18,10 +18,8 @@ import net.minecraft.client.renderer.Rect2i
 import net.minecraft.world.effect.MobEffectInstance
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.repolib.api.recipes.Recipe
-import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
@@ -55,6 +53,7 @@ class DefaultPlugin : Plugin {
 						it.message = unfavText
 						it.setTooltip(unfavTooltip)
 					}
+					SkyBlockItemList.favouriteInstance?.listWidget?.updatePositionsAsync()
 				}.apply {
 					tooltip(if (isFav) unfavTooltip else favTooltip)
 					size(10, 10)

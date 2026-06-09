@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist
 
+import com.operationpotato.itemlist.favorite.FavouritesManager
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping
 import net.minecraft.client.KeyMapping
@@ -7,6 +8,7 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
 object Keybinds {
@@ -46,6 +48,14 @@ object Keybinds {
 		)
 	)
 
+	val favouriteItem: KeyMapping = registerKeyMapping(
+		KeyMapping(
+			"key.skyblock-item-list.favouriteItem",
+			GLFW.GLFW_KEY_F,
+			category,
+		)
+	)
+
 	fun handleKeybind(itemStack: ItemStack, keyEvent: KeyEvent): Boolean {
 		if (viewRecipe.matches(keyEvent)) {
 			RecipeScreen.openRecipeForItem(itemStack, McScreen.self)
@@ -53,7 +63,16 @@ object Keybinds {
 		} else if (viewUsage.matches(keyEvent)) {
 			RecipeScreen.openUsageForItem(itemStack, McScreen.self)
 			return true
+		} else if (favouriteItem.matches(keyEvent)) {
+		val targetId = itemStack.getSkyBlockId() ?: return true
+		if (FavouritesManager.isFavouriteItem(targetId)) {
+			FavouritesManager.removeFavouriteItem(targetId)
+		} else {
+			FavouritesManager.addFavouriteItem(targetId)
 		}
+		SkyBlockItemList.favouriteInstance?.listWidget?.updatePositionsAsync()
+		return true
+	}
 		return false
 	}
 
