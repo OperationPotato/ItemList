@@ -15,10 +15,10 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
 class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) :
 	AbstractContainerWidget(x, y, width, height, Component.empty(), defaultSettings(0)) {
-	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height - 20)
+	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height)
 
 	fun updatePosition() {
-		listWidget.setPosition(x, y + 10)
+		listWidget.setPosition(x, y)
 		listWidget.setSize(width - 2, height - 20)
 		listWidget.itemSize = Settings.itemSize
 		listWidget.scaleChildren()
