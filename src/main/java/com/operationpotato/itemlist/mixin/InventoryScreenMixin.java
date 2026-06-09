@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.mixin;
 
 import com.operationpotato.itemlist.SkyBlockItemList;
+import com.operationpotato.itemlist.gui.FavoritePanel;
 import com.operationpotato.itemlist.gui.ItemPanel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -16,7 +17,8 @@ public class InventoryScreenMixin {
 	@Inject(method = "onRecipeBookButtonClick", at = @At("HEAD"))
 	public void skyblockItemList$onButtonClick(CallbackInfo ci) {
 		ItemPanel itemPanel = SkyBlockItemList.INSTANCE.getInstance();
-		if (itemPanel == null) return;
-		itemPanel.updateWidth();
+		if (itemPanel != null) itemPanel.updateWidth();
+		FavoritePanel favoritesPanel = SkyBlockItemList.INSTANCE.getFavoriteInstance();
+		if (favoritesPanel != null) favoritesPanel.updateWidth();
 	}
 }
