@@ -13,9 +13,9 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 
-class FavouritePanel(x: Int, y: Int, width: Int, height: Int) :
+class FavoritePanel(x: Int, y: Int, width: Int, height: Int) :
 	AbstractContainerWidget(x, y, width, height, Component.empty(), defaultSettings(0)) {
-	val listWidget = FavouriteListWidget(width - AbstractItemList.PADDING, height - 20)
+	val listWidget = FavoriteListWidget(width - AbstractItemList.PADDING, height - 20)
 
 	fun updatePosition() {
 		listWidget.setPosition(x, y + 10)

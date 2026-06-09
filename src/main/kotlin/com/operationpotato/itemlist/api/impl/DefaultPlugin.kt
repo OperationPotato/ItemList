@@ -6,7 +6,7 @@ import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.HoveredItemManager
 import com.operationpotato.itemlist.api.Plugin
 import com.operationpotato.itemlist.api.RecipeButtonManager
-import com.operationpotato.itemlist.favorite.FavouritesManager
+import com.operationpotato.itemlist.favorite.FavoritesManager
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.screens.Screen
@@ -36,24 +36,24 @@ class DefaultPlugin : Plugin {
 	override fun registerRecipeButtons(manager: RecipeButtonManager) {
 		manager.addProvider { recipeObj, _ ->
 			val recipe = recipeObj as? Recipe<*> ?: return@addProvider Optional.empty()
-			val isFav = FavouritesManager.isFavouriteRecipe(recipe)
+			val isFav = FavoritesManager.isFavoriteRecipe(recipe)
 			val favText = Text.of("+")
 			val unfavText = Text.of("-")
-			val favTooltip = Tooltip.create(Text.of("Favourite Recipe"))
-			val unfavTooltip = Tooltip.create(Text.of("Unfavourite Recipe"))
+			val favTooltip = Tooltip.create(Text.of("Favorite Recipe"))
+			val unfavTooltip = Tooltip.create(Text.of("Unfavorite Recipe"))
 
 			Optional.of(
 				Button.builder(if (isFav) unfavText else favText) {
-					if (FavouritesManager.isFavouriteRecipe(recipe)) {
-						FavouritesManager.removeFavouriteRecipe(recipe)
+					if (FavoritesManager.isFavoriteRecipe(recipe)) {
+						FavoritesManager.removeFavoriteRecipe(recipe)
 						it.message = favText
 						it.setTooltip(favTooltip)
 					} else {
-						FavouritesManager.addFavouriteRecipe(recipe)
+						FavoritesManager.addFavoriteRecipe(recipe)
 						it.message = unfavText
 						it.setTooltip(unfavTooltip)
 					}
-					SkyBlockItemList.favouriteInstance?.listWidget?.updatePositionsAsync()
+					SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
 				}.apply {
 					tooltip(if (isFav) unfavTooltip else favTooltip)
 					size(10, 10)

@@ -2,8 +2,8 @@ package com.operationpotato.itemlist
 
 import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
-import com.operationpotato.itemlist.favorite.FavouritesManager
-import com.operationpotato.itemlist.gui.FavouritePanel
+import com.operationpotato.itemlist.favorite.FavoritesManager
+import com.operationpotato.itemlist.gui.FavoritePanel
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
@@ -30,10 +30,10 @@ object SkyBlockItemList : ClientModInitializer {
 	val latePhase = id("late")
 	val logger: Logger = LogUtils.getLogger()
 	var instance: ItemPanel? = null
-	var favouriteInstance: FavouritePanel? = null
+	var favoriteInstance: FavoritePanel? = null
 
 	override fun onInitializeClient() {
-		FavouritesManager.load()
+		FavoritesManager.load()
 		Keybinds.init()
 		ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 		ScreenEvents.AFTER_INIT.register(latePhase, ::addItemListWidget)
@@ -63,8 +63,8 @@ object SkyBlockItemList : ClientModInitializer {
 
 			Screens.getWidgets(screen).add(itemPanel)
 
-			val favPanel = favouriteInstance ?: FavouritePanel(0, 0, 0, 0)
-			favouriteInstance = favPanel
+			val favPanel = favoriteInstance ?: FavoritePanel(0, 0, 0, 0)
+			favoriteInstance = favPanel
 
 			favPanel.setPosition(0, 0)
 			favPanel.setSize(width - 2, h)
@@ -118,7 +118,7 @@ object SkyBlockItemList : ClientModInitializer {
 
 	fun resetWidget() {
 		instance = null
-		favouriteInstance = null
+		favoriteInstance = null
 	}
 
 	fun id(path: String): Identifier = Identifier.fromNamespaceAndPath("skyblock-item-list", path)
