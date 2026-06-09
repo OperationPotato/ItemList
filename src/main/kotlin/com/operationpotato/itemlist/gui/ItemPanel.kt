@@ -1,8 +1,6 @@
 package com.operationpotato.itemlist.gui
 
-import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.Settings
-import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.utils.ComponentUtils
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
@@ -32,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import java.util.concurrent.Future
-import kotlin.jvm.optionals.getOrNull
 
 class ItemPanel(x: Int, y: Int, width: Int, height: Int) :
 	AbstractContainerWidget(x, y, width, height, Component.empty(), defaultSettings(0)) {
@@ -184,11 +181,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) :
 			this.searchBox.keyPressed(event)
 			return true
 		}
-		val mousePos = McClient.mouse
-		val child = itemListWidget.getChildAt(mousePos.first, mousePos.second).getOrNull()
-		if (child !is StackDisplay) return false
-		if (PluginManager.provideHoveredItem(child.stack, event)) return true
-		return Keybinds.handleKeybind(child.stack, event)
+		return itemListWidget.keyPressed(event)
 	}
 
 	fun updateWidth() {

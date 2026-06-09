@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.utils.ThreadUtils
 import com.operationpotato.itemlist.utils.ThreadUtils.cancelAndSubmit
@@ -7,11 +8,13 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import java.util.concurrent.Future
+import kotlin.jvm.optionals.getOrNull
 
 abstract class AbstractItemList(width: Int, height: Int) :
 	AbstractContainerWidget(
@@ -151,6 +154,14 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		scrollAmountWidget?.extractRenderState(graphics, mouseX, mouseY, a)
 		if (scrollAmountWidget?.expired() == true) scrollAmountWidget = null
 		graphics.disableScissor()
+	}
+
+	override fun keyPressed(event: KeyEvent): Boolean {
+		val mousePos = McClient.mouse
+		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
+		if (child !is StackDisplay) return false
+		if (PluginManager.provideHoveredItem(child.stack, event)) return true
+		return Keybinds.handleKeybind(child.stack, event)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
