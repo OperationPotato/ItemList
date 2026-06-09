@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.favorite.FavoritesManager
 import com.operationpotato.itemlist.utils.RepoLibUtils.result
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import com.operationpotato.itemlist.utils.Utils.toLazy
 
 class FavoriteListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
@@ -22,6 +23,13 @@ class FavoriteListWidget(width: Int, height: Int) : AbstractItemList(width, heig
 			val result = recipe.result()?.toItem()
 			if (result != null && !result.isEmpty) {
 				displays.add(StackDisplay(result.toLazy(), SkyBlockItemCategory.ALL))
+			}
+		}
+
+		FavoritesManager.favorites.favoriteMobs.forEach {
+			val stack = SkyBlockMobsRepo.getItemStack(it)
+			if (stack != null && !stack.isEmpty) {
+				displays.add(StackDisplay(stack.toLazy(), SkyBlockItemCategory.ALL))
 			}
 		}
 

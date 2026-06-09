@@ -3,6 +3,7 @@ package com.operationpotato.itemlist.favorite
 import com.google.gson.JsonParser
 import com.mojang.serialization.JsonOps
 import com.operationpotato.itemlist.SkyBlockItemList
+import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -63,4 +64,18 @@ object FavoritesManager {
 	}
 
 	fun isFavoriteRecipe(recipe: Recipe<*>): Boolean = favorites.favoriteRecipes.contains(recipe)
+
+	fun addFavoriteMob(mob: String) {
+		if (!favorites.favoriteMobs.contains(mob)) {
+			favorites = favorites.copy(favoriteMobs = favorites.favoriteMobs + mob)
+			save()
+		}
+	}
+
+	fun removeFavoriteMob(mob: String) {
+		favorites = favorites.copy(favoriteMobs = favorites.favoriteMobs.filter { it != mob })
+		save()
+	}
+
+	fun isFavoriteMob(mob: String): Boolean = favorites.favoriteMobs.contains(mob)
 }
