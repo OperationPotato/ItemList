@@ -57,6 +57,7 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) :
 	override fun contentHeight(): Int = height
 
 	override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
+		if (listWidget.itemCount == 0) return
 		listWidget.extractRenderState(graphics, mouseX, mouseY, a)
 	}
 
