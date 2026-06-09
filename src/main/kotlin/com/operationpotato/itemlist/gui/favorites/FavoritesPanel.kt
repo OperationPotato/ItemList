@@ -20,7 +20,7 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) :
 	fun updatePosition() {
 		listWidget.setPosition(x, y)
 		listWidget.setSize(width - 2, height - 20)
-		listWidget.itemSize = Settings.itemSize
+		listWidget.itemSize = Settings.favoritesItemSize
 		listWidget.scaleChildren()
 		listWidget.updatePositionsAsync()
 	}
@@ -48,6 +48,10 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) :
 		if (!this.visible) return true
 		if (event.isEscape) return true
 		return !keyPressed(event)
+	}
+
+	fun removed() {
+		Settings.favoritesItemSize = listWidget.itemSize
 	}
 
 	override fun contentHeight(): Int = height

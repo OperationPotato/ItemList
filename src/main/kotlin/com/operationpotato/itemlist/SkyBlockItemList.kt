@@ -106,6 +106,7 @@ object SkyBlockItemList : ClientModInitializer {
 			}
 
 			ScreenEvents.remove(screen).register {
+				favPanel.removed()
 				itemPanel.removed()
 			}
 		}
