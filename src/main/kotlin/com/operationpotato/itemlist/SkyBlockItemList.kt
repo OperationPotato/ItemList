@@ -2,6 +2,7 @@ package com.operationpotato.itemlist
 
 import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.favorite.FavouritesManager
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
@@ -30,6 +31,7 @@ object SkyBlockItemList : ClientModInitializer {
 	var instance: ItemPanel? = null
 
 	override fun onInitializeClient() {
+		FavouritesManager.load()
 		Keybinds.init()
 		ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 		ScreenEvents.AFTER_INIT.register(latePhase, ::addItemListWidget)

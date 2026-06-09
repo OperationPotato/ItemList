@@ -25,7 +25,7 @@ class RecipeButtonsManagerImpl : RecipeButtonManager {
 
 	fun getButtons(recipe: Recipe<*>): List<AbstractWidget> {
 		val stack = recipe.result()?.toItem() ?: return emptyList()
-		return providers.mapNotNull { it.provide(stack).orElse(null) }
+		return providers.mapNotNull { it.provide(recipe, stack).orElse(null) }
 	}
 
 	fun onButtonClick(widget: AbstractWidget, event: MouseButtonEvent) {
