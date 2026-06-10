@@ -7,9 +7,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
+import tech.thatgravyboat.skyblockapi.utils.extentions.currentInstant
+import tech.thatgravyboat.skyblockapi.utils.extentions.isInPast
+import kotlin.time.Duration
 
-class TemporalTextWidget(x: Int, y: Int, var time: Float, message: Component, val font: Font) :
+class TemporalTextWidget(x: Int, y: Int, val time: Duration, message: Component, val font: Font) :
 	AbstractWidget(x - font.width(message) / 2, y, font.width(message), font.lineHeight, message) {
+
+	private var createdAt = currentInstant()
 
 	override fun extractWidgetRenderState(
 		graphics: GuiGraphicsExtractor,
@@ -17,15 +22,13 @@ class TemporalTextWidget(x: Int, y: Int, var time: Float, message: Component, va
 		mouseY: Int,
 		a: Float
 	) {
-		time -= a
-		if (time < 0) return
 		graphics.fill(x - PADDING, y - PADDING, x + width + PADDING, y + height + PADDING, BACKGROUND_COLOR)
 		graphics.text(font, message, x, y, CommonColors.WHITE)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
 
-	fun expired(): Boolean = time < 0
+	fun expired(): Boolean = (createdAt + time).isInPast()
 
 	companion object {
 		const val PADDING = 2

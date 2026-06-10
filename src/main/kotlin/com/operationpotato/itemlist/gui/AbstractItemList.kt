@@ -15,6 +15,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import java.util.concurrent.Future
 import kotlin.jvm.optionals.getOrNull
+import kotlin.time.Duration.Companion.seconds
 
 abstract class AbstractItemList(width: Int, height: Int) :
 	AbstractContainerWidget(
@@ -113,7 +114,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 			(maxScale * StackDisplay.STACK_SIZE).toInt()
 		)
 		scrollAmountWidget = TemporalTextWidget(
-			x + width / 2, itemListHeight / 2, 5f,
+			x + width / 2, itemListHeight / 2, 0.75.seconds,
 			Component.literal("${(itemSize / StackDisplay.STACK_SIZE.toFloat() * 100).toInt()}%"), McFont.self
 		)
 		scaleChildren()
