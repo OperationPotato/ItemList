@@ -69,7 +69,7 @@ object SkyBlockItemList : ClientModInitializer {
 			favPanel.setPosition(0, 0)
 			favPanel.setSize(width - 2, h)
 			favPanel.updatePosition()
-			favPanel.visible = Settings.enabled
+			favPanel.visible = Settings.enabled && Settings.enableFavorites
 			if (width < 80) favPanel.visible = false
 
 			Screens.getWidgets(screen).add(favPanel)
@@ -90,7 +90,7 @@ object SkyBlockItemList : ClientModInitializer {
 			keyPress.register(latePhase) { screen, event ->
 				if (event.hasControlDownWithQuirk() && Keybinds.hideOverlay.matches(event)) {
 					itemPanel.visible = !itemPanel.visible
-					favPanel.visible = itemPanel.visible
+					favPanel.visible = itemPanel.visible && Settings.enableFavorites
 					Settings.enabled = itemPanel.visible
 					return@register false
 				}
