@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.Settings
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockItems
@@ -12,10 +13,10 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 
 	fun filterChildren(category: SkyBlockItemCategory) {
 		currentFilter = category
-		visibleChildren = if (currentFilter == SkyBlockItemCategory.ALL) {
-			children
-		} else {
-			children.filter { it.type == currentFilter }
+		visibleChildren = when (currentFilter) {
+			SkyBlockItemCategory.ALL -> children
+			SkyBlockItemCategory.CUSTOM -> children.filter { it.type in Settings.customFilters }
+			else -> children.filter { it.type == currentFilter }
 		}
 	}
 

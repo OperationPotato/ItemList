@@ -13,9 +13,14 @@ enum class SkyBlockItemCategory(val formattedName: String) {
 	POTION("Potions"),
 	RUNE("Runes"),
 	ALL("All"),
+	CUSTOM("Custom"),
 	;
 
 	fun asComponent(): MutableComponent {
 		return Component.literal(this.formattedName)
+	}
+
+	companion object {
+		val NON_ENTITIES = entries.filter { it != MOB && it != NPC }
 	}
 }

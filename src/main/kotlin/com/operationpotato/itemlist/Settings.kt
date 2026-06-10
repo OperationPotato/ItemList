@@ -11,7 +11,8 @@ object Settings {
 	// Main List
 	var itemSize: Int = StackDisplay.STACK_SIZE
 	var lastSearch: String = ""
-	var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.ALL
+	var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM
+	var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 
 	// Favorites
 	var enableFavorites: Boolean = true
