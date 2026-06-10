@@ -62,6 +62,9 @@ dependencies {
 			requireCapability("tech.thatgravyboat:skyblock-api-26.1")
 		}
 	}
+
+	implementation(libs.keval)
+	include(libs.keval)
 }
 
 loom {

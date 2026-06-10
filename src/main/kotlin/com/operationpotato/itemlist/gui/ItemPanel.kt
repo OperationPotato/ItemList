@@ -1,5 +1,7 @@
 package com.operationpotato.itemlist.gui
 
+import com.notkamui.keval.Keval
+import com.notkamui.keval.KevalNumbers
 import com.operationpotato.itemlist.Settings
 import com.operationpotato.itemlist.utils.ComponentUtils
 import com.operationpotato.itemlist.utils.SearchUtils
@@ -22,10 +24,14 @@ import net.minecraft.client.gui.screens.inventory.PageButton
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
+import tech.thatgravyboat.skyblockapi.api.profile.currency.CurrencyAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
+import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.Future
 
 class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, y, width, height) {
@@ -56,12 +62,14 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	var filterFuture: Future<*>? = null
 	var searchFuture: Future<*>? = null
 
+	private var calculatorResult: String = ""
+
 	init {
 		filterButton.value = Settings.lastFilter
 		filterButton.message = Component.literal("F")
 		searchBox.value = Settings.lastSearch
 		searchBox.addFormatter(SearchUtils::highlightSearch)
-		searchBox.setHint(Component.literal("Search..."))
+		searchBox.setHint(Component.literal("Search or Calculate..."))
 		searchBox.setResponder(::searchAsync)
 		searchBox.setMaxLength(999)
 
@@ -133,20 +141,42 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			itemListWidget.searchChildren(Settings.lastSearch)
 			itemListWidget.switchPage(0)
 			itemListWidget.updatePositionsAsync()
+			McClient.runOrNextTick { updateSearchResult() }
 		}
 	}
 
 	fun searchAsync(text: String) {
 		Settings.lastSearch = text
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
+			calculatorResult = runCatching {
+				if (text.any { it in "+-*/^()" }) Keval.create(KevalNumbers.real) {
+					includeDefault()
+
+					fun caseInsensitiveConstant(name: String, amount: () -> Double) {
+						constant {
+							this.name = name.lowercase()
+							this.value = amount()
+						}
+						constant {
+							this.name = name.uppercase()
+							this.value = amount()
+						}
+					}
+
+					caseInsensitiveConstant("purse") { CurrencyAPI.purse }
+				}.eval(text).toFormattedString()
+				else ""
+			}.getOrElse { "" }
+
 			itemListWidget.searchChildren(text)
 			itemListWidget.switchPage(0)
 			itemListWidget.updatePositionsAsync()
+			McClient.runOrNextTick { updateSearchResult() }
 		}
 	}
 
 	fun updateSearchResult() {
-		if (itemListWidget.visibleChildren.isEmpty()) {
+		if (itemListWidget.visibleChildren.isEmpty() && calculatorResult.isEmpty()) {
 			searchBox.setTextColor(CommonColors.SOFT_RED)
 		} else {
 			searchBox.setTextColor(CommonColors.TEXT_GRAY)
@@ -185,5 +215,12 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		a: Float
 	) {
 		children.forEach { it.extractRenderState(graphics, mouseX, mouseY, a) }
+
+		if (calculatorResult.isNotEmpty()) {
+			val message = Text.of("= $calculatorResult", TextColor.YELLOW)
+			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - 6
+			val textY = searchBox.y + (searchBox.height - McFont.height) / 2 + 1
+			graphics.text(McFont.self, message, textX, textY, CommonColors.WHITE)
+		}
 	}
 }
