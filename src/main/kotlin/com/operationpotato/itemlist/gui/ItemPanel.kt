@@ -143,7 +143,6 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			itemListWidget.searchChildren(Settings.lastSearch)
 			itemListWidget.switchPage(0)
 			itemListWidget.updatePositionsAsync()
-			McClient.runOrNextTick { updateSearchResult() }
 		}
 	}
 
@@ -162,7 +161,6 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			itemListWidget.searchChildren(text)
 			itemListWidget.switchPage(0)
 			itemListWidget.updatePositionsAsync()
-			McClient.runOrNextTick { updateSearchResult() }
 		}
 	}
 
