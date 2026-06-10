@@ -63,8 +63,12 @@ dependencies {
 		}
 	}
 
-	implementation(libs.keval)
-	include(libs.keval)
+	includeImplementation(libs.keval)
+}
+
+fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>) {
+	this.include(dependencyNotation)
+	this.implementation(dependencyNotation)
 }
 
 loom {
