@@ -17,4 +17,8 @@ object Settings {
 	// Favorites
 	var enableFavorites: Boolean = true
 	var favoritesItemSize: Int = StackDisplay.STACK_SIZE
+
+	// Calculator
+	var requiresEquals: Boolean = false // maybe switch to true by default
+	var customConstants: Map<String, Double> = mutableMapOf()
 }
