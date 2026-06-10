@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui.favorites
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.Settings
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
 import com.operationpotato.itemlist.gui.StackDisplay
@@ -21,6 +22,11 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 	}
 
 	fun updateChildren() {
+		if (!Settings.enableFavorites) {
+			children = emptyList()
+			return
+		}
+
 		val displays = mutableListOf<StackDisplay>()
 
 		FavoritesManager.favorites.favoriteItems.forEach { id ->
