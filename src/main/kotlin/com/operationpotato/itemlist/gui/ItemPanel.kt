@@ -150,7 +150,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.setTextColor(CommonColors.TEXT_GRAY)
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
 			calculatorResult = CalcUtils.calculateExpression(text)
-			calculatorResultColor = if (calculatorResult.first.startsWith('=')) TextColor.YELLOW else TextColor.RED
+			calculatorResultColor = if (calculatorResult.second) TextColor.YELLOW else TextColor.RED
 		}
 	}
 
