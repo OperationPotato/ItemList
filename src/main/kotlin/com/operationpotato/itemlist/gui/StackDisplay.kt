@@ -25,8 +25,11 @@ import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
-open class StackDisplay(val lazyStack: LazyItemStack, val type: SkyBlockItemCategory) :
-	AbstractWidget(0, 0, STACK_SIZE, STACK_SIZE, Component.empty()) {
+open class StackDisplay(
+	val lazyStack: LazyItemStack,
+	val type: SkyBlockItemCategory,
+	val isVanilla: Boolean = false
+) : AbstractWidget(0, 0, STACK_SIZE, STACK_SIZE, Component.empty()) {
 
 	var stack: ItemStack = ItemStack.EMPTY
 	var scale: Float = 1f

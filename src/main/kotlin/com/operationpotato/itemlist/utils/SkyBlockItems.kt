@@ -1,7 +1,9 @@
 package com.operationpotato.itemlist.utils
 
+import com.operationpotato.itemlist.config.ConfigManager
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockAttributesRepo
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockEnchantmentsRepo
@@ -87,18 +89,21 @@ object SkyBlockItems {
 
 		attributeNames.forEach { key ->
 			val stack = SkyBlockAttributesRepo.getLazyItemStack(key) ?: return@forEach
-			allItems.add(Item(stack, SkyBlockItemCategory.ATTRIBUTE, key))
+			val isVanilla = RepoAPI.overlays().getAttribute(key)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.ATTRIBUTE, key, isVanilla))
 		}
 
 		enchantNames.forEach { key ->
 			val stack = SkyBlockEnchantmentsRepo.getLazyItemStack(key) ?: return@forEach
 			val id = key.id.replace(Regex("^ULTIMATE_"), "")
-			allItems.add(Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}"))
+			val isVanilla = RepoAPI.overlays().getEnchantment(key.id, key.level ?: 1)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}", isVanilla))
 		}
 
 		itemNames.forEach { key ->
 			val stack = SkyBlockItemsRepo.getLazyItemStack(key) ?: return@forEach
-			allItems.add(Item(stack, SkyBlockItemCategory.ITEM, key))
+			val isVanilla = RepoAPI.overlays().getItem(key)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.ITEM, key, isVanilla))
 		}
 
 		entityNames.forEach { key ->
@@ -106,23 +111,27 @@ object SkyBlockItems {
 			val type = key.substringAfterLast("_")
 			val isMob = SkyBlockMobsRepo.mobSuffixes.any { type == it }
 			val category = if (isMob) SkyBlockItemCategory.MOB else SkyBlockItemCategory.NPC
-			allItems.add(Item(stack, category, key))
+			val isVanilla = RepoAPI.overlays().getMob(key)?.vanilla() ?: false
+			allItems.add(Item(stack, category, key, isVanilla))
 		}
 
 		petNames.forEach { key ->
 			val stack = SkyBlockPetsRepo.getLazyItemStack(key) ?: return@forEach
-			allItems.add(Item(stack, SkyBlockItemCategory.PET, "${key.id};${key.rarity.ordinal}"))
+			val isVanilla = RepoAPI.overlays().getPet(key.id, key.rarity.name)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.PET, "${key.id};${key.rarity.ordinal}", isVanilla))
 		}
 
 		potionNames.forEach { key ->
 			val stack = SkyBlockPotionsRepo.getLazyItemStack(key) ?: return@forEach
 			val id = key.id.replace(Regex("^POTION_"), "")
-			allItems.add(Item(stack, SkyBlockItemCategory.POTION, "$id;${key.level}"))
+			val isVanilla = RepoAPI.overlays().getPotion(key.id, key.level ?: 1)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.POTION, "$id;${key.level}", isVanilla))
 		}
 
 		runeNames.forEach { key ->
 			val stack = SkyBlockRunesRepo.getLazyItemStack(key) ?: return@forEach
-			allItems.add(Item(stack, SkyBlockItemCategory.RUNE, "${key.id};${key.id}"))
+			val isVanilla = RepoAPI.overlays().getRune(key.id, key.tier ?: 1)?.vanilla() ?: false
+			allItems.add(Item(stack, SkyBlockItemCategory.RUNE, "${key.id};${key.id}", isVanilla))
 		}
 
 		return allItems.sortedWith(::sortByIdAndNumber)
@@ -131,6 +140,7 @@ object SkyBlockItems {
 	data class Item(
 		val stack: LazyItemStack,
 		val category: SkyBlockItemCategory,
-		val id: String
+		val id: String,
+		val isVanilla: Boolean = false
 	)
 }

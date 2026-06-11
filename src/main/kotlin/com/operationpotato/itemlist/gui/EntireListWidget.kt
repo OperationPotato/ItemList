@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockItems
+import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.utils.lazy.registryBoundLazy
 
 class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
@@ -17,6 +18,9 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 			SkyBlockItemCategory.ALL -> children
 			SkyBlockItemCategory.CUSTOM -> children.filter { it.type in ConfigManager.get().customFilters }
 			else -> children.filter { it.type == currentFilter }
+		}
+		if (ConfigManager.get().hideVanillaItems) {
+			visibleChildren = visibleChildren.filterNot { it.isVanilla }
 		}
 	}
 
@@ -43,8 +47,8 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 		fun getItems(): List<StackDisplay> {
 			val displays: MutableList<StackDisplay> = mutableListOf()
 
-			SkyBlockItems.items.forEach { (stack, category) ->
-				val display = StackDisplay(stack, category)
+			SkyBlockItems.items.forEach { item ->
+				val display = StackDisplay(item.stack, item.category, item.isVanilla)
 				displays.add(display)
 			}
 
