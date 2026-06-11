@@ -4,17 +4,28 @@ import com.notkamui.keval.Keval
 import com.notkamui.keval.KevalNumbers
 import com.operationpotato.itemlist.Settings
 import tech.thatgravyboat.skyblockapi.api.profile.currency.CurrencyAPI
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.BazaarAPI
+import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.LowestBinAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 
 object CalcUtils {
 
 	val defaultConstants: Map<String, Double> = mapOf(
-		"st" to 64.toDouble(),
-		"k" to 1_000.toDouble(),
-		"m" to 1_000_000.toDouble(),
-		"b" to 1_000_000_000.toDouble(),
-		"t" to 1_000_000_000_000.toDouble(),
+		"st" to 64.0,
+		"k" to 1_000.0,
+		"m" to 1_000_000.0,
+		"b" to 1_000_000_000.0,
+		"t" to 1_000_000_000_000.0,
 	)
+
+	private val customResolvers: Map<String, (String) -> Double> = mapOf(
+		"bz" to { id -> BazaarAPI.getProduct(id)?.buyPrice ?: 0.0 },
+		"lb" to { id -> LowestBinAPI.getLowestPrice(id)?.toDouble() ?: 0.0 },
+		"npc" to { id -> ItemData.getNpcSellPrice(id)?.toDouble() ?: 0.0 },
+	)
+
+	private val resolverRegex = Regex("\\b([a-zA-Z_]+)\\(([^)]+)\\)")
 
 	val calc
 		get() = Keval.create(KevalNumbers.real) {
@@ -38,16 +49,22 @@ object CalcUtils {
 
 
 	fun calculateExpression(text: String): String {
-		val expression = text.let { if (it.startsWith('=')) it.substring(1) else it }
+		var expression = text.removePrefix("=")
+
+		expression = resolverRegex.replace(expression) { matchResult ->
+			val name = matchResult.groupValues[1].trim().lowercase()
+			val arg = matchResult.groupValues[2].trim().uppercase()
+			customResolvers[name]?.invoke(arg)?.toString() ?: matchResult.value
+		}
+
 		val result = runCatching {
 			calc.eval(expression).toFormattedString()
 		}
 
-		val exception = result.exceptionOrNull()
-		if (exception != null) {
-			return "ERR: ${exception.message}"
-		}
-		return "= ${result.getOrNull()}"
+		return result.fold(
+			onSuccess = { "= $it" },
+			onFailure = { "ERR: ${it.message}" }
+		)
 	}
 
 	fun String.isExpression(): Boolean {
