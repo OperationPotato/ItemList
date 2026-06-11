@@ -149,7 +149,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	fun calculateAsync(text: String) {
 		searchBox.setTextColor(CommonColors.TEXT_GRAY)
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
-			calculatorResult = CalcUtils.calculateExpression(text.substring(1))
+			calculatorResult = CalcUtils.calculateExpression(text)
 			calculatorResultColor = if (calculatorResult.startsWith('=')) TextColor.YELLOW else TextColor.RED
 		}
 	}
