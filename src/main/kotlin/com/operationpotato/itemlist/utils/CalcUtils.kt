@@ -20,9 +20,9 @@ object CalcUtils {
 	)
 
 	private val customResolvers: Map<String, (String) -> Double> = mapOf(
-		"bz" to { id -> BazaarAPI.getProduct(id)?.buyPrice ?: 0.0 },
-		"lb" to { id -> LowestBinAPI.getLowestPrice(id)?.toDouble() ?: 0.0 },
-		"npc" to { id -> ItemData.getNpcSellPrice(id)?.toDouble() ?: 0.0 },
+		"bz" to { id -> BazaarAPI.getProduct(id)?.buyPrice ?: throw Exception("Unknown item $id") },
+		"lb" to { id -> LowestBinAPI.getLowestPrice(id)?.toDouble() ?: throw Exception("Unknown item $id") },
+		"npc" to { id -> ItemData.getNpcSellPrice(id)?.toDouble() ?: throw Exception("Unknown item $id") },
 	)
 
 	private val resolverRegex = Regex("\\b([a-zA-Z_]+)\\(([^)]+)\\)")
@@ -48,22 +48,22 @@ object CalcUtils {
 		}
 
 
-	fun calculateExpression(text: String): String {
+	fun calculateExpression(text: String): Pair<String, Boolean> {
 		var expression = text.removePrefix("=")
 
-		expression = resolverRegex.replace(expression) { matchResult ->
-			val name = matchResult.groupValues[1].trim().lowercase()
-			val arg = matchResult.groupValues[2].trim().uppercase()
-			customResolvers[name]?.invoke(arg)?.toString() ?: matchResult.value
-		}
-
 		val result = runCatching {
+			expression = resolverRegex.replace(expression) { matchResult ->
+				val name = matchResult.groupValues[1].trim().lowercase()
+				val arg = matchResult.groupValues[2].trim().uppercase()
+				customResolvers[name]?.invoke(arg)?.toString() ?: matchResult.value
+			}
+
 			calc.eval(expression).toFormattedString()
 		}
 
 		return result.fold(
-			onSuccess = { "= $it" },
-			onFailure = { "ERR: ${it.message}" }
+			onSuccess = { "= $it" to true },
+			onFailure = { "ERR: ${it.message}" to false }
 		)
 	}
 

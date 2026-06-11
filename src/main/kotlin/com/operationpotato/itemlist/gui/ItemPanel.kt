@@ -60,7 +60,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	var filterFuture: Future<*>? = null
 	var searchFuture: Future<*>? = null
 
-	private var calculatorResult: String = ""
+	private var calculatorResult: Pair<String, Boolean> = "" to false
 	private var calculatorResultColor: Int = 0
 
 	init {
@@ -150,13 +150,13 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.setTextColor(CommonColors.TEXT_GRAY)
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
 			calculatorResult = CalcUtils.calculateExpression(text)
-			calculatorResultColor = if (calculatorResult.startsWith('=')) TextColor.YELLOW else TextColor.RED
+			calculatorResultColor = if (calculatorResult.first.startsWith('=')) TextColor.YELLOW else TextColor.RED
 		}
 	}
 
 	fun searchAsync(text: String) {
 		Settings.lastSearch = text
-		calculatorResult = ""
+		calculatorResult = "" to false
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
 			itemListWidget.searchChildren(text)
 			itemListWidget.switchPage(0)
@@ -165,7 +165,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}
 
 	fun updateSearchResult() {
-		if (itemListWidget.visibleChildren.isEmpty() && calculatorResult.isEmpty()) {
+		if (itemListWidget.visibleChildren.isEmpty() && calculatorResult.first.isEmpty()) {
 			searchBox.setTextColor(CommonColors.SOFT_RED)
 		} else {
 			searchBox.setTextColor(CommonColors.TEXT_GRAY)
@@ -205,10 +205,11 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	) {
 		children.forEach { it.extractRenderState(graphics, mouseX, mouseY, a) }
 
-		if (calculatorResult.isNotEmpty()) {
-			val message = Text.of(calculatorResult, calculatorResultColor)
+		if (calculatorResult.first.isNotEmpty()) {
+			val message = Text.of(calculatorResult.first, calculatorResultColor)
 			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - 6
-			val textY = searchBox.y + (searchBox.height - McFont.height) / 2 + 1
+			val textY = if (calculatorResult.second) searchBox.y + (searchBox.height - McFont.height) / 2 + 1
+			else searchBox.y - 5 - McFont.height / 2
 			graphics.text(McFont.self, message, textX, textY, CommonColors.WHITE)
 		}
 	}
