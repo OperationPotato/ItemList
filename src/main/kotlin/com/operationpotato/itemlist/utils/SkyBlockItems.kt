@@ -1,9 +1,7 @@
 package com.operationpotato.itemlist.utils
 
-import com.operationpotato.itemlist.config.ConfigManager
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.data.SkyBlockRarity
-import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockAttributesRepo
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockEnchantmentsRepo
@@ -109,8 +107,8 @@ object SkyBlockItems {
 		entityNames.forEach { key ->
 			val stack = SkyBlockMobsRepo.getLazyItemStack(key) ?: return@forEach
 			val type = key.substringAfterLast("_")
-			val isMob = SkyBlockMobsRepo.mobSuffixes.any { type == it }
-			val category = if (isMob) SkyBlockItemCategory.MOB else SkyBlockItemCategory.NPC
+			val isNpc = SkyBlockMobsRepo.npcSuffixes.any { type == it }
+			val category = if (isNpc) SkyBlockItemCategory.NPC else SkyBlockItemCategory.MOB
 			val isVanilla = RepoAPI.overlays().getMob(key)?.vanilla() ?: false
 			allItems.add(Item(stack, category, key, isVanilla))
 		}

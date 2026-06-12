@@ -2,11 +2,15 @@ package com.operationpotato.itemlist.utils
 
 import com.mojang.authlib.properties.Property
 import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.item.component.ItemLore
+import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
@@ -15,39 +19,40 @@ import tech.thatgravyboat.skyblockapi.api.repo.apis.RepoItemCache
 import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.toData
-import tech.thatgravyboat.skyblockapi.utils.extentions.toTitleCase
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.style
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import kotlin.jvm.optionals.getOrNull
 
 object SkyBlockMobsRepo : RepoItemCache<String>("Mobs") {
-	val mobSuffixes = listOf("MONSTER", "SC", "MINIBOSS", "BOSS")
-	val suffixesToCapitalize = listOf("SC", "NPC")
+	val npcSuffixes = listOf("NPC", "Rift NPC")
 	private const val ID_KEY = "skyblock-item-list:id"
 
 	private val repo get() = RepoAPI.mobs()
 
 	override fun create(key: String): LazyItemStack? {
 		val data = repo.getMob(key) ?: return null
-		val type = key.substringAfterLast("_")
-		val shouldTitleCase = !suffixesToCapitalize.any { type == it }
-		var suffix = if (shouldTitleCase) type.toTitleCase() else type
-		// TODO: remove this when SkyBlockAPI gives the NEU mob type directly
-		if (data.island == "rift") suffix = "Rift $suffix"
 
-		val stackName = Component.literal("${data.name} ($suffix)")
-			.style { withItalic(false) }
+		val stackName = Text.of(data.name) {
+			italic = false
+			data.type?.let { append(" ($it)") }
+		}
 		val lore = createLore(data)
 
-		// TODO: replace barrier with mob item when it's available
-		val stack = LazyItemStack(Items.BARRIER.takeIf { data.texture == null } ?: Items.PLAYER_HEAD) {
+		val item = Identifier.parse(data.itemId().lowercase())
+			?.let(BuiltInRegistries.ITEM::getValue)
+			?.takeUnless { it == Items.AIR }
+			?: Items.BARRIER
+
+		val stack = LazyItemStack(item.takeIf { data.texture == null } ?: Items.PLAYER_HEAD) {
 			if (data.texture != null) {
 				this[DataComponents.PROFILE] = ResolvableProfile { put("textures", Property("textures", data.texture)) }
 			}
 			this[DataComponents.CUSTOM_NAME] = stackName
 			if (lore.isNotEmpty()) {
 				this[DataComponents.LORE] = ItemLore(lore)
+				this[DataComponents.TOOLTIP_DISPLAY] =
+					TooltipDisplay.DEFAULT.withHidden(DataComponents.ATTRIBUTE_MODIFIERS, true)
 			}
 			// Set fake id for favoriting & links
 			this[DataComponents.CUSTOM_DATA] = compoundTag {
