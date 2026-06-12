@@ -38,6 +38,7 @@
 		"minecraft": "~26.1",
 		"java": ">=25",
 		"fabric-api": "*",
-		"fabric-language-kotlin": "*"
+		"fabric-language-kotlin": "*",
+		"skyblock-api": ">=${sbapi}"
 	}
 }
