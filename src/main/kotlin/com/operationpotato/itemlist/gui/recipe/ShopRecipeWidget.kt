@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.RepoLibUtils.getInputItemStacks
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.components.ImageWidget
 import net.minecraft.client.gui.layouts.GridLayout
@@ -36,6 +37,11 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 		if (!outputStack.isEmpty) {
 			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(134, 35))
 		}
+		val npcItem = SkyBlockMobsRepo.getItemStackOrDefault(recipe.npc)
+		container.addChild(
+			IngredientDisplay(npcItem),
+			container.topLeftAlignment(103, 16)
+		)
 
 		container.arrangeElements()
 	}

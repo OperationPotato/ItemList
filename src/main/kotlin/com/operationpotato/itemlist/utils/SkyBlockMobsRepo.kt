@@ -29,8 +29,10 @@ object SkyBlockMobsRepo : RepoItemCache<String>("Mobs") {
 
 	private val repo get() = RepoAPI.mobs()
 
+	fun get(key: String): Mob? = repo.getMob(key)
+
 	override fun create(key: String): LazyItemStack? {
-		val data = repo.getMob(key) ?: return null
+		val data = get(key) ?: return null
 
 		val stackName = Text.of(data.name) {
 			italic = false
