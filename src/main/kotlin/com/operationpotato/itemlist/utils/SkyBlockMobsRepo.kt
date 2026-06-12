@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Style
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.item.component.ItemLore
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.repolib.api.RepoAPI
