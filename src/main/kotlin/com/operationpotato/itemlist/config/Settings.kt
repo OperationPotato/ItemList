@@ -17,6 +17,7 @@ data class Settings(
 	var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList(),
 	var hideItemsWithoutSearch: Boolean = true,
 	var hideVanillaItems: Boolean = true,
+	var maxWidth: Float = 1f, // Percentage 0..1
 
 	// Favorites
 	var enableFavorites: Boolean = true,
@@ -37,6 +38,7 @@ data class Settings(
 				SkyBlockItemCategory.CODEC.listOf().fieldOf("customFilters").forGetter(Settings::customFilters),
 				Codec.BOOL.fieldOf("hideItemsWithoutSearch").forGetter(Settings::hideItemsWithoutSearch),
 				Codec.BOOL.optionalFieldOf("hideVanillaItems", false).forGetter(Settings::hideVanillaItems),
+				Codec.FLOAT.optionalFieldOf("maxWidth", 1f).forGetter(Settings::maxWidth),
 				Codec.BOOL.fieldOf("enableFavorites").forGetter(Settings::enableFavorites),
 				Codec.INT.fieldOf("favoritesItemSize").forGetter(Settings::favoritesItemSize),
 				Codec.BOOL.fieldOf("requiresEquals").forGetter(Settings::requiresEquals),
