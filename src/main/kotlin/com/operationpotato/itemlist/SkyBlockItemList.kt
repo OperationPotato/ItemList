@@ -61,15 +61,18 @@ object SkyBlockItemList : ClientModInitializer {
 				is RecipeScreen -> screen.getRight()
 				else -> w
 			}
-			val width = w - screenRight
+
+			val availableWidth = w - screenRight
+			val panelWidth = (availableWidth * ConfigManager.get().maxWidth).toInt()
+
 			val itemPanel = instance ?: ItemPanel(0, 0, 0, 0)
 			instance = itemPanel
 
-			itemPanel.setPosition(screenRight, 0)
-			itemPanel.setSize(width - 2, h)
+			itemPanel.setPosition(w - panelWidth, 0)
+			itemPanel.setSize(panelWidth - 2, h)
 			itemPanel.updatePosition()
 			itemPanel.visible = ConfigManager.get().enabled
-			if (width < 80) itemPanel.visible = false
+			if (panelWidth < 80) itemPanel.visible = false
 
 			Screens.getWidgets(screen).add(itemPanel)
 
@@ -77,10 +80,10 @@ object SkyBlockItemList : ClientModInitializer {
 			favoriteInstance = favPanel
 
 			favPanel.setPosition(0, 0)
-			favPanel.setSize(width - 2, h)
+			favPanel.setSize(panelWidth - 2, h)
 			favPanel.updatePosition()
 			favPanel.visible = ConfigManager.get().enabled && ConfigManager.get().enableFavorites
-			if (width < 80) favPanel.visible = false
+			if (panelWidth < 80) favPanel.visible = false
 
 			Screens.getWidgets(screen).add(favPanel)
 
