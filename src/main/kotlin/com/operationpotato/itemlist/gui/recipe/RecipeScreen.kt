@@ -69,6 +69,9 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>)
 		if (Keybinds.previousRecipe.matches(event)) {
 			McClient.setScreen(parent)
 			return true
+		} else if (this.minecraft.options.keyInventory.matches(event)) {
+			this.onClose()
+			return true
 		}
 		val mousePos = McClient.mouse
 		var child = getChildAt(mousePos.first, mousePos.second).getOrNull()
