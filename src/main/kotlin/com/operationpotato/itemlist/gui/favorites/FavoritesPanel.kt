@@ -16,6 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import java.util.*
 
 class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, y, width, height) {
 	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height)
@@ -67,14 +68,17 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 		ConfigManager.get().favoritesItemSize = listWidget.itemSize
 	}
 
-	fun setRecipe(recipe: Recipe<*>) {
+	fun setRecipe(recipe: Optional<Recipe<*>>) {
 		FavoritesManager.favorites.pinnedRecipe = recipe
-		recipeWidget = if (recipe != recipeWidget?.recipe) RecipeScreen.getWidgetForRecipe(recipe) else null
+		recipeWidget =
+			if (recipe != recipeWidget?.recipe && !recipe.isEmpty) RecipeScreen.getWidgetForRecipe(recipe.get()) else null
 		updatePosition()
 	}
 
+	fun setRecipe(recipe: Recipe<*>) = setRecipe(Optional.ofNullable(recipe))
+
 	fun removeRecipe() {
-		FavoritesManager.favorites.pinnedRecipe = null
+		FavoritesManager.favorites.pinnedRecipe = Optional.empty()
 		recipeWidget = null
 		updatePosition()
 	}
