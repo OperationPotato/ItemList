@@ -46,7 +46,7 @@ class DefaultPlugin : Plugin {
 				Button.builder(Text.of("o")) { button ->
 					if (button.active) McClient.sendCommand("viewrecipe $id")
 				}.apply {
-					tooltip(Tooltip.create(Text.of("Show Skyblock Craft")))
+					tooltip(Tooltip.create(Text.of("Show SkyBlock Craft")))
 					size(10, 10)
 				}.build()
 			)
