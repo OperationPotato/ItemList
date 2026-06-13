@@ -51,7 +51,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			.withTooltip(::createFilterTooltip)
 			.create(Component.empty(), ::onFilterButtonClick)
 	val searchBox: EditBox = EditBox(
-		McFont.self, 100, 16, Component.empty() // Giving it default width fixes it not starting with the input
+		McFont.self, 0, 16, Component.empty()
 	)
 	var bottomLayout: LinearLayout = LinearLayout.horizontal()
 
@@ -69,37 +69,19 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.value = ConfigManager.get().lastSearch
 		searchBox.addFormatter(SearchUtils::highlightSearch)
 		searchBox.setHint(Component.literal("Search or Calculate..."))
-		searchBox.setMaxLength(999)
-		updateListVisibility(searchBox.value, false)
-
-		if (ConfigManager.get().lastFilter != SkyBlockItemCategory.ALL)
-			itemListWidget.currentFilter = filterButton.value
-
-		// Initial Search
-		if (ConfigManager.get().lastSearch.isNotEmpty() || ConfigManager.get().lastFilter != SkyBlockItemCategory.ALL) {
-			itemListWidget.currentSearch = searchBox.value
-
-			val initialText = searchBox.value
-			val isExpression = initialText.isExpression()
-			updateListVisibility(initialText, isExpression)
-			if (isExpression) calculateAsync(initialText)
-
-			this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
-				itemListWidget.filterChildren(filterButton.value)
-
-				if (!isExpression) itemListWidget.searchChildren(initialText)
-
-				itemListWidget.switchPage(0)
-				itemListWidget.updatePositionsAsync()
-			}
-		}
-
 		searchBox.setResponder { text ->
 			val isExpression = text.isExpression()
 			updateListVisibility(text, isExpression)
 			if (isExpression) calculateAsync(text)
 			else searchAsync(text)
 		}
+		searchBox.setMaxLength(999)
+		updateListVisibility(searchBox.value, false)
+
+		if (ConfigManager.get().lastFilter != SkyBlockItemCategory.ALL)
+			itemListWidget.currentFilter = filterButton.value
+		if (ConfigManager.get().lastSearch.isNotEmpty())
+			itemListWidget.currentSearch = searchBox.value
 	}
 
 	fun updateListVisibility(search: String, isExpression: Boolean) {
