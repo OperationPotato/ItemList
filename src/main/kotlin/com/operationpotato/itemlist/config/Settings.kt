@@ -16,7 +16,7 @@ data class Settings(
 	var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM,
 	var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList(),
 	var hideItemsWithoutSearch: Boolean = true,
-	var hideVanillaItems: Boolean = true,
+	var hideVanillaItems: Boolean = false,
 	var maxWidth: Float = 1f, // Percentage 0..1
 
 	// Favorites
