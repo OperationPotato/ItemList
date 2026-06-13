@@ -37,6 +37,21 @@ class DefaultPlugin : Plugin {
 	}
 
 	override fun registerRecipeButtons(manager: RecipeButtonManager) {
+		manager.addProvider { recipeObj, stack ->
+			val id = stack.getSkyBlockId()?.skyblockId
+			if ((recipeObj as? Recipe<*>)?.type() != Recipe.Type.CRAFTING || id == null) {
+				return@addProvider Optional.empty()
+			}
+			Optional.of(
+				Button.builder(Text.of("o")) { button ->
+					if (button.active) McClient.sendCommand("viewrecipe $id")
+				}.apply {
+					tooltip(Tooltip.create(Text.of("Show Skyblock Craft")))
+					size(10, 10)
+				}.build()
+			)
+		}
+
 		manager.addProvider { recipeObj, _ ->
 			val recipe = recipeObj as? Recipe<*> ?: return@addProvider Optional.empty()
 			val isFav = FavoritesManager.isFavoriteRecipe(recipe)
@@ -73,20 +88,6 @@ class DefaultPlugin : Plugin {
 					tooltip(Tooltip.create(Text.of("Unpin Recipe")))
 					size(10, 10)
 				}.build()
-			)
-		}
-
-		manager.addProvider { recipeObj, stack ->
-			val id = stack.getSkyBlockId()?.skyblockId
-			Optional.of(
-				Button.builder(Text.of("o")) { button ->
-					if (button.active) McClient.sendCommand("viewrecipe $id")
-				}.apply {
-					tooltip(Tooltip.create(Text.of("Show Skyblock Craft")))
-					size(10, 10)
-				}.build().apply {
-					if ((recipeObj as? Recipe<*>)?.type() != Recipe.Type.CRAFTING || id == null) active = false
-				}
 			)
 		}
 	}
