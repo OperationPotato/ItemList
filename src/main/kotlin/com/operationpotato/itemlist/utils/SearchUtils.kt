@@ -23,10 +23,18 @@ object SearchUtils {
 
 	fun highlightSearch(text: String, offset: Int): FormattedCharSequence {
 		return { visitor ->
+			var color = false
 			for (i in text.indices) {
 				val codePoint = text.codePointAt(i)
 				var style = Style.EMPTY
-				if (codePoint == '|'.code) style = style.withColor(CommonColors.SOFT_YELLOW)
+				when(codePoint) {
+					'@'.code -> if (i == 0) color = true
+					' '.code -> color = false
+					'|'.code -> style = style.withColor(CommonColors.SOFT_YELLOW)
+				}
+				if (color) {
+					style = style.withColor(CommonColors.COSMOS_PINK)
+				}
 				visitor.accept(i, style, codePoint)
 			}
 			true

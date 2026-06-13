@@ -72,6 +72,15 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.addFormatter(SearchUtils::highlightSearch)
 		searchBox.setHint(Component.literal("Search or Calculate..."))
 		searchBox.setResponder { text ->
+			// Suggestion Provider for Filters
+			if (text.startsWith('@') && !text.contains(' ')) {
+				SkyBlockItemCategory.entries.firstOrNull {
+					it.formattedName.lowercase().startsWith(text.substring(1).lowercase())
+				}?.let {
+					searchBox.setSuggestion(it.formattedName.lowercase().substring(text.length - 1))
+				} ?: searchBox.setSuggestion(null)
+			} else searchBox.setSuggestion(null)
+
 			val isExpression = text.isExpression()
 			updateListVisibility(text, isExpression)
 			if (isExpression) calculateAsync(text)
@@ -165,6 +174,18 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		ConfigManager.get().lastSearch = text
 		calculatorResult = "" to false
 		this.searchFuture = ThreadUtils.SORTING_EXECUTOR.cancelAndSubmit(searchFuture) {
+			var text = text
+			if (text.startsWith("@")) {
+				val filter = text.substringBefore(' ').substring(1).lowercase()
+				if (SkyBlockItemCategory.entries.map { it.formattedName.lowercase() }.contains(filter)) {
+					itemListWidget.currentFilter = SkyBlockItemCategory.entries.first {
+						it.formattedName.lowercase() == filter
+					}
+				}
+				text = text.substringAfter(' ')
+			} else {
+				itemListWidget.currentFilter = filterButton.value
+			}
 			itemListWidget.searchChildren(text)
 			itemListWidget.switchPage(0)
 			itemListWidget.updatePositionsAsync()
