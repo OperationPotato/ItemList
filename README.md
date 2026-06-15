@@ -32,7 +32,7 @@ Check out [the gallery](https://modrinth.com/mod/skyblock-item-list/gallery) to 
 
 # Usage Guide
 * See the "SkyBlock Item List" category in the Minecraft Controls screen to adjust keybinds.
-* To toggle the overlay, press `Ctrl + O` or `Cmd + O`.
+* To toggle the overlay, while in the inventory, press `Ctrl + O` or `Cmd + O`.
 * To change the scale of items, hold `Ctrl` or `Cmd` as you scroll over the item list.
 * Hovered Item Interactions
 	* When hovering over an item, you can view its recipes and usages or favorite it.
