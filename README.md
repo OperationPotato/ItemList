@@ -28,7 +28,17 @@ Check out [the gallery](https://modrinth.com/mod/skyblock-item-list/gallery) to 
 	* Add custom buttons to recipes.
 	* For more information, see the 
       [Plugin API](https://github.com/OperationPotato/ItemList/blob/master/src/main/java/com/operationpotato/itemlist/api/Plugin.java)
-	  on GitHub.
+      on GitHub.
+
+# Usage Guide
+* See the "SkyBlock Item List" category in the Minecraft Controls screen to adjust keybinds.
+* To toggle the overlay, press `Ctrl + O` or `Cmd + O`.
+* To change the scale of items, hold `Ctrl` or `Cmd` as you scroll over the item list.
+* Hovered Item Interactions
+	* When hovering over an item, you can view its recipes and usages or favorite it.
+	* To view its recipe, press `R`.
+	* To view its usages, press `U`.
+	* To favorite the item, press `F`.
 
 ## My Item List doesn't load
 
