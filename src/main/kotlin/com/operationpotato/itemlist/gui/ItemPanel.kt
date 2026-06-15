@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.gui.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
 import com.operationpotato.itemlist.utils.ComponentUtils
@@ -45,6 +46,11 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}, false)
 	var topLayout: LinearLayout = LinearLayout.horizontal()
 
+	val settingsButton: Button = Button.builder(Component.literal("⚙")) {
+		McClient.setScreen(ConfigScreen(McScreen.self))
+	}.apply {
+		size(16, 16)
+	}.build()
 	val filterButton: CycleButton<SkyBlockItemCategory> =
 		CycleButton.builder(SkyBlockItemCategory::asComponent, SkyBlockItemCategory.ALL)
 			.withValues(SkyBlockItemCategory.entries)
@@ -55,7 +61,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	)
 	var bottomLayout: LinearLayout = LinearLayout.horizontal()
 
-	val children: List<AbstractWidget> = listOf(nextPageButton, prevPageButton, filterButton, searchBox, itemListWidget)
+	val children: List<AbstractWidget> = listOf(nextPageButton, prevPageButton, filterButton, searchBox, settingsButton, itemListWidget)
 
 	var filterFuture: Future<*>? = null
 	var searchFuture: Future<*>? = null
@@ -117,13 +123,14 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 	fun positionBottomBar() {
 		filterButton.setSize(16, 16)
-		searchBox.width = width - 26 - filterButton.width
+		searchBox.width = width - 10 - filterButton.width * 3
 
 		bottomLayout = LinearLayout.horizontal()
 		bottomLayout.defaultCellSetting().paddingRight(4)
-		bottomLayout.setPosition(x + 20 + itemListWidget.horizontalPadding, y + height - 20)
+		bottomLayout.setPosition(x + 15 + itemListWidget.horizontalPadding, y + height - 20)
 		bottomLayout.addChild(searchBox)
 		bottomLayout.addChild(filterButton)
+		bottomLayout.addChild(settingsButton)
 		bottomLayout.arrangeElements()
 	}
 
