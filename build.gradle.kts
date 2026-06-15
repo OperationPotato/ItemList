@@ -64,6 +64,7 @@ dependencies {
 	}
 
 	includeImplementation(libs.keval)
+	includeImplementation(libs.lattice)
 }
 
 fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>) {

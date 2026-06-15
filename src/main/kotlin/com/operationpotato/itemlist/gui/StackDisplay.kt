@@ -64,7 +64,7 @@ open class StackDisplay(
 			if (isHovered) graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
 			)
-			if (scale > 1f && ConfigManager.get().nonPixelatedItemScale) {
+			if (scale > 1f && ConfigManager.get().general.nonPixelatedItemScale) {
 				ScaledItemRenderer.extract(graphics, stack, 0, 0)
 			} else {
 				graphics.fakeItem(stack, 0, 0)

@@ -1,19 +1,21 @@
 package com.operationpotato.itemlist.gui.config
 
-import net.minecraft.client.gui.layouts.HeaderAndFooterLayout
+import com.moulberry.lattice.Lattice
+import com.moulberry.lattice.element.LatticeElements
+import com.operationpotato.itemlist.config.ConfigManager
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 
-class ConfigScreen(val parent: Screen?) : Screen(Component.literal("SkyBlock Item List Settings")) {
-	override fun isInGameUi(): Boolean = true
-
-	override fun init() {
-		val layout = HeaderAndFooterLayout(this)
-		layout.visitWidgets(this::addRenderableWidget)
+object ConfigScreen {
+	fun createLatticeElements(): LatticeElements {
+		val title = Component.literal("SkyBlock Item List Settings")
+		val elements = LatticeElements.fromAnnotations(title, ConfigManager.get())
+		return elements
 	}
 
-	override fun onClose() {
-		McClient.setScreen(parent)
+	fun createScreen(parent: Screen?): Screen {
+		val elements = createLatticeElements()
+		val screen = Lattice.createConfigScreen(elements, null, parent)
+		return screen
 	}
 }

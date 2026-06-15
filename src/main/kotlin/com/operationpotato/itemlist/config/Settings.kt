@@ -1,50 +1,138 @@
 package com.operationpotato.itemlist.config
 
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.moulberry.lattice.annotation.LatticeCategory
+import com.moulberry.lattice.annotation.LatticeOption
+import com.moulberry.lattice.annotation.constraint.LatticeFloatRange
+import com.moulberry.lattice.annotation.constraint.LatticeIntRange
+import com.moulberry.lattice.annotation.widget.LatticeWidgetButton
+import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
+import com.moulberry.lattice.annotation.widget.LatticeWidgetSlider
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 
-data class Settings(
-	// General
-	var enabled: Boolean = true,
-	var nonPixelatedItemScale: Boolean = true, // Currently a bit laggy when actively scaling, else runs fine
+class Settings {
+	val version = 1
 
-	// Main List
-	var itemSize: Int = StackDisplay.STACK_SIZE,
-	var lastSearch: String = "",
-	var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM,
-	var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList(),
-	var hideItemsWithoutSearch: Boolean = true,
-	var hideVanillaItems: Boolean = false,
-	var maxWidth: Float = 1f, // Percentage 0..1
+	@LatticeCategory(name = "General Settings")
+	val general = GeneralSettings()
 
-	// Favorites
-	var enableFavorites: Boolean = true,
-	var favoritesItemSize: Int = StackDisplay.STACK_SIZE,
+	@LatticeCategory(name = "Main Item Panel")
+	val mainList = MainListSettings()
 
-	// Calculator
-	var requiresEquals: Boolean = false, // maybe switch to true by default
-	var customConstants: Map<String, Double> = mutableMapOf(),
-) {
-	companion object {
-		val CODEC: Codec<Settings> = RecordCodecBuilder.create { instance ->
-			instance.group(
-				Codec.BOOL.fieldOf("enabled").forGetter(Settings::enabled),
-				Codec.BOOL.fieldOf("nonPixelatedItemScaling").forGetter(Settings::nonPixelatedItemScale),
-				Codec.INT.fieldOf("itemSize").forGetter(Settings::itemSize),
-				Codec.STRING.fieldOf("lastSearch").forGetter(Settings::lastSearch),
-				SkyBlockItemCategory.CODEC.fieldOf("lastFilter").forGetter(Settings::lastFilter),
-				SkyBlockItemCategory.CODEC.listOf().fieldOf("customFilters").forGetter(Settings::customFilters),
-				Codec.BOOL.fieldOf("hideItemsWithoutSearch").forGetter(Settings::hideItemsWithoutSearch),
-				Codec.BOOL.optionalFieldOf("hideVanillaItems", false).forGetter(Settings::hideVanillaItems),
-				Codec.FLOAT.optionalFieldOf("maxWidth", 1f).forGetter(Settings::maxWidth),
-				Codec.BOOL.fieldOf("enableFavorites").forGetter(Settings::enableFavorites),
-				Codec.INT.fieldOf("favoritesItemSize").forGetter(Settings::favoritesItemSize),
-				Codec.BOOL.fieldOf("requiresEquals").forGetter(Settings::requiresEquals),
-				Codec.unboundedMap(Codec.STRING, Codec.DOUBLE).fieldOf("customConstants")
-					.forGetter(Settings::customConstants),
-			).apply(instance, ::Settings)
-		}
+	@LatticeCategory(name = "Favorites Item Panel")
+	val favoritesList = FavoritesListSettings()
+
+	@LatticeCategory(name = "Calculator")
+	val calculator = CalculatorSettings()
+
+	@LatticeCategory(name = "Keybinds")
+	@Suppress("unused")
+	val keybinds = KeybindSettings()
+
+	class GeneralSettings {
+		@LatticeOption(title = "Enabled", translate = false)
+		@LatticeWidgetButton
+		var enabled: Boolean = true
+
+		@LatticeOption(
+			title = "Enable Non-Pixelated Item Scaling",
+			description = "Uses a custom item renderer when scaling above 100%.\nThis results in better looking items, at the cost of some performance.",
+			translate = false
+		)
+		@LatticeWidgetButton
+		var nonPixelatedItemScale: Boolean = true // Currently a bit laggy when actively scaling, else runs fine
+
+		@LatticeOption(
+			title = "Max Width",
+			description = "How much of the available width that should be used up by the item list."
+		)
+		@LatticeFloatRange(min = 0.25f, max = 1f, clampMin = 0.25f, clampMax = 1f)
+		@LatticeWidgetSlider
+		var maxWidth: Float = 1f // Percentage 0..1
+	}
+
+	class MainListSettings {
+		@LatticeOption(
+			title = "Item Size",
+			description = "This can be changed in-game by holding Control/Cmd and scrolling on the Item List."
+		)
+		@LatticeIntRange(min = 8, max = 48, clampMin = 8, clampMax = 48)
+		@LatticeWidgetSlider
+		var itemSize: Int = StackDisplay.STACK_SIZE
+
+		@LatticeOption(
+			title = "Hide Items Without Search",
+			description = "Hides items when there is no active search.\nThis is recommended to improve performance."
+		)
+		@LatticeWidgetButton
+		var hideItemsWithoutSearch: Boolean = true
+
+		@LatticeOption(
+			title = "Hide Vanilla Items",
+		)
+		@LatticeWidgetButton
+		var hideVanillaItems: Boolean = false
+
+		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
+		var lastSearch: String = ""
+		var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM
+	}
+
+	class FavoritesListSettings {
+		@LatticeOption(
+			title = "Enable Favorites"
+		)
+		@LatticeWidgetButton
+		var enableFavorites: Boolean = true
+
+		@LatticeOption(
+			title = "Favorites Item Size",
+			description = "This can be changed in-game by holding Control/Cmd and scrolling on the Favorites List."
+		)
+		@LatticeIntRange(min = 8, max = 48, clampMin = 8, clampMax = 48)
+		@LatticeWidgetSlider
+		var favoritesItemSize: Int = StackDisplay.STACK_SIZE
+	}
+
+	class CalculatorSettings {
+		@LatticeOption(
+			title = "Require Equals Sign",
+			description = "Whether an equals sign at the beginning of your search should be required for calculation."
+		)
+		@LatticeWidgetButton
+		var requiresEquals: Boolean = false // maybe switch to true by default
+
+		var customConstants: Map<String, Double> = mutableMapOf()
+	}
+
+	@Suppress("unused")
+	class KeybindSettings {
+		@LatticeOption(
+			title = "Hide Overlay",
+			description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
+		)
+		@LatticeWidgetKeybind
+		val hideOverlay = Keybinds.hideOverlay
+
+		@LatticeOption(title = "View Recipe", description = "Shows the recipes of the hovered item, if there are any.")
+		@LatticeWidgetKeybind
+		val viewRecipe = Keybinds.viewRecipe
+
+
+		@LatticeOption(title = "View Usage", description = "Shows the uses of the hovered item, if there are any.")
+		@LatticeWidgetKeybind
+		val viewUsage = Keybinds.viewUsage
+
+		@LatticeOption(
+			title = "Return to Previous Recipe",
+			description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen."
+		)
+		@LatticeWidgetKeybind
+		val previousRecipe = Keybinds.previousRecipe
+
+		@LatticeOption(title = "Favorite Item", description = "Adds the hovered item or recipe to your Favorites List.")
+		@LatticeWidgetKeybind
+		val favoriteItem = Keybinds.favoriteItem
 	}
 }

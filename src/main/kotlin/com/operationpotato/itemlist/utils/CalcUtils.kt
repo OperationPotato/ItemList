@@ -43,7 +43,7 @@ object CalcUtils {
 
 			caseInsensitiveConstant("purse") { CurrencyAPI.purse }
 			defaultConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
-			ConfigManager.get().customConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
+			ConfigManager.get().calculator.customConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
 		}
 
 
@@ -67,7 +67,7 @@ object CalcUtils {
 	}
 
 	fun String.isExpression(): Boolean {
-		if (ConfigManager.get().requiresEquals) return this.startsWith('=')
+		if (ConfigManager.get().calculator.requiresEquals) return this.startsWith('=')
 		return this.any { it in "+-*/^()" }
 	}
 }

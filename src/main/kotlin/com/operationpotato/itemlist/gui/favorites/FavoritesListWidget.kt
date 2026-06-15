@@ -29,7 +29,7 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 	}
 
 	fun updateChildren() {
-		if (!ConfigManager.get().enableFavorites) {
+		if (!ConfigManager.get().favoritesList.enableFavorites) {
 			children = emptyList()
 			return
 		}

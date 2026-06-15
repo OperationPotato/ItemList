@@ -63,7 +63,7 @@ object SkyBlockItemList : ClientModInitializer {
 			}
 
 			val availableWidth = w - screenRight
-			val panelWidth = (availableWidth * ConfigManager.get().maxWidth).toInt()
+			val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 
 			val itemPanel = instance ?: ItemPanel(0, 0, 0, 0)
 			instance = itemPanel
@@ -71,7 +71,7 @@ object SkyBlockItemList : ClientModInitializer {
 			itemPanel.setPosition(w - panelWidth, 0)
 			itemPanel.setSize(panelWidth - 2, h)
 			itemPanel.updatePosition()
-			itemPanel.visible = ConfigManager.get().enabled
+			itemPanel.visible = ConfigManager.get().general.enabled
 			if (panelWidth < 80) itemPanel.visible = false
 
 			Screens.getWidgets(screen).add(itemPanel)
@@ -82,7 +82,7 @@ object SkyBlockItemList : ClientModInitializer {
 			favPanel.setPosition(0, 0)
 			favPanel.setSize(panelWidth - 2, h)
 			favPanel.updatePosition()
-			favPanel.visible = ConfigManager.get().enabled && ConfigManager.get().enableFavorites
+			favPanel.visible = ConfigManager.get().general.enabled && ConfigManager.get().favoritesList.enableFavorites
 			if (panelWidth < 80) favPanel.visible = false
 
 			Screens.getWidgets(screen).add(favPanel)
@@ -113,8 +113,8 @@ object SkyBlockItemList : ClientModInitializer {
 						modName = null
 					}
 					itemPanel.visible = !itemPanel.visible
-					favPanel.visible = itemPanel.visible && ConfigManager.get().enableFavorites
-					ConfigManager.get().enabled = itemPanel.visible
+					favPanel.visible = itemPanel.visible && ConfigManager.get().favoritesList.enableFavorites
+					ConfigManager.get().general.enabled = itemPanel.visible
 					return@register false
 				}
 				if (!favPanel.onScreenKeyPress(screen, event)) return@register false
@@ -130,7 +130,7 @@ object SkyBlockItemList : ClientModInitializer {
 
 			ScreenEvents.remove(screen).register {
 				PluginManager.onScreenClosed()
-				if (modName == null) ConfigManager.get().enabled = itemPanel.visible
+				if (modName == null) ConfigManager.get().general.enabled = itemPanel.visible
 				favPanel.removed()
 				itemPanel.removed()
 			}

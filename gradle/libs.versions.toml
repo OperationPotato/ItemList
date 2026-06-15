@@ -1,25 +1,24 @@
 [versions]
 fabric-loader = "0.19.2"
 fabric-language-kotlin = "1.13.11+kotlin.2.3.21"
+fabric-loom = "1.16-SNAPSHOT"
 kotlin = "2.3.21"
 
 minecraft = "26.1.2"
 fabric-api = "0.148.0+26.1.2"
 skyblock-api = "4.1.13"
-
 keval = "1.1.1"
+lattice = "2.0.1+26.1"
 
-fabric-loom = "1.16-SNAPSHOT"
 
 [libraries]
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 skyblock-api = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblock-api" }
-
 keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
-
-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
-fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
+lattice = { module = "com.moulberry:lattice", version.ref = "lattice" }
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }

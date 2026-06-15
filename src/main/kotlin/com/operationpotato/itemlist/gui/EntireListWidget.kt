@@ -15,10 +15,10 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 		currentFilter = category
 		visibleChildren = when (currentFilter) {
 			SkyBlockItemCategory.ALL -> children
-			SkyBlockItemCategory.CUSTOM -> children.filter { it.type in ConfigManager.get().customFilters }
+			SkyBlockItemCategory.CUSTOM -> children.filter { it.type in ConfigManager.get().mainList.customFilters }
 			else -> children.filter { it.type == currentFilter }
 		}
-		if (ConfigManager.get().hideVanillaItems) {
+		if (ConfigManager.get().mainList.hideVanillaItems) {
 			visibleChildren = visibleChildren.filterNot { it.isVanilla }
 		}
 	}

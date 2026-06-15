@@ -23,7 +23,7 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	var recipeWidget: AbstractRecipeWidget? = null
 
 	init {
-		listWidget.itemSize = ConfigManager.get().favoritesItemSize
+		listWidget.itemSize = ConfigManager.get().favoritesList.favoritesItemSize
 		val pinnedRecipe = FavoritesManager.favorites.pinnedRecipe
 		setRecipe(pinnedRecipe)
 	}
@@ -60,14 +60,14 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 		val screen = McScreen.self
 		if (screen !is AbstractContainerScreen<*>) return
 		val availableWidth = screen.width - screen.right
-		val panelWidth = (availableWidth * ConfigManager.get().maxWidth).toInt()
+		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 		x = 0
 		width = panelWidth - 2
 		updatePosition()
 	}
 
 	override fun removed() {
-		ConfigManager.get().favoritesItemSize = listWidget.itemSize
+		ConfigManager.get().favoritesList.favoritesItemSize = listWidget.itemSize
 	}
 
 	fun setRecipe(recipe: Optional<Recipe<*>>) {
