@@ -31,22 +31,25 @@ class CollapsibleStackDisplay(
 
 	var isExpanded = false
 	var hoveredChildIndex = -1
+	var filteredFamilyItems = familyItems
 
 	override val hoveredStack: ItemStack
 		get() {
-			if (isExpanded && hoveredChildIndex in familyItems.indices) {
-				return familyItems[hoveredChildIndex].stack.create()
+			if (isExpanded && hoveredChildIndex in filteredFamilyItems.indices) {
+				return filteredFamilyItems[hoveredChildIndex].stack.create()
 			}
 			return stack
 		}
 
 	override fun matchesSearch(searches: List<String>): Boolean {
-		return familyItems.any { item ->
+		val filterd = familyItems.filter { item ->
 			val stack = item.stack.create()
 			val stackName = stack.cleanName.lowercase()
 			val loreLines = stack.getRawLore().map { it.lowercase() }
 			searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
 		}
+		filteredFamilyItems = filterd
+		return filterd.isNotEmpty()
 	}
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
@@ -58,8 +61,8 @@ class CollapsibleStackDisplay(
 		if (isExpanded) {
 			val parentHeight = STACK_SIZE * scale
 			val popoutY = y + parentHeight
-			val cols = minOf(6, familyItems.size)
-			val rows = ceil(familyItems.size / cols.toDouble())
+			val cols = minOf(6, filteredFamilyItems.size)
+			val rows = ceil(filteredFamilyItems.size / cols.toDouble())
 			val expandedWidth = cols * STACK_SIZE * scale
 			val expandedHeight = rows * STACK_SIZE * scale
 
@@ -85,8 +88,8 @@ class CollapsibleStackDisplay(
 			isExpanded = true
 			hoveredChildIndex = -1
 		} else if (isExpanded) {
-			val cols = minOf(6, familyItems.size)
-			val rows = ceil(familyItems.size / cols.toDouble())
+			val cols = minOf(6, filteredFamilyItems.size)
+			val rows = ceil(filteredFamilyItems.size / cols.toDouble())
 			val expandedWidth = cols * STACK_SIZE * scale
 			val expandedHeight = rows * STACK_SIZE * scale
 
@@ -95,7 +98,7 @@ class CollapsibleStackDisplay(
 				val relX = (mouseX - x) / (STACK_SIZE * scale)
 				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)
 				val index = relY.toInt() * cols + relX.toInt()
-				hoveredChildIndex = if (index < familyItems.size) index else -1
+				hoveredChildIndex = if (index < filteredFamilyItems.size) index else -1
 			} else {
 				isExpanded = false
 				hoveredChildIndex = -1
@@ -132,8 +135,8 @@ class CollapsibleStackDisplay(
 			)
 		}
 
-		val cols = minOf(6, familyItems.size)
-		val rows = ceil(familyItems.size / cols.toDouble())
+		val cols = minOf(6, filteredFamilyItems.size)
+		val rows = ceil(filteredFamilyItems.size / cols.toDouble())
 		val expandedWidth = cols * STACK_SIZE * scale
 		val expandedHeight = rows * STACK_SIZE * scale
 
@@ -146,7 +149,7 @@ class CollapsibleStackDisplay(
 				BACKGROUND_COLOR,
 			)
 
-			familyItems.forEachIndexed { index, familyItem ->
+			filteredFamilyItems.forEachIndexed { index, familyItem ->
 				val col = index % cols
 				val row = index / cols
 				val itemX = x + col * (STACK_SIZE * scale).toInt()

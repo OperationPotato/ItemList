@@ -22,6 +22,9 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 		if (ConfigManager.get().mainList.hideVanillaItems) {
 			visibleChildren = visibleChildren.filterNot { it.isVanilla }
 		}
+		visibleChildren.filterIsInstance<CollapsibleStackDisplay>().forEach {
+			it.filteredFamilyItems = it.familyItems
+		}
 	}
 
 	fun searchChildren(search: String) {
