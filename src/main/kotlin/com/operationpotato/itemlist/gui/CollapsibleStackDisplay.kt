@@ -42,14 +42,14 @@ class CollapsibleStackDisplay(
 		}
 
 	override fun matchesSearch(searches: List<String>): Boolean {
-		val filterd = familyItems.filter { item ->
+		val filtered = familyItems.filter { item ->
 			val stack = item.stack.create()
 			val stackName = stack.cleanName.lowercase()
 			val loreLines = stack.getRawLore().map { it.lowercase() }
 			searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
 		}
-		filteredFamilyItems = filterd
-		return filterd.isNotEmpty()
+		filteredFamilyItems = filtered
+		return filtered.isNotEmpty()
 	}
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
