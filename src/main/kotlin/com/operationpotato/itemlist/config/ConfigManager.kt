@@ -1,15 +1,15 @@
 package com.operationpotato.itemlist.config
 
-import com.google.gson.JsonParser
-import com.mojang.serialization.JsonOps
+import com.google.gson.GsonBuilder
 import com.operationpotato.itemlist.SkyBlockItemList
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.json.Json.toPrettyString
 import java.nio.file.Files
 
 object ConfigManager {
+	const val CONFIG_VERSION = 1
 	private val file = McClient.config.resolve("skyblock-item-list", "config.json")
 	private var settings: Settings = Settings()
+	private val GSON = GsonBuilder().setPrettyPrinting().create()
 
 	fun get() = settings
 
@@ -20,8 +20,7 @@ object ConfigManager {
 		}
 
 		try {
-			val json = JsonParser.parseString(Files.readString(file))
-//			settings = Settings.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow()
+			settings = GSON.fromJson(Files.readString(file), Settings::class.java)
 		} catch (e: Exception) {
 			SkyBlockItemList.logger.error("[SkyBlock Item List] Failed to load config!", e)
 		}
@@ -30,9 +29,8 @@ object ConfigManager {
 	fun save() {
 		try {
 			Files.createDirectories(file.parent)
-//			Settings.CODEC.encodeStart(JsonOps.INSTANCE, get()).result().ifPresent {
-//				Files.writeString(file, it.toPrettyString())
-//			}
+			val json = GSON.toJson(settings, Settings::class.java)
+			Files.writeString(file, json)
 		} catch (e: Exception) {
 			SkyBlockItemList.logger.error("[SkyBlock Item List] Failed to save config!", e)
 		}

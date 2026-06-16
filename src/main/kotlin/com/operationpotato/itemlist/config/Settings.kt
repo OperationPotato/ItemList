@@ -12,7 +12,8 @@ import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 
 class Settings {
-	val version = 1
+	@Suppress("unused")
+	val version = ConfigManager.CONFIG_VERSION
 
 	@LatticeCategory(name = "General Settings")
 	val general = GeneralSettings()
@@ -28,6 +29,7 @@ class Settings {
 
 	@LatticeCategory(name = "Keybinds")
 	@Suppress("unused")
+	@Transient
 	val keybinds = KeybindSettings()
 
 	class GeneralSettings {
@@ -75,6 +77,7 @@ class Settings {
 		var hideVanillaItems: Boolean = false
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
+
 		var lastSearch: String = ""
 		var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM
 	}
@@ -113,15 +116,18 @@ class Settings {
 			description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
 		)
 		@LatticeWidgetKeybind
+		@Transient
 		val hideOverlay = Keybinds.hideOverlay
 
 		@LatticeOption(title = "View Recipe", description = "Shows the recipes of the hovered item, if there are any.")
 		@LatticeWidgetKeybind
+		@Transient
 		val viewRecipe = Keybinds.viewRecipe
 
 
 		@LatticeOption(title = "View Usage", description = "Shows the uses of the hovered item, if there are any.")
 		@LatticeWidgetKeybind
+		@Transient
 		val viewUsage = Keybinds.viewUsage
 
 		@LatticeOption(
@@ -129,10 +135,12 @@ class Settings {
 			description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen."
 		)
 		@LatticeWidgetKeybind
+		@Transient
 		val previousRecipe = Keybinds.previousRecipe
 
 		@LatticeOption(title = "Favorite Item", description = "Adds the hovered item or recipe to your Favorites List.")
 		@LatticeWidgetKeybind
+		@Transient
 		val favoriteItem = Keybinds.favoriteItem
 	}
 }
