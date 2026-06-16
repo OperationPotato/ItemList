@@ -26,7 +26,7 @@ import kotlin.math.ceil
 
 class CollapsibleStackDisplay(
 	val familyItems: List<SkyBlockItems.Item>,
-	val mainItem: SkyBlockItems.Item
+	mainItem: SkyBlockItems.Item
 ) : StackDisplay(mainItem.stack, mainItem.category, mainItem.isVanilla) {
 
 	var isExpanded = false
@@ -136,22 +136,7 @@ class CollapsibleStackDisplay(
 			return
 		}
 
-		graphics.pushPop {
-			graphics.translate(x, y)
-			graphics.scale(scale, scale)
-			if (overParent) graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
-			)
-			if (scale > 1f && ConfigManager.get().general.nonPixelatedItemScale) {
-				ScaledItemRenderer.extract(graphics, stack, 0, 0)
-			} else {
-				graphics.fakeItem(stack, 0, 0)
-			}
-			if (overParent) graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_FRONT, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
-			)
-		}
-
+		extractStack(graphics, stack, x, y, overParent)
 		graphics.pushPop {
 			graphics.fill(
 				popoutX.toInt() - 2,
@@ -168,33 +153,12 @@ class CollapsibleStackDisplay(
 				val itemY = popoutY + row * (STACK_SIZE * scale).toInt()
 
 				val itemStack = familyItem.stack.create()
-
 				val isChildHovered = hoveredChildIndex == index
 
-				graphics.pushPop {
-					graphics.translate(itemX, itemY)
-					graphics.scale(scale, scale)
-					if (isChildHovered) graphics.blitSprite(
-						RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
-					)
-					if (scale > 1f && ConfigManager.get().general.nonPixelatedItemScale) {
-						ScaledItemRenderer.extract(graphics, itemStack, 0, 0)
-					} else {
-						graphics.fakeItem(itemStack, 0, 0)
-					}
-					if (isChildHovered) graphics.blitSprite(
-						RenderPipelines.GUI_TEXTURED, HIGHLIGHT_FRONT, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
-					)
-				}
+				extractStack(graphics, itemStack, itemX, itemY, isChildHovered)
 
 				if (isChildHovered) {
-					val tooltipStyle = if (McClient.options.advancedItemTooltips) {
-						TooltipFlag.Default.ADVANCED
-					} else {
-						TooltipFlag.Default.NORMAL
-					}
-					val tooltipLines =
-						itemStack.getTooltipLines(Item.TooltipContext.of(McLevel.self), McPlayer.self, tooltipStyle)
+					val tooltipLines = getTooltipLines(stack)
 					graphics.setComponentTooltipForNextFrame(McClient.gui.font, tooltipLines, mouseX, mouseY)
 				}
 			}

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
+import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -17,8 +18,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 
 class RecipeStackDisplay(val recipe: Recipe<*>, lazyStack: LazyItemStack, type: SkyBlockItemCategory) : StackDisplay(lazyStack, type) {
-	override fun getTooltipLines(): List<Component> {
-		val lines = super.getTooltipLines()
+	override fun getTooltipLines(stack: ItemStack): List<Component> {
+		val lines = super.getTooltipLines(stack)
 		val pinLine = Text.of("[CTRL+Click to pin this recipe]").withColor(TextColor.GRAY).apply { italic = false }
 		(lines as ArrayList<Component>).add(pinLine)
 		return lines
