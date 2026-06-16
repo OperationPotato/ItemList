@@ -95,8 +95,7 @@ object SkyBlockItems {
 			val stack = SkyBlockEnchantmentsRepo.getLazyItemStack(key) ?: return@forEach
 			val id = key.id.replace(Regex("^ULTIMATE_"), "")
 			val isVanilla = RepoAPI.overlays().getEnchantment(key.id, key.level ?: 1)?.vanilla() ?: false
-			val item =
-				Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}", isVanilla, "${key.id};${key.level}")
+			val item = Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}", isVanilla, "${key.id};${key.level}")
 			allItems.add(item)
 		}
 
