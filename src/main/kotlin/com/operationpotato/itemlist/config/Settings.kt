@@ -57,7 +57,7 @@ class Settings {
 	class MainListSettings {
 		@LatticeOption(
 			title = "Item Size",
-			description = "This can be changed in-game by holding Control/Cmd and scrolling on the Item List."
+			description = "This can be changed in-game by holding Control/Command and scrolling on the Item List."
 		)
 		@LatticeIntRange(min = 8, max = 48, clampMin = 8, clampMax = 48)
 		@LatticeWidgetSlider
@@ -98,7 +98,7 @@ class Settings {
 
 		@LatticeOption(
 			title = "Favorites Item Size",
-			description = "This can be changed in-game by holding Control/Cmd and scrolling on the Favorites List."
+			description = "This can be changed in-game by holding Control/Command and scrolling on the Favorites List."
 		)
 		@LatticeIntRange(min = 8, max = 48, clampMin = 8, clampMax = 48)
 		@LatticeWidgetSlider

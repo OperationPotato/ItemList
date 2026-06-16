@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
@@ -47,6 +48,8 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	var topLayout: LinearLayout = LinearLayout.horizontal()
 
 	val settingsButton: Button = Button.builder(Component.literal("⚙")) {
+		SkyBlockItemList.instance?.removed()
+		SkyBlockItemList.favoriteInstance?.removed()
 		McClient.setScreen(ConfigScreen.createScreen(McScreen.self))
 	}.apply {
 		size(16, 16)
