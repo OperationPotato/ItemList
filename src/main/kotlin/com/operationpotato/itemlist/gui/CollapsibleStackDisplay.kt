@@ -128,7 +128,7 @@ class CollapsibleStackDisplay(
 			graphics.pushPop {
 				graphics.translate(x, y)
 				graphics.scale(scale, scale)
-				graphics.text(McFont.self, "+", 12, 12, CommonColors.WHITE)
+				graphics.text(McFont.self, "+", 10, 10, CommonColors.WHITE)
 			}
 			return
 		}
