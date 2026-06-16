@@ -79,6 +79,11 @@ class CollapsibleStackDisplay(
 		return false
 	}
 
+	fun resetState() {
+		isExpanded = false
+		hoveredChildIndex = -1
+	}
+
 	override fun extractWidgetRenderState(
 		graphics: GuiGraphicsExtractor,
 		mouseX: Int,
@@ -114,12 +119,10 @@ class CollapsibleStackDisplay(
 				val index = relY.toInt() * cols + relX.toInt()
 				hoveredChildIndex = if (index < filteredFamilyItems.size) index else -1
 			} else {
-				isExpanded = false
-				hoveredChildIndex = -1
+				resetState()
 			}
 		} else {
-			isExpanded = false
-			hoveredChildIndex = -1
+			resetState()
 		}
 
 		if (!isExpanded) {

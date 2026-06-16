@@ -178,10 +178,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 
 		layout.visitPageWidgets {
 			if (it !== expandedWidget) {
-				if (it is CollapsibleStackDisplay) {
-					it.isExpanded = false
-					it.hoveredChildIndex = -1
-				}
+				if (it is CollapsibleStackDisplay) it.resetState()
 				it.extractRenderState(graphics, renderMouseX, renderMouseY, a)
 			}
 		}
