@@ -42,16 +42,16 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 	override fun getAllItems(): List<StackDisplay> = children
 
 	companion object {
-		private val groupedChildren: List<StackDisplay> by registryBoundLazy { generateItems(true) }
-		private val normalChildren: List<StackDisplay> by registryBoundLazy { generateItems(false) }
+		private val groupedChildren: List<StackDisplay> by registryBoundLazy { getGroupedItems() }
+		private val normalChildren: List<StackDisplay> by registryBoundLazy { getItems() }
 
 		val children: List<StackDisplay>
 			get() = if (ConfigManager.get().mainList.groupFamilies) groupedChildren else normalChildren
 
-		private fun generateItems(groupFamilies: Boolean): List<StackDisplay> {
+		private fun getGroupedItems(): List<StackDisplay> {
 			val displays: MutableList<StackDisplay> = mutableListOf()
 
-			if (RepoAPI.isInitialized() && groupFamilies) {
+			if (RepoAPI.isInitialized()) {
 				val itemsById = SkyBlockItems.items.associateBy { it.repoId.uppercase() }
 				val processed = mutableSetOf<String>()
 
@@ -75,10 +75,18 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 					processed.add(upperId)
 				}
 			} else {
-				SkyBlockItems.items.forEach { item ->
-					val display = StackDisplay(item.stack, item.category, item.isVanilla)
-					displays.add(display)
-				}
+				return getItems()
+			}
+
+			return displays
+		}
+
+		private fun getItems(): List<StackDisplay> {
+			val displays: MutableList<StackDisplay> = mutableListOf()
+
+			SkyBlockItems.items.forEach { item ->
+				val display = StackDisplay(item.stack, item.category, item.isVanilla)
+				displays.add(display)
 			}
 
 			return displays
