@@ -22,7 +22,6 @@ import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
-import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import kotlin.math.ceil
 
 class CollapsibleStackDisplay(
@@ -57,12 +56,14 @@ class CollapsibleStackDisplay(
 		if (overParent) return true
 
 		if (isExpanded) {
+			val parentHeight = STACK_SIZE * scale
+			val popoutY = y + parentHeight
 			val cols = minOf(6, familyItems.size)
 			val rows = ceil(familyItems.size / cols.toDouble())
 			val expandedWidth = cols * STACK_SIZE * scale
 			val expandedHeight = rows * STACK_SIZE * scale
 
-			return mouseX >= x && mouseX < x + expandedWidth && mouseY >= y && mouseY < y + expandedHeight
+			return mouseX >= x && mouseX < x + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 		}
 
 		return false
@@ -77,19 +78,22 @@ class CollapsibleStackDisplay(
 		createStackIfEmpty()
 
 		val overParent = mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height
+		val parentHeight = STACK_SIZE * scale
+		val popoutY = (y + parentHeight).toInt()
+
 		if (overParent) {
 			isExpanded = true
-			hoveredChildIndex = familyItems.indexOf(mainItem).takeIf { it >= 0 } ?: 0
+			hoveredChildIndex = -1
 		} else if (isExpanded) {
 			val cols = minOf(6, familyItems.size)
 			val rows = ceil(familyItems.size / cols.toDouble())
 			val expandedWidth = cols * STACK_SIZE * scale
 			val expandedHeight = rows * STACK_SIZE * scale
 
-			val overExpanded = mouseX >= x && mouseX < x + expandedWidth && mouseY >= y && mouseY < y + expandedHeight
+			val overExpanded = mouseX >= x && mouseX < x + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 			if (overExpanded) {
 				val relX = (mouseX - x) / (STACK_SIZE * scale)
-				val relY = (mouseY - y) / (STACK_SIZE * scale)
+				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)
 				val index = relY.toInt() * cols + relX.toInt()
 				hoveredChildIndex = if (index < familyItems.size) index else -1
 			} else {
@@ -112,6 +116,22 @@ class CollapsibleStackDisplay(
 			return
 		}
 
+		graphics.pushPop {
+			graphics.translate(x, y)
+			graphics.scale(scale, scale)
+			if (overParent) graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_BACK, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
+			)
+			if (scale > 1f && ConfigManager.get().general.nonPixelatedItemScale) {
+				ScaledItemRenderer.extract(graphics, stack, 0, 0)
+			} else {
+				graphics.fakeItem(stack, 0, 0)
+			}
+			if (overParent) graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED, HIGHLIGHT_FRONT, -4, -4, HIGHLIGHT_SIZE, HIGHLIGHT_SIZE
+			)
+		}
+
 		val cols = minOf(6, familyItems.size)
 		val rows = ceil(familyItems.size / cols.toDouble())
 		val expandedWidth = cols * STACK_SIZE * scale
@@ -120,9 +140,9 @@ class CollapsibleStackDisplay(
 		graphics.pushPop {
 			graphics.fill(
 				x - 2,
-				y - 2,
+				popoutY - 2,
 				x + expandedWidth.toInt() + 2,
-				y + expandedHeight.toInt() + 2,
+				popoutY + expandedHeight.toInt() + 2,
 				BACKGROUND_COLOR,
 			)
 
@@ -130,7 +150,7 @@ class CollapsibleStackDisplay(
 				val col = index % cols
 				val row = index / cols
 				val itemX = x + col * (STACK_SIZE * scale).toInt()
-				val itemY = y + row * (STACK_SIZE * scale).toInt()
+				val itemY = popoutY + row * (STACK_SIZE * scale).toInt()
 
 				val itemStack = familyItem.stack.create()
 
