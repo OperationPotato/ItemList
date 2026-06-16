@@ -52,22 +52,22 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 			val displays: MutableList<StackDisplay> = mutableListOf()
 
 			if (RepoAPI.isInitialized() && groupFamilies) {
-				val itemsById = SkyBlockItems.items.associateBy { it.id.uppercase() }
+				val itemsById = SkyBlockItems.items.associateBy { it.repoId.uppercase() }
 				val processed = mutableSetOf<String>()
 
 				SkyBlockItems.items.forEach { item ->
-					val upperId = item.id.uppercase()
+					val upperId = item.repoId.uppercase()
 					if (processed.contains(upperId)) return@forEach
 
-					val family = RepoAPI.parents().getFamily(item.id)
+					val family = RepoAPI.parents().getFamily(item.repoId)
 					val familyIds = listOf(family.mainParent) + family.allChildren
 					val familyItems = familyIds.distinct().mapNotNull { itemsById[it.uppercase()] }
 
 					if (familyItems.size > 1) {
-						val mainItem = familyItems.firstOrNull { it.id.equals(family.mainParent, ignoreCase = true) }
+						val mainItem = familyItems.firstOrNull { it.repoId.equals(family.mainParent, ignoreCase = true) }
 							?: familyItems.first()
 						displays.add(CollapsibleStackDisplay(familyItems, mainItem))
-						processed.addAll(familyItems.map { it.id.uppercase() })
+						processed.addAll(familyItems.map { it.repoId.uppercase() })
 						return@forEach
 					}
 
