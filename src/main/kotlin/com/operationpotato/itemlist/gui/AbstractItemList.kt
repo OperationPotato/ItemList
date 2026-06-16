@@ -167,7 +167,8 @@ abstract class AbstractItemList(width: Int, height: Int) :
 
 		var expandedWidget: CollapsibleStackDisplay? = null
 		layout.visitPageWidgets {
-			if (expandedWidget == null && it is CollapsibleStackDisplay && it.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
+			if (expandedWidget != null) return@visitPageWidgets
+			if (it is CollapsibleStackDisplay && it.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
 				expandedWidget = it
 			}
 		}
