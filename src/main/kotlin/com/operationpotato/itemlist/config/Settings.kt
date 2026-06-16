@@ -51,7 +51,7 @@ class Settings {
 		)
 		@LatticeFloatRange(min = 0.25f, max = 1f, clampMin = 0.25f, clampMax = 1f)
 		@LatticeWidgetSlider
-		var maxWidth: Float = 1f // Percentage 0..1
+		var maxWidth: Float = 1f
 	}
 
 	class MainListSettings {
@@ -75,6 +75,13 @@ class Settings {
 		)
 		@LatticeWidgetButton
 		var hideVanillaItems: Boolean = false
+
+		@LatticeOption(
+			title = "Group Families",
+			description = "Group similar items to a parent item"
+		)
+		@LatticeWidgetButton
+		var groupFamilies: Boolean = false
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 

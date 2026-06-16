@@ -37,7 +37,9 @@ open class StackDisplay(
 	val stackName: String by lazy { stack.cleanName.lowercase() }
 	val loreLines: List<String> by lazy { stack.getRawLore().map { it.lowercase() } }
 
-	private fun createStackIfEmpty() {
+	open val hoveredStack: ItemStack get() = stack
+
+	protected fun createStackIfEmpty() {
 		if (stack.isEmpty) stack = lazyStack.create()
 	}
 
@@ -90,7 +92,7 @@ open class StackDisplay(
 		this.scale = scaledSize / STACK_SIZE.toFloat()
 	}
 
-	fun matchesSearch(searches: List<String>): Boolean {
+	open fun matchesSearch(searches: List<String>): Boolean {
 		createStackIfEmpty()
 		return searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
 	}
@@ -101,7 +103,7 @@ open class StackDisplay(
 		const val STACK_SIZE = 16
 		const val HIGHLIGHT_SIZE = 24
 
-		private val HIGHLIGHT_BACK: Identifier = Identifier.withDefaultNamespace("container/slot_highlight_back")
-		private val HIGHLIGHT_FRONT: Identifier = Identifier.withDefaultNamespace("container/slot_highlight_front")
+		val HIGHLIGHT_BACK: Identifier = Identifier.withDefaultNamespace("container/slot_highlight_back")
+		val HIGHLIGHT_FRONT: Identifier = Identifier.withDefaultNamespace("container/slot_highlight_front")
 	}
 }
