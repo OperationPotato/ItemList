@@ -1,21 +1,14 @@
 package com.operationpotato.itemlist.gui
 
-import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
-import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TooltipFlag
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import tech.thatgravyboat.skyblockapi.helpers.McLevel
-import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
