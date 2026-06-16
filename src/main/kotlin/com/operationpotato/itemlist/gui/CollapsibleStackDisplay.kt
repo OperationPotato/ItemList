@@ -45,6 +45,25 @@ class CollapsibleStackDisplay(
 		return filtered.isNotEmpty()
 	}
 
+	private fun getPopOutState(): PopOutState {
+		val parentHeight = STACK_SIZE * scale
+		val popoutY = y + parentHeight
+
+		val cols = minOf(6, filteredFamilyItems.size)
+		val rows = ceil(filteredFamilyItems.size / cols.toDouble()).toInt()
+		val expandedWidth = cols * STACK_SIZE * scale
+		val expandedHeight = rows * STACK_SIZE * scale
+
+		val screenWidth = McScreen.self?.width ?: Int.MAX_VALUE
+		var popoutX = x.toDouble()
+		if (popoutX + expandedWidth > screenWidth) {
+			popoutX = screenWidth - expandedWidth - 4.0
+		}
+		popoutX = maxOf(4.0, popoutX)
+
+		return PopOutState(cols, rows, popoutX, popoutY, expandedWidth, expandedHeight)
+	}
+
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
 		if (!this.active || !this.visible) return false
 
@@ -52,20 +71,7 @@ class CollapsibleStackDisplay(
 		if (overParent) return true
 
 		if (isExpanded) {
-			val parentHeight = STACK_SIZE * scale
-			val popoutY = y + parentHeight
-			val cols = minOf(6, filteredFamilyItems.size)
-			val rows = ceil(filteredFamilyItems.size / cols.toDouble())
-			val expandedWidth = cols * STACK_SIZE * scale
-			val expandedHeight = rows * STACK_SIZE * scale
-
-			val screenWidth = McScreen.self?.width ?: Int.MAX_VALUE
-			var popoutX = x.toDouble()
-			if (popoutX + expandedWidth > screenWidth) {
-				popoutX = screenWidth - expandedWidth - 4.0
-			}
-			popoutX = maxOf(4.0, popoutX)
-
+			val (_, _, popoutX, popoutY, expandedWidth, expandedHeight) = getPopOutState()
 			return mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 		}
 
@@ -86,20 +92,7 @@ class CollapsibleStackDisplay(
 		createStackIfEmpty()
 
 		val overParent = mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height
-		val parentHeight = STACK_SIZE * scale
-		val popoutY = (y + parentHeight).toInt()
-
-		val cols = minOf(6, filteredFamilyItems.size)
-		val rows = ceil(filteredFamilyItems.size / cols.toDouble())
-		val expandedWidth = cols * STACK_SIZE * scale
-		val expandedHeight = rows * STACK_SIZE * scale
-
-		val screenWidth = McScreen.self?.width ?: Int.MAX_VALUE
-		var popoutX = x.toDouble()
-		if (popoutX + expandedWidth > screenWidth) {
-			popoutX = screenWidth - expandedWidth - 4.0
-		}
-		popoutX = maxOf(4.0, popoutX)
+		val (cols, _, popoutX, popoutY, expandedWidth, expandedHeight) = getPopOutState()
 
 		if (overParent) {
 			isExpanded = true
@@ -120,7 +113,6 @@ class CollapsibleStackDisplay(
 
 		if (!isExpanded) {
 			super.extractWidgetRenderState(graphics, mouseX, mouseY, a)
-
 			graphics.pushPop {
 				graphics.translate(x, y)
 				graphics.scale(scale, scale)
@@ -133,9 +125,9 @@ class CollapsibleStackDisplay(
 		graphics.pushPop {
 			graphics.fill(
 				popoutX.toInt() - 2,
-				popoutY - 2,
+				popoutY.toInt() - 2,
 				popoutX.toInt() + expandedWidth.toInt() + 2,
-				popoutY + expandedHeight.toInt() + 2,
+				popoutY.toInt() + expandedHeight.toInt() + 2,
 				BACKGROUND_COLOR,
 			)
 
@@ -143,7 +135,7 @@ class CollapsibleStackDisplay(
 				val col = index % cols
 				val row = index / cols
 				val itemX = popoutX.toInt() + col * (STACK_SIZE * scale).toInt()
-				val itemY = popoutY + row * (STACK_SIZE * scale).toInt()
+				val itemY = popoutY.toInt() + row * (STACK_SIZE * scale).toInt()
 
 				val itemStack = familyItem.stack.create()
 				val isChildHovered = hoveredChildIndex == index
@@ -163,6 +155,12 @@ class CollapsibleStackDisplay(
 			RecipeScreen.openRecipeForItem(hoveredStack, McScreen.self)
 		}
 	}
+
+	private data class PopOutState(
+		val cols: Int, val rows: Int,
+		val popoutX: Double, val popoutY: Float,
+		val expandedWidth: Float, val expandedHeight: Float,
+	)
 
 	companion object {
 		private val BACKGROUND_COLOR = ARGB.multiplyAlpha(CommonColors.BLACK, 0.8f)
