@@ -66,7 +66,14 @@ class CollapsibleStackDisplay(
 			val expandedWidth = cols * STACK_SIZE * scale
 			val expandedHeight = rows * STACK_SIZE * scale
 
-			return mouseX >= x && mouseX < x + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
+			val screenWidth = McScreen.self?.width ?: Int.MAX_VALUE
+			var popoutX = x.toDouble()
+			if (popoutX + expandedWidth > screenWidth) {
+				popoutX = screenWidth - expandedWidth - 4.0
+			}
+			popoutX = maxOf(4.0, popoutX)
+
+			return mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 		}
 
 		return false
@@ -84,18 +91,25 @@ class CollapsibleStackDisplay(
 		val parentHeight = STACK_SIZE * scale
 		val popoutY = (y + parentHeight).toInt()
 
+		val cols = minOf(6, filteredFamilyItems.size)
+		val rows = ceil(filteredFamilyItems.size / cols.toDouble())
+		val expandedWidth = cols * STACK_SIZE * scale
+		val expandedHeight = rows * STACK_SIZE * scale
+
+		val screenWidth = McScreen.self?.width ?: Int.MAX_VALUE
+		var popoutX = x.toDouble()
+		if (popoutX + expandedWidth > screenWidth) {
+			popoutX = screenWidth - expandedWidth - 4.0
+		}
+		popoutX = maxOf(4.0, popoutX)
+
 		if (overParent) {
 			isExpanded = true
 			hoveredChildIndex = -1
 		} else if (isExpanded) {
-			val cols = minOf(6, filteredFamilyItems.size)
-			val rows = ceil(filteredFamilyItems.size / cols.toDouble())
-			val expandedWidth = cols * STACK_SIZE * scale
-			val expandedHeight = rows * STACK_SIZE * scale
-
-			val overExpanded = mouseX >= x && mouseX < x + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
+			val overExpanded = mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 			if (overExpanded) {
-				val relX = (mouseX - x) / (STACK_SIZE * scale)
+				val relX = (mouseX - popoutX) / (STACK_SIZE * scale)
 				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)
 				val index = relY.toInt() * cols + relX.toInt()
 				hoveredChildIndex = if (index < filteredFamilyItems.size) index else -1
@@ -135,16 +149,11 @@ class CollapsibleStackDisplay(
 			)
 		}
 
-		val cols = minOf(6, filteredFamilyItems.size)
-		val rows = ceil(filteredFamilyItems.size / cols.toDouble())
-		val expandedWidth = cols * STACK_SIZE * scale
-		val expandedHeight = rows * STACK_SIZE * scale
-
 		graphics.pushPop {
 			graphics.fill(
-				x - 2,
+				popoutX.toInt() - 2,
 				popoutY - 2,
-				x + expandedWidth.toInt() + 2,
+				popoutX.toInt() + expandedWidth.toInt() + 2,
 				popoutY + expandedHeight.toInt() + 2,
 				BACKGROUND_COLOR,
 			)
@@ -152,7 +161,7 @@ class CollapsibleStackDisplay(
 			filteredFamilyItems.forEachIndexed { index, familyItem ->
 				val col = index % cols
 				val row = index / cols
-				val itemX = x + col * (STACK_SIZE * scale).toInt()
+				val itemX = popoutX.toInt() + col * (STACK_SIZE * scale).toInt()
 				val itemY = popoutY + row * (STACK_SIZE * scale).toInt()
 
 				val itemStack = familyItem.stack.create()
