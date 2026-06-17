@@ -145,6 +145,13 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		return true
 	}
 
+	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
+		if (!super.isMouseOver(mouseX, mouseY)) return false
+
+		// If the mouse is inside any active exclusion zone, ignore mouse input
+		return !PluginManager.isInAnyExclusionZone(mouseX.toInt(), mouseY.toInt())
+	}
+
 	override fun getChildAt(mouseX: Double, mouseY: Double): Optional<GuiEventListener> {
 		val widgets = layout.getPageWidgets()
 		val expanded = widgets.find { it is CollapsibleStackDisplay && it.isExpanded && it.isMouseOver(mouseX, mouseY) }

@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import java.time.temporal.TemporalQueries.zone
 
 @ApiStatus.Internal
 object PluginManager {
@@ -49,6 +50,16 @@ object PluginManager {
 
 	fun getExclusionZones(): List<ExclusionZone> {
 		return exclusionZoneManager.getExclusionZones()
+	}
+
+	fun isInAnyExclusionZone(x: Int, y: Int): Boolean {
+		for (zone in getExclusionZones()) {
+			val rect = zone.area
+			if (x >= rect.x && x < rect.x + rect.width && y >= rect.y && y < rect.y + rect.height) {
+				return false
+			}
+		}
+		return true
 	}
 
 	fun didExclusionZonesChange(): Boolean {
