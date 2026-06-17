@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import java.time.temporal.TemporalQueries.zone
 
 @ApiStatus.Internal
 object PluginManager {

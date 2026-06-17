@@ -6,7 +6,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
-import tech.thatgravyboat.skyblockapi.helpers.McClient.mouse
 
 abstract class AbstractItemPanel(
 	x: Int, y: Int, width: Int, height: Int,
