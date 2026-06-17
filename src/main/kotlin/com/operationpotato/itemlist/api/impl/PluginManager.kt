@@ -55,10 +55,10 @@ object PluginManager {
 		for (zone in getExclusionZones()) {
 			val rect = zone.area
 			if (x >= rect.x && x < rect.x + rect.width && y >= rect.y && y < rect.y + rect.height) {
-				return false
+				return true
 			}
 		}
-		return true
+		return false
 	}
 
 	fun didExclusionZonesChange(): Boolean {
