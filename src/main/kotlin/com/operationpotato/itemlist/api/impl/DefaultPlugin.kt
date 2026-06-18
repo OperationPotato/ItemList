@@ -125,7 +125,7 @@ class DefaultPlugin : Plugin {
 		val availableWidth = screen.width - (x)
 		val maxWidth = if (availableWidth >= 120) 120 else 32
 		var y = screen.top
-		val step = if (player.activeEffects.size > 5) 132 / (player.activeEffects.size) else 33
+		val step = if (player.activeEffects.size > 5) 132 / (player.activeEffects.size - 1) else 33
 
 		val zones = mutableListOf<Rect2i>()
 		playerEffects.forEach { effect ->
@@ -137,7 +137,7 @@ class DefaultPlugin : Plugin {
 	}
 
 	fun getEffectSize(effectsInInventory: EffectsInInventory, effect: MobEffectInstance): Int {
-		return 32 + McFont.self.width(effectsInInventory.getEffectName(effect))
+		return 32 + 7 + McFont.self.width(effectsInInventory.getEffectName(effect))
 	}
 
 	fun getEffectsInInventory(screen: Screen): EffectsInInventory? {
