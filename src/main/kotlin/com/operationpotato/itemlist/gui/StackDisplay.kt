@@ -4,6 +4,8 @@ import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
+import com.operationpotato.itemlist.utils.search.IdentifierSearch
+import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -24,6 +26,7 @@ import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 open class StackDisplay(
 	val lazyStack: LazyItemStack,
@@ -94,9 +97,12 @@ open class StackDisplay(
 		this.scale = scaledSize / STACK_SIZE.toFloat()
 	}
 
-	open fun matchesSearch(searches: List<String>): Boolean {
+	open fun matchesSearch(searches: List<Search>): Boolean {
 		createStackIfEmpty()
-		return searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
+		return searches.any { search ->
+			if (search is IdentifierSearch) search.matches("id:${stack.getSkyBlockId() ?: ""}")
+			else search.matches(stackName) || loreLines.any { search.matches(it) }
+		}
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}

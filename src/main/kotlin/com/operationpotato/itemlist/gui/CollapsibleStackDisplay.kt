@@ -2,6 +2,8 @@ package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.SkyBlockItems
+import com.operationpotato.itemlist.utils.search.IdentifierSearch
+import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.util.ARGB
@@ -15,6 +17,7 @@ import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.ceil
 
 class CollapsibleStackDisplay(
@@ -34,12 +37,15 @@ class CollapsibleStackDisplay(
 			return stack
 		}
 
-	override fun matchesSearch(searches: List<String>): Boolean {
+	override fun matchesSearch(searches: List<Search>): Boolean {
 		val filtered = familyItems.filter { item ->
 			val stack = item.stack.create()
 			val stackName = stack.cleanName.lowercase()
 			val loreLines = stack.getRawLore().map { it.lowercase() }
-			searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
+			searches.any { search ->
+				if (search is IdentifierSearch) search.matches("id:${stack.getSkyBlockId() ?: ""}")
+				else search.matches(stackName) || loreLines.any { search.matches(it) }
+			}
 		}
 		filteredFamilyItems = filtered
 		return filtered.isNotEmpty()
@@ -98,7 +104,8 @@ class CollapsibleStackDisplay(
 			isExpanded = true
 			hoveredChildIndex = -1
 		} else if (isExpanded) {
-			val overExpanded = mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
+			val overExpanded =
+				mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 			if (overExpanded) {
 				val relX = (mouseX - popoutX) / (STACK_SIZE * scale)
 				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)
