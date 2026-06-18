@@ -1,6 +1,5 @@
 package com.operationpotato.itemlist.gui
 
-import com.operationpotato.itemlist.api.impl.PluginManager
 import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.gui.screens.Screen
@@ -29,9 +28,7 @@ abstract class AbstractItemPanel(
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
 		if (!super.isMouseOver(mouseX, mouseY)) return false
-
-		// If the mouse is inside any active exclusion zone, ignore mouse input
-		return !PluginManager.isInAnyExclusionZone(mouseX.toInt(), mouseY.toInt())
+		return children().any { it.isMouseOver(mouseX, mouseY) }
 	}
 
 	override fun contentHeight(): Int = height

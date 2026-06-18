@@ -51,16 +51,6 @@ object PluginManager {
 		return exclusionZoneManager.getExclusionZones()
 	}
 
-	fun isInAnyExclusionZone(x: Int, y: Int): Boolean {
-		for (zone in getExclusionZones()) {
-			val rect = zone.area
-			if (x >= rect.x && x < rect.x + rect.width && y >= rect.y && y < rect.y + rect.height) {
-				return true
-			}
-		}
-		return false
-	}
-
 	fun didExclusionZonesChange(): Boolean {
 		return exclusionZoneManager.getHasChanged()
 	}

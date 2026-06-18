@@ -147,9 +147,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
 		if (!super.isMouseOver(mouseX, mouseY)) return false
-
-		// If the mouse is inside any active exclusion zone, ignore mouse input
-		return !PluginManager.isInAnyExclusionZone(mouseX.toInt(), mouseY.toInt())
+		return getChildAt(mouseX, mouseY).isPresent
 	}
 
 	override fun getChildAt(mouseX: Double, mouseY: Double): Optional<GuiEventListener> {
