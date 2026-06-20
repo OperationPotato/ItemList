@@ -63,6 +63,7 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 
 		pageAmount = pages.size - 1
 
+		topLayout = LinearLayout.horizontal()
 		val layout: Layout = LinearLayout.vertical().spacing(10).apply {
 
 			topLayout.addChild(prevPageButton) { it.alignHorizontallyLeft() }
