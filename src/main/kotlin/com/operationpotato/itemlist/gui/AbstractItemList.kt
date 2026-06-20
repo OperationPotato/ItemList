@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import java.util.Optional
 import java.util.concurrent.Future
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration.Companion.seconds
@@ -135,13 +136,26 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		scrollY: Double
 	): Boolean {
 		if (!visible) return false
-		if (!this.isMouseOver(x, y)) return false
+		if (!super.isMouseOver(x, y)) return false
+		if (PluginManager.isInAnyExclusionZone(x, y)) return false
 		if (McClient.self.hasControlDown()) {
 			scrollItemSize(scrollY)
 		} else {
 			scrollPage(scrollY < 0)
 		}
 		return true
+	}
+
+	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
+		if (!super.isMouseOver(mouseX, mouseY)) return false
+		return getChildAt(mouseX, mouseY).isPresent
+	}
+
+	override fun getChildAt(mouseX: Double, mouseY: Double): Optional<GuiEventListener> {
+		val widgets = layout.getPageWidgets()
+		val expanded = widgets.find { it is CollapsibleStackDisplay && it.isExpanded && it.isMouseOver(mouseX, mouseY) }
+		if (expanded != null) return Optional.of(expanded)
+		return super.getChildAt(mouseX, mouseY)
 	}
 
 	override fun extractWidgetRenderState(
@@ -156,9 +170,28 @@ abstract class AbstractItemList(width: Int, height: Int) :
 			x + width / 2, y + McFont.height, CommonColors.WHITE
 		)
 		graphics.enableScissor(x, y, x + width - horizontalPadding, y + height)
+
+		var expandedWidget: CollapsibleStackDisplay? = null
 		layout.visitPageWidgets {
-			it.extractRenderState(graphics, mouseX, mouseY, a)
+			if (expandedWidget != null) return@visitPageWidgets
+			if (it is CollapsibleStackDisplay && it.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
+				expandedWidget = it
+			}
 		}
+
+		// Needs to be -1,-1 when rendering collapsed stuff so the items below don't render their tooltip
+		val renderMouseX = if (expandedWidget != null) -1 else mouseX
+		val renderMouseY = if (expandedWidget != null) -1 else mouseY
+
+		layout.visitPageWidgets {
+			if (it !== expandedWidget) {
+				if (it is CollapsibleStackDisplay) it.resetState()
+				it.extractRenderState(graphics, renderMouseX, renderMouseY, a)
+			}
+		}
+
+		expandedWidget?.extractRenderState(graphics, mouseX, mouseY, a)
+
 		scrollAmountWidget?.extractRenderState(graphics, mouseX, mouseY, a)
 		if (scrollAmountWidget?.expired() == true) scrollAmountWidget = null
 		graphics.disableScissor()
@@ -168,8 +201,8 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		val mousePos = McClient.mouse
 		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
 		if (child !is StackDisplay) return false
-		if (PluginManager.provideHoveredItem(child.stack, event)) return true
-		return Keybinds.handleKeybind(child.stack, event)
+		if (PluginManager.provideHoveredItem(child.hoveredStack, event)) return true
+		return Keybinds.handleKeybind(child.hoveredStack, event)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}

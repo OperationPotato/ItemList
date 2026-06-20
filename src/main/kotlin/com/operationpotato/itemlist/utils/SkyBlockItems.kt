@@ -95,7 +95,8 @@ object SkyBlockItems {
 			val stack = SkyBlockEnchantmentsRepo.getLazyItemStack(key) ?: return@forEach
 			val id = key.id.replace(Regex("^ULTIMATE_"), "")
 			val isVanilla = RepoAPI.overlays().getEnchantment(key.id, key.level ?: 1)?.vanilla() ?: false
-			allItems.add(Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}", isVanilla))
+			val item = Item(stack, SkyBlockItemCategory.ENCHANTMENT, "$id;${key.level}", isVanilla, "${key.id};${key.level}")
+			allItems.add(item)
 		}
 
 		itemNames.forEach { key ->
@@ -123,7 +124,8 @@ object SkyBlockItems {
 			val stack = SkyBlockPotionsRepo.getLazyItemStack(key) ?: return@forEach
 			val id = key.id.replace(Regex("^POTION_"), "")
 			val isVanilla = RepoAPI.overlays().getPotion(key.id, key.level ?: 1)?.vanilla() ?: false
-			allItems.add(Item(stack, SkyBlockItemCategory.POTION, "$id;${key.level}", isVanilla))
+			val item = Item(stack, SkyBlockItemCategory.POTION, "$id;${key.level}", isVanilla, "${key.id};${key.level}")
+			allItems.add(item)
 		}
 
 		runeNames.forEach { key ->
@@ -139,6 +141,7 @@ object SkyBlockItems {
 		val stack: LazyItemStack,
 		val category: SkyBlockItemCategory,
 		val id: String,
-		val isVanilla: Boolean = false
+		val isVanilla: Boolean = false,
+		val repoId: String = id,
 	)
 }

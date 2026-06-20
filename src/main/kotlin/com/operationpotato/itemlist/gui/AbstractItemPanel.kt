@@ -26,6 +26,11 @@ abstract class AbstractItemPanel(
 		return getListWidget().mouseScrolled(x, y, scrollX, scrollY)
 	}
 
+	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
+		if (!super.isMouseOver(mouseX, mouseY)) return false
+		return children().any { it.isMouseOver(mouseX, mouseY) }
+	}
+
 	override fun contentHeight(): Int = height
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
 }

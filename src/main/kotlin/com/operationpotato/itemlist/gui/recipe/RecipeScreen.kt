@@ -25,7 +25,12 @@ import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.repolib.api.recipes.ShopRecipe
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.Text.send
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import kotlin.jvm.optionals.getOrNull
 
 class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>, val pageIndex: Int = 0) : Screen(Text.of("Recipe Screen")) {
@@ -140,6 +145,12 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 			val matchingRecipes = SkyBlockRecipeAPI.getRecipesForId(targetId)
 			if (matchingRecipes.isNotEmpty()) {
 				openRecipe(matchingRecipes, parent)
+			} else {
+				Text.of("No recipes found for ") {
+					color = TextColor.RED
+					append(stack.cleanName, TextColor.LIGHT_PURPLE)
+					append("!")
+				}.send()
 			}
 		}
 
@@ -149,6 +160,12 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 			val matchingRecipes = SkyBlockRecipeAPI.getUsagesForId(targetId)
 			if (matchingRecipes.isNotEmpty()) {
 				openRecipe(matchingRecipes, parent)
+			} else {
+				Text.of("No usages found for ") {
+					color = TextColor.RED
+					append(stack.cleanName, TextColor.LIGHT_PURPLE)
+					append("!")
+				}.send()
 			}
 		}
 

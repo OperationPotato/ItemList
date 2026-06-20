@@ -5,6 +5,7 @@ import com.moulberry.lattice.element.LatticeElements
 import com.operationpotato.itemlist.SkyBlockItemList
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 object ConfigScreen {
 	fun createLatticeElements(): LatticeElements {
@@ -17,7 +18,9 @@ object ConfigScreen {
 		SkyBlockItemList.instance = null
 		SkyBlockItemList.favoriteInstance = null
 		val elements = createLatticeElements()
-		val screen = Lattice.createConfigScreen(elements, null, parent)
+		val screen = Lattice.createConfigScreen(elements, {
+			McClient.self.options.save()
+		}, parent)
 		return screen
 	}
 }

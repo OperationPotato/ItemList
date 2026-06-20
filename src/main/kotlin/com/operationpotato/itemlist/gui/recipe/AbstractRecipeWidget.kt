@@ -36,7 +36,7 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 		}
 
 		val buttons = PluginManager.getRecipeButtons(recipe)
-		val verticalButtons = LinearLayout.vertical().spacing(5).apply {
+		val verticalButtons = LinearLayout.vertical().spacing(3).apply {
 			buttons.forEach { button -> addChild(button) }
 		}
 		container.addChild(

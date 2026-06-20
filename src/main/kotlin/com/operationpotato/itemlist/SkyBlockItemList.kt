@@ -131,7 +131,9 @@ object SkyBlockItemList : ClientModInitializer {
 			ScreenEvents.remove(screen).register {
 				PluginManager.onScreenClosed()
 				if (modName == null) ConfigManager.get().general.enabled = itemPanel.visible
+				favPanel.focused = null
 				favPanel.removed()
+				itemPanel.focused = null
 				itemPanel.removed()
 			}
 		}

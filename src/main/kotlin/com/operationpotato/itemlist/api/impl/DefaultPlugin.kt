@@ -27,6 +27,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.*
 
 @ApiStatus.Internal
@@ -43,11 +44,11 @@ class DefaultPlugin : Plugin {
 				return@addProvider Optional.empty()
 			}
 			Optional.of(
-				Button.builder(Text.of("o")) {
+				Button.builder(Text.of("+")) {
 					McClient.sendCommand("viewrecipe $id")
 				}.apply {
 					tooltip(Tooltip.create(Text.of("Show SkyBlock Craft")))
-					size(10, 10)
+					size(12, 12)
 				}.build()
 			)
 		}
@@ -56,8 +57,8 @@ class DefaultPlugin : Plugin {
 			if (isPinnedRecipe(recipeObj)) return@addProvider Optional.empty()
 			val recipe = recipeObj as? Recipe<*> ?: return@addProvider Optional.empty()
 			val isFav = FavoritesManager.isFavoriteRecipe(recipe)
-			val favText = Text.of("+")
-			val unfavText = Text.of("-")
+			val favText = Text.of("❤")
+			val unfavText = Text.of("❤").withColor(TextColor.RED)
 			val favTooltip = Tooltip.create(Text.of("Favorite Recipe"))
 			val unfavTooltip = Tooltip.create(Text.of("Unfavorite Recipe"))
 
@@ -74,7 +75,7 @@ class DefaultPlugin : Plugin {
 					}
 				}.apply {
 					tooltip(if (isFav) unfavTooltip else favTooltip)
-					size(10, 10)
+					size(12, 12)
 				}.build()
 			)
 		}
@@ -86,7 +87,7 @@ class DefaultPlugin : Plugin {
 					SkyBlockItemList.favoriteInstance?.removeRecipe()
 				}.apply {
 					tooltip(Tooltip.create(Text.of("Unpin Recipe")))
-					size(10, 10)
+					size(12, 12)
 				}.build()
 			)
 		}
@@ -124,7 +125,7 @@ class DefaultPlugin : Plugin {
 		val availableWidth = screen.width - (x)
 		val maxWidth = if (availableWidth >= 120) 120 else 32
 		var y = screen.top
-		val step = if (player.activeEffects.size > 5) 132 / (player.activeEffects.size) else 33
+		val step = if (player.activeEffects.size > 5) 132 / (player.activeEffects.size - 1) else 33
 
 		val zones = mutableListOf<Rect2i>()
 		playerEffects.forEach { effect ->
@@ -136,7 +137,7 @@ class DefaultPlugin : Plugin {
 	}
 
 	fun getEffectSize(effectsInInventory: EffectsInInventory, effect: MobEffectInstance): Int {
-		return 32 + McFont.self.width(effectsInInventory.getEffectName(effect))
+		return 32 + 7 + McFont.self.width(effectsInInventory.getEffectName(effect))
 	}
 
 	fun getEffectsInInventory(screen: Screen): EffectsInInventory? {
