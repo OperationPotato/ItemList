@@ -62,6 +62,7 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 		}
 
 		pageAmount = pages.size - 1
+		val pageIndex = pageIndex.coerceIn(0, pageAmount)
 
 		topLayout = LinearLayout.horizontal()
 		val layout: Layout = LinearLayout.vertical().spacing(10).apply {
