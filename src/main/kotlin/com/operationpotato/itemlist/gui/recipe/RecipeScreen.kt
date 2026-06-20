@@ -38,11 +38,11 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 	var pageAmount: Int = 0
 
 	val prevPageButton: Button = PageButton(0, 0, false, { _ ->
-		McClient.setScreen(RecipeScreen(parent, recipes, if (pageIndex != 0) pageIndex - 1 else pageAmount))
+		goBackward()
 		playButtonClickSound(Minecraft.getInstance().soundManager)
 	}, false)
 	val nextPageButton: Button = PageButton(0, 0, true, { _ ->
-		McClient.setScreen(RecipeScreen(parent, recipes, if (pageIndex != pageAmount) pageIndex + 1 else 0))
+		goForward()
 		playButtonClickSound(Minecraft.getInstance().soundManager)
 	}, false)
 	var topLayout: LinearLayout = LinearLayout.horizontal()
@@ -136,6 +136,26 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 			if (Keybinds.handleKeybind(stack, event)) return true
 		}
 		return super.keyPressed(event)
+	}
+
+	override fun mouseScrolled(x: Double, y: Double, scrollX: Double, scrollY: Double): Boolean {
+		return if (!super.mouseScrolled(x, y, scrollX, scrollY)) {
+			if (x >= topLayout.x && x <= topLayout.x + topLayout.width) {
+				if (scrollY > 0) goForward() else goBackward()
+				return true
+			}
+			false
+		} else {
+			true
+		}
+	}
+
+	fun goForward() {
+		McClient.setScreen(RecipeScreen(parent, recipes, if (pageIndex != pageAmount) pageIndex + 1 else 0))
+	}
+
+	fun goBackward() {
+		McClient.setScreen(RecipeScreen(parent, recipes, if (pageIndex != 0) pageIndex - 1 else pageAmount))
 	}
 
 	companion object {
