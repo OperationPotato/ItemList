@@ -1,9 +1,9 @@
 package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
-import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.SkyBlockItemList.logger
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.SpacerTextWidget
 import com.operationpotato.itemlist.utils.SkyBlockRecipeAPI
 import net.minecraft.client.Minecraft
@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.components.AbstractWidget.playButtonClickSound
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.layouts.FrameLayout
-import net.minecraft.client.gui.layouts.Layout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.PageButton
@@ -54,7 +53,7 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 		val allowedSize = this@RecipeScreen.height / 5 * 4
 
 		recipes.forEach { recipe ->
-			if (pages.last().sumOf { it.height + 10 } + recipe.height > allowedSize) {
+			if (pages.last().sumOf { it.height + 5 } + recipe.height > allowedSize) {
 				pages.add(mutableListOf(recipe))
 			} else {
 				pages.last().add(recipe)
@@ -65,8 +64,7 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 		val pageIndex = pageIndex.coerceIn(0, pageAmount)
 
 		topLayout = LinearLayout.horizontal()
-		val layout: Layout = LinearLayout.vertical().spacing(10).apply {
-
+		val layout = LinearLayout.vertical().spacing(5).apply {
 			topLayout.addChild(prevPageButton) { it.alignHorizontallyLeft() }
 			topLayout.addChild(SpacerTextWidget(
 				0,
