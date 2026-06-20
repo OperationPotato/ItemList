@@ -139,15 +139,12 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 	}
 
 	override fun mouseScrolled(x: Double, y: Double, scrollX: Double, scrollY: Double): Boolean {
-		return if (!super.mouseScrolled(x, y, scrollX, scrollY)) {
-			if (x >= topLayout.x && x <= topLayout.x + topLayout.width) {
-				if (scrollY < 0) goForward() else goBackward()
-				return true
-			}
-			false
-		} else {
-			true
+		if (super.mouseScrolled(x, y, scrollX, scrollY)) return true
+		if (x >= topLayout.x && x <= topLayout.x + topLayout.width) {
+			if (scrollY < 0) goForward() else goBackward()
+			return true
 		}
+		return false
 	}
 
 	fun goForward() {
