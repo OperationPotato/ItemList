@@ -43,8 +43,9 @@ class ScaledItemRenderer(/*? if <26.2 {*//*buffer: MultiBufferSource.BufferSourc
 
 	override fun renderToTexture(
 		state: State,
-		stack: PoseStack/*? if >=26.2 {*/,
-		submitNodeCollector: SubmitNodeCollector/*? }*/
+		stack: PoseStack,
+		//? if >=26.2
+		submitNodeCollector: SubmitNodeCollector
 	) {
 		this.lastState = state
 		this.textureView = RenderSystem.outputColorTextureOverride
