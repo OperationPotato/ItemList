@@ -151,6 +151,23 @@ tasks.register<Jar>("apiSourcesJar") {
 
 tasks.named("assemble") {
 	dependsOn("apiJar", "apiSourcesJar")
+	doLast {
+		val files = listOf("${base.archivesName.get()}-$version.jar", "api/${base.archivesName.get()}-api-$version.jar")
+		for (fileName in files) {
+			val sourceFile = rootProject.projectDir.resolve("versions/${project.name}/build/libs/${fileName}")
+			val targetFile = rootProject.projectDir.resolve("build/libs/${fileName}")
+			targetFile.parentFile.mkdirs()
+			targetFile.writeBytes(sourceFile.readBytes())
+		}
+	}
+}
+
+tasks.named("clean") {
+	doLast {
+		val libsFolder = rootProject.projectDir.resolve("build/libs")
+		if (!libsFolder.exists()) return@doLast
+		delete(libsFolder)
+	}
 }
 
 publishing {
