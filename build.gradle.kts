@@ -6,7 +6,11 @@ plugins {
 	alias(libs.plugins.publish)
 }
 
-version = providers.gradleProperty("mod_version").get() + "+" + versionedLibs.versions.minecraft.get()
+val versionedLibs = the<VersionCatalogsExtension>().find("versionedLibs${sc.current.project.replace(".", "")}").get()
+fun VersionCatalog.library(name: String): Provider<MinimalExternalModuleDependency> = this.findLibrary(name).get()
+fun VersionCatalog.version(name: String): VersionConstraint = this.findVersion(name).get()
+
+version = providers.gradleProperty("mod_version").get() + "+" + sc.current.version
 group = providers.gradleProperty("maven_group").get()
 
 repositories {
@@ -54,27 +58,27 @@ repositories {
 }
 
 dependencies {
-	minecraft(versionedLibs.minecraft)
+	minecraft(versionedLibs.library("minecraft"))
 
 	implementation(libs.fabric.loader)
 	implementation(libs.fabric.language.kotlin)
 
-	implementation(versionedLibs.fabric.api)
-	api(versionedLibs.skyblock.api) {
+	implementation(versionedLibs.library("fabric.api"))
+	api(versionedLibs.library("skyblock.api")) {
 		capabilities {
-			requireCapability("tech.thatgravyboat:skyblock-api-26.1")
+			requireCapability("tech.thatgravyboat:skyblock-api-${sc.current.project}")
 		}
 	}
-	include(versionedLibs.skyblock.api) {
+	include(versionedLibs.library("skyblock.api")) {
 		capabilities {
-			requireCapability("tech.thatgravyboat:skyblock-api-26.1")
+			requireCapability("tech.thatgravyboat:skyblock-api-${sc.current.project}")
 		}
 	}
 
 	includeImplementation(libs.keval)
-	includeImplementation(versionedLibs.lattice)
+	includeImplementation(versionedLibs.library("lattice"))
 
-	compileOnly(versionedLibs.modmenu)
+	compileOnly(versionedLibs.library("modmenu"))
 }
 
 fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>) {
@@ -87,13 +91,16 @@ loom {
 		ideConfigGenerated(true)
 	}
 
-	accessWidenerPath = file("src/main/resources/skyblock-item-list.classtweaker")
+	accessWidenerPath = sc.process(
+		rootProject.file("src/main/resources/skyblock-item-list.classtweaker"),
+		"build/skyblock-item-list.classtweaker"
+	)
 }
 
 tasks.processResources {
 	inputs.property("version", project.property("version"))
-	inputs.property("sbapi", versionedLibs.versions.skyblock.api.get())
-	inputs.property("minecraft", versionedLibs.versions.mcRange.get())
+	inputs.property("sbapi", versionedLibs.version("skyblock.api"))
+	inputs.property("minecraft", versionedLibs.version("mcRange"))
 
 	filesMatching("fabric.mod.json") {
 		val props = mapOf(
