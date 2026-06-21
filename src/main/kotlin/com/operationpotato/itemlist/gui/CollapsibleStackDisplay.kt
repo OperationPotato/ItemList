@@ -7,7 +7,6 @@ import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
@@ -149,7 +148,7 @@ class CollapsibleStackDisplay(
 
 				if (isChildHovered) {
 					val tooltipLines = getTooltipLines(itemStack)
-					graphics.setComponentTooltipForNextFrame(McClient.gui.hud.font, tooltipLines, mouseX, mouseY)
+					graphics.setComponentTooltipForNextFrame(McFont.self, tooltipLines, mouseX, mouseY)
 				}
 			}
 		}
