@@ -154,7 +154,7 @@ tasks.named("assemble") {
 	doLast {
 		val files = listOf("${base.archivesName.get()}-$version.jar", "api/${base.archivesName.get()}-api-$version.jar")
 		for (fileName in files) {
-			val sourceFile = rootProject.projectDir.resolve("versions/${project.name}/build/libs/${fileName}")
+			val sourceFile = project.projectDir.resolve("build/libs/${fileName}")
 			val targetFile = rootProject.projectDir.resolve("build/libs/${fileName}")
 			targetFile.parentFile.mkdirs()
 			targetFile.writeBytes(sourceFile.readBytes())
