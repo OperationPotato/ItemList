@@ -1,0 +1,14 @@
+[versions]
+minecraft = "26.1.2"
+mcRange = "~26.1"
+fabric-api = "0.148.0+26.1.2"
+skyblock-api = "4.1.13"
+lattice = "2.0.1+26.1"
+modmenu = "18.0.0-alpha.6"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+skyblock-api = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblock-api" }
+lattice = { module = "com.moulberry:lattice", version.ref = "lattice" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }

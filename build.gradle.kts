@@ -6,7 +6,7 @@ plugins {
 	alias(libs.plugins.publish)
 }
 
-version = providers.gradleProperty("mod_version").get() + "+" + libs.versions.minecraft.get()
+version = providers.gradleProperty("mod_version").get() + "+" + versionedLibs.versions.minecraft.get()
 group = providers.gradleProperty("maven_group").get()
 
 repositories {
@@ -54,27 +54,27 @@ repositories {
 }
 
 dependencies {
-	minecraft(libs.minecraft)
+	minecraft(versionedLibs.minecraft)
 
 	implementation(libs.fabric.loader)
 	implementation(libs.fabric.language.kotlin)
 
-	implementation(libs.fabric.api)
-	api(libs.skyblock.api) {
+	implementation(versionedLibs.fabric.api)
+	api(versionedLibs.skyblock.api) {
 		capabilities {
 			requireCapability("tech.thatgravyboat:skyblock-api-26.1")
 		}
 	}
-	include(libs.skyblock.api) {
+	include(versionedLibs.skyblock.api) {
 		capabilities {
 			requireCapability("tech.thatgravyboat:skyblock-api-26.1")
 		}
 	}
 
 	includeImplementation(libs.keval)
-	includeImplementation(libs.lattice)
+	includeImplementation(versionedLibs.lattice)
 
-	compileOnly(libs.modmenu)
+	compileOnly(versionedLibs.modmenu)
 }
 
 fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>) {
@@ -92,12 +92,14 @@ loom {
 
 tasks.processResources {
 	inputs.property("version", project.property("version"))
-	inputs.property("sbapi", libs.skyblock.api.get().version)
+	inputs.property("sbapi", versionedLibs.versions.skyblock.api.get())
+	inputs.property("minecraft", versionedLibs.versions.mcRange.get())
 
 	filesMatching("fabric.mod.json") {
 		val props = mapOf(
 			"version" to inputs.properties["version"],
 			"sbapi" to inputs.properties["sbapi"],
+			"minecraft" to inputs.properties["minecraft"],
 		)
 		expand(props)
 	}
