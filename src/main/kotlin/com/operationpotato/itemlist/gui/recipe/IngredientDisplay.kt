@@ -56,7 +56,7 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 		}
 
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McClient.gui.font, getTooltipLines(), mouseX, mouseY)
+			graphics.setComponentTooltipForNextFrame(McClient.gui.hud.font, getTooltipLines(), mouseX, mouseY)
 		}
 	}
 

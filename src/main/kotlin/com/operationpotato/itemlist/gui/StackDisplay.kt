@@ -79,7 +79,7 @@ open class StackDisplay(
 		createStackIfEmpty()
 		extractStack(graphics, stack, x, y, isHovered)
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McClient.gui.font, getTooltipLines(stack), mouseX, mouseY)
+			graphics.setComponentTooltipForNextFrame(McClient.gui.hud.font, getTooltipLines(stack), mouseX, mouseY)
 		}
 	}
 

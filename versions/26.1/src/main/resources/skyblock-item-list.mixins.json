@@ -3,8 +3,7 @@
 	"package": "com.operationpotato.itemlist.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"InventoryScreenMixin",
-		"LatticeConfigScreenMixin"
+		"InventoryScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

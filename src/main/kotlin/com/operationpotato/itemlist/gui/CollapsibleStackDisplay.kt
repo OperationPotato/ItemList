@@ -149,7 +149,7 @@ class CollapsibleStackDisplay(
 
 				if (isChildHovered) {
 					val tooltipLines = getTooltipLines(itemStack)
-					graphics.setComponentTooltipForNextFrame(McClient.gui.font, tooltipLines, mouseX, mouseY)
+					graphics.setComponentTooltipForNextFrame(McClient.gui.hud.font, tooltipLines, mouseX, mouseY)
 				}
 			}
 		}

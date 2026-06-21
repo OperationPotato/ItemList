@@ -49,7 +49,7 @@ object SkyBlockItemList : ClientModInitializer {
 			FavoritesManager.save()
 		}
 
-		PictureInPictureRendererRegistry.register { ScaledItemRenderer(it.bufferSource()) }
+		PictureInPictureRendererRegistry.register { ScaledItemRenderer(/*? if <26.2 {*//*it.bufferSource() *//*? }*/) }
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
