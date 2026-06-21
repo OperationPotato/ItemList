@@ -27,12 +27,12 @@ import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.*
 
 //? if <26.2
-/*import net.minecraft.client.renderer.MultiBufferSource*/
+//import net.minecraft.client.renderer.MultiBufferSource
 
 // Taken with Permission from Meowdding-Lib and modified a bit ~J10a1n15
 // https://github.com/meowdding/meowdding-lib/blob/master/src/main/kotlin/me/owdding/lib/displays/item/ItemStateRenderer.kt
-class ScaledItemRenderer(/*? if <26.2 {*//* buffer: MultiBufferSource.BufferSource*//*? }*/) :
-	PictureInPictureRenderer<ScaledItemRenderer.State>(/*? if <26.2 {*//* buffer*//*? }*/) {
+class ScaledItemRenderer(/*? if <26.2 {*//*buffer: MultiBufferSource.BufferSource*//*? }*/) :
+	PictureInPictureRenderer<ScaledItemRenderer.State>(/*? if <26.2 {*//*buffer*//*? }*/) {
 
 	private var textureView: GpuTextureView? = null
 	private var lastState: State? = null
@@ -58,14 +58,14 @@ class ScaledItemRenderer(/*? if <26.2 {*//* buffer: MultiBufferSource.BufferSour
 		)
 
 		//? if <26.2
-		// val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+		//val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
 		item.itemStackRenderState().submit(
 			//~ if <26.2 'submitNodeCollector' -> 'featureRenderer.submitNodeStorage'
 			stack, submitNodeCollector,
 			LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0
 		)
 		//? if <26.2
-		// featureRenderer.renderAllFeatures()
+		//featureRenderer.renderAllFeatures()
 	}
 
 	override fun getTranslateY(height: Int, ignored: Int): Float {
