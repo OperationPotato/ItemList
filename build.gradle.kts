@@ -12,6 +12,7 @@ fun VersionCatalog.version(name: String): VersionConstraint = this.findVersion(n
 
 version = providers.gradleProperty("mod_version").get() + "+" + sc.current.version
 group = providers.gradleProperty("maven_group").get()
+base.archivesName = rootProject.name
 
 repositories {
 	exclusiveContent {
