@@ -6,13 +6,13 @@ import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
-import net.minecraft.util.CommonColors
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.platform.drawFilledBox
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
@@ -26,8 +26,7 @@ class RecipeStackDisplay(val recipe: Recipe<*>, lazyStack: LazyItemStack, type: 
 	}
 
 	override fun extractWidgetRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
-		// TODO: make this a sprite instead
-		graphics.drawFilledBox(x, y, width, height, CommonColors.GREEN)
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, RECIPE_BACKGROUND, x, y, width, height)
 		super.extractWidgetRenderState(graphics, mouseX, mouseY, a)
 	}
 
@@ -39,5 +38,9 @@ class RecipeStackDisplay(val recipe: Recipe<*>, lazyStack: LazyItemStack, type: 
 				RecipeScreen.openRecipe(setOf(recipe), McScreen.self)
 			}
 		}
+	}
+
+	companion object {
+		val RECIPE_BACKGROUND: Identifier = SkyBlockItemList.id("favorite_recipe")
 	}
 }
