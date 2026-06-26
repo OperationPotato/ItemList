@@ -10,12 +10,16 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 
 object CalcUtils {
 
-	val defaultConstants: Map<String, Double> = mapOf(
+	private val defaultConstants: Map<String, Double> = mapOf(
 		"st" to 64.0,
 		"k" to 1_000.0,
 		"m" to 1_000_000.0,
 		"b" to 1_000_000_000.0,
 		"t" to 1_000_000_000_000.0,
+	)
+
+	private val extraConstants: Map<String, () -> Double> = mapOf(
+		"purse" to { CurrencyAPI.purse }
 	)
 
 	private val customResolvers: Map<String, (String) -> Double> = mapOf(
@@ -25,6 +29,10 @@ object CalcUtils {
 	)
 
 	private val resolverRegex = Regex("\\b([a-zA-Z_]+)\\(([^)]+)\\)")
+
+	private val allConstants
+		get(): Map<String, Double> =
+			defaultConstants + extraConstants.mapValues { it.value() } + ConfigManager.get().calculator.customConstants
 
 	val calc
 		get() = Keval.create {
@@ -41,9 +49,7 @@ object CalcUtils {
 				}
 			}
 
-			caseInsensitiveConstant("purse") { CurrencyAPI.purse }
-			defaultConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
-			ConfigManager.get().calculator.customConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
+			allConstants.forEach { (k, v) -> caseInsensitiveConstant(k) { v } }
 		}
 
 
@@ -55,6 +61,17 @@ object CalcUtils {
 				val name = matchResult.groupValues[1].trim().lowercase()
 				val arg = matchResult.groupValues[2].trim().uppercase()
 				customResolvers[name]?.invoke(arg)?.toString() ?: matchResult.value
+			}
+
+			expression = expression.replace(Regex("(?i)((?:\\d+)?\\.?\\d*)(\\w+)")) { match ->
+				val num = match.groupValues[1].toDoubleOrNull() ?: 1.0
+				val constName = match.groupValues[2].lowercase()
+				val constValue = allConstants[constName]
+				if (constValue != null) {
+					(num * constValue).toString()
+				} else {
+					match.value
+				}
 			}
 
 			calc.eval(expression).toFormattedString()
