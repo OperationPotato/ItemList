@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.utils
 
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.IdOverlaysAPI
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -45,8 +46,13 @@ private fun handleWiki(stack: ItemStack, type: String, getter: (IdOverlaysAPI.Wi
 
 private fun getWikiOverlay(stack: ItemStack): IdOverlaysAPI.WikiData? {
 	if (!RepoAPI.isInitialized()) return null
-	val id = stack.getSkyBlockId() ?: return null
 	val api = RepoAPI.overlays()
+
+	val id = stack.getSkyBlockId()
+	if (id == null) {
+		val mobId = stack.getMobId() ?: return null
+		return api.getMob(mobId)?.wiki
+	}
 
 	val cleanId = id.cleanId
 	val base = cleanId.substringBeforeLast(DELIMITER)
