@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.config.Settings
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
@@ -8,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -84,9 +86,15 @@ open class StackDisplay(
 		}
 	}
 
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() == 0 || info.button() == 1
+	}
+
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(stack, McScreen.self)
+		// Adding new buttons here also means the same onClick needs to be updated in CollapsibleStackDisplay and IngredientDisplay
+		when (event.button()) {
+			0 -> ConfigManager.get().mainList.leftClickAction.action(stack)
+			1 -> ConfigManager.get().mainList.rightClickAction.action(stack)
 		}
 	}
 

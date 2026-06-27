@@ -2,11 +2,13 @@ package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.config.ConfigManager
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -60,9 +62,14 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 		}
 	}
 
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() == 0 || info.button() == 1
+	}
+
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(stack, McScreen.self)
+		when (event.button()) {
+			0 -> ConfigManager.get().mainList.leftClickAction.action(stack)
+			1 -> ConfigManager.get().mainList.rightClickAction.action(stack)
 		}
 	}
 

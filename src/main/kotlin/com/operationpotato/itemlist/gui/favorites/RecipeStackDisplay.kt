@@ -31,12 +31,10 @@ class RecipeStackDisplay(val recipe: Recipe<*>, lazyStack: LazyItemStack, type: 
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			if (event.hasControlDownWithQuirk()) {
-				SkyBlockItemList.favoriteInstance?.setRecipe(recipe)
-			} else {
-				RecipeScreen.openRecipe(setOf(recipe), McScreen.self)
-			}
+		if (event.button() == 0 && event.hasControlDownWithQuirk()) {
+			SkyBlockItemList.favoriteInstance?.setRecipe(recipe)
+		} else {
+			 super.onClick(event, doubleClick)
 		}
 	}
 

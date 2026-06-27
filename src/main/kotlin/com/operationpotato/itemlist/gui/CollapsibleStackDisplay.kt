@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -155,8 +156,9 @@ class CollapsibleStackDisplay(
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(hoveredStack, McScreen.self)
+		when (event.button()) {
+			0 -> ConfigManager.get().mainList.leftClickAction.action(hoveredStack)
+			1 -> ConfigManager.get().mainList.rightClickAction.action(hoveredStack)
 		}
 	}
 

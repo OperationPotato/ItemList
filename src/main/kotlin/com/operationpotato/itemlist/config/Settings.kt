@@ -5,10 +5,12 @@ import com.moulberry.lattice.annotation.LatticeOption
 import com.moulberry.lattice.annotation.constraint.LatticeFloatRange
 import com.moulberry.lattice.annotation.constraint.LatticeIntRange
 import com.moulberry.lattice.annotation.widget.LatticeWidgetButton
+import com.moulberry.lattice.annotation.widget.LatticeWidgetDropdown
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.moulberry.lattice.annotation.widget.LatticeWidgetSlider
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.gui.StackDisplay
+import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 
 class Settings {
@@ -90,6 +92,20 @@ class Settings {
 		)
 		@LatticeWidgetButton
 		var groupFamilies: Boolean = false
+
+		@LatticeOption(
+			title = "Left Click Action",
+			description = "What happens when you left click an Item"
+		)
+		@LatticeWidgetDropdown
+		var leftClickAction: ItemClickAction = ItemClickAction.OPEN_RECIPE
+
+		@LatticeOption(
+			title = "Right Click Action",
+			description = "What happens when you right click an Item"
+		)
+		@LatticeWidgetDropdown
+		var rightClickAction: ItemClickAction = ItemClickAction.OPEN_INDEPENDENT_WIKI
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 

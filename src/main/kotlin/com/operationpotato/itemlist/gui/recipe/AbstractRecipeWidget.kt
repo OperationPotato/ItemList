@@ -11,6 +11,7 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -62,6 +63,11 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 		container.visitWidgets { widget ->
 			widget.extractRenderState(graphics, mouseX, mouseY, a)
 		}
+	}
+
+	// Needed for right-clicks inside IngredientDisplay
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() == 0 || info.button() == 1
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
