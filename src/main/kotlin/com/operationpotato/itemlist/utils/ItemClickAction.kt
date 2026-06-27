@@ -17,11 +17,13 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
+@Suppress("unused")
 enum class ItemClickAction(val action: (ItemStack) -> Unit) {
 	OPEN_RECIPE({ stack -> RecipeScreen.openRecipeForItem(stack, McScreen.self) }),
 	OPEN_USAGE({ stack -> RecipeScreen.openUsageForItem(stack, McScreen.self) }),
 	OPEN_INDEPENDENT_WIKI({ handleWiki(it, "independent") { overlay -> overlay.independent } }),
 	OPEN_OFFICIAL_WIKI({ handleWiki(it, "official") { overlay -> overlay.official } }),
+	NOTHING({ _ -> }),
 	;
 
 	private val formattedName = toFormattedName()
