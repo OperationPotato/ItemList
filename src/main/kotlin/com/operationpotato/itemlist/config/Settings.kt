@@ -54,6 +54,20 @@ class Settings {
 		@LatticeFloatRange(min = 0.25f, max = 1f, clampMin = 0.25f, clampMax = 1f)
 		@LatticeWidgetSlider
 		var maxWidth: Float = 1f
+
+		@LatticeOption(
+			title = "Left Click Action",
+			description = "What happens when you left click an Item"
+		)
+		@LatticeWidgetDropdown
+		var leftClickAction: ItemClickAction = ItemClickAction.OPEN_RECIPE
+
+		@LatticeOption(
+			title = "Right Click Action",
+			description = "What happens when you right click an Item"
+		)
+		@LatticeWidgetDropdown
+		var rightClickAction: ItemClickAction = ItemClickAction.OPEN_INDEPENDENT_WIKI
 	}
 
 	class MainListSettings {
@@ -92,20 +106,6 @@ class Settings {
 		)
 		@LatticeWidgetButton
 		var groupFamilies: Boolean = false
-
-		@LatticeOption(
-			title = "Left Click Action",
-			description = "What happens when you left click an Item"
-		)
-		@LatticeWidgetDropdown
-		var leftClickAction: ItemClickAction = ItemClickAction.OPEN_RECIPE
-
-		@LatticeOption(
-			title = "Right Click Action",
-			description = "What happens when you right click an Item"
-		)
-		@LatticeWidgetDropdown
-		var rightClickAction: ItemClickAction = ItemClickAction.OPEN_INDEPENDENT_WIKI
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 

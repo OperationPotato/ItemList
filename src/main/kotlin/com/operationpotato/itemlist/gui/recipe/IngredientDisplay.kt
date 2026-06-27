@@ -68,8 +68,8 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
 		when (event.button()) {
-			0 -> ConfigManager.get().mainList.leftClickAction.action(stack)
-			1 -> ConfigManager.get().mainList.rightClickAction.action(stack)
+			0 -> ConfigManager.get().general.leftClickAction.action(stack)
+			1 -> ConfigManager.get().general.rightClickAction.action(stack)
 		}
 	}
 

@@ -157,8 +157,8 @@ class CollapsibleStackDisplay(
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
 		when (event.button()) {
-			0 -> ConfigManager.get().mainList.leftClickAction.action(hoveredStack)
-			1 -> ConfigManager.get().mainList.rightClickAction.action(hoveredStack)
+			0 -> ConfigManager.get().general.leftClickAction.action(hoveredStack)
+			1 -> ConfigManager.get().general.rightClickAction.action(hoveredStack)
 		}
 	}
 

@@ -93,8 +93,8 @@ open class StackDisplay(
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
 		// Adding new buttons here also means the same onClick needs to be updated in CollapsibleStackDisplay and IngredientDisplay
 		when (event.button()) {
-			0 -> ConfigManager.get().mainList.leftClickAction.action(stack)
-			1 -> ConfigManager.get().mainList.rightClickAction.action(stack)
+			0 -> ConfigManager.get().general.leftClickAction.action(stack)
+			1 -> ConfigManager.get().general.rightClickAction.action(stack)
 		}
 	}
 
