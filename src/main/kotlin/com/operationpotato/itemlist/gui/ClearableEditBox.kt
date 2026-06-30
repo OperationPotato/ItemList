@@ -22,7 +22,6 @@ class ClearableEditBox(font: Font, width: Int, height: Int, narration: Component
 		if (!this.isActive) return false
 		if (event.button() == 0 && doubleClick) {
 			isSearchingInventory = !isSearchingInventory
-			println("isSearchingInventory: $isSearchingInventory")
 			if (isSearchingInventory) {
 				ContainerSearcher.setSearch(value)
 			} else {
