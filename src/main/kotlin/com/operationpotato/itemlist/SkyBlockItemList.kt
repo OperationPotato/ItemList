@@ -149,5 +149,6 @@ object SkyBlockItemList : ClientModInitializer {
 		favoriteInstance = null
 	}
 
+	@JvmStatic
 	fun id(path: String): Identifier = Identifier.fromNamespaceAndPath("skyblock-item-list", path)
 }
