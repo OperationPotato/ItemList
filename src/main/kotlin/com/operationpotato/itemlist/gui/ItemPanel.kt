@@ -233,7 +233,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}
 
 	fun added() {
-		if (searchBox.isSearchingInventory) ContainerSearcher.setSearch(searchBox.value)
+		if (ContainerSearcher.shouldSearch()) ContainerSearcher.setSearch(searchBox.value)
 	}
 
 	override fun removed() {
