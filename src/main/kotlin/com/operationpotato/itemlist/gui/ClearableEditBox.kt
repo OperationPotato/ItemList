@@ -1,7 +1,6 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.ContainerSearcher
-import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.SkyBlockItemList.id
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.components.EditBox
