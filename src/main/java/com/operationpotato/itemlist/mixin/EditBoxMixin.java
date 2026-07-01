@@ -26,8 +26,11 @@ public class EditBoxMixin {
 
 	@Mixin(ClearableEditBox.class)
 	static abstract class ClearableEditBoxMisin extends EditBoxMixin {
-		@Shadow abstract WidgetSprites getSprites();
-		@Shadow boolean isSearchingInventory;
+		@Shadow
+		public abstract WidgetSprites getSprites();
+
+		@Shadow
+		private boolean isSearchingInventory;
 
 		public Identifier extractWidgetRenderState(WidgetSprites instance, boolean enabled, boolean focused, Operation<Identifier> original) {
 			if (isSearchingInventory) {
