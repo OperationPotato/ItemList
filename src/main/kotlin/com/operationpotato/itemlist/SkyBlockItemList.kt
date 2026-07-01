@@ -72,6 +72,7 @@ object SkyBlockItemList : ClientModInitializer {
 			itemPanel.setSize(panelWidth - 2, h)
 			itemPanel.updatePosition()
 			itemPanel.visible = ConfigManager.get().general.enabled
+			itemPanel.added()
 			if (panelWidth < 80) itemPanel.visible = false
 
 			Screens.getWidgets(screen).add(itemPanel)

@@ -232,7 +232,12 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		return children().any { it.isMouseOver(mouseX, mouseY) }
 	}
 
+	fun added() {
+		if (searchBox.isSearchingInventory) ContainerSearcher.setSearch(searchBox.value)
+	}
+
 	override fun removed() {
+		ContainerSearcher.setSearch(null)
 		ConfigManager.get().mainList.itemSize = itemListWidget.itemSize
 	}
 
