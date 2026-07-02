@@ -1,6 +1,5 @@
 package com.operationpotato.itemlist.api.impl
 
-import com.operationpotato.itemlist.api.ExclusionZone
 import com.operationpotato.itemlist.api.Plugin
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget

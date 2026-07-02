@@ -1,7 +1,6 @@
-package com.operationpotato.itemlist.api
+package com.operationpotato.itemlist.api.impl
 
 import net.minecraft.client.renderer.Rect2i
-
 
 data class ExclusionZone(
 	val area: Rect2i
