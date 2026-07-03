@@ -25,17 +25,18 @@ maven {
 	* You can find the latest version number on the
 	  Maven [here](https://maven.operationpotato.com/#/releases/com/operationpotato/skyblock-item-list-api)
 2. Create a class that implements
-   the [Plugin API](https://github.com/OperationPotato/ItemList/blob/1279215236138afe11fe32029bfabef94545c93f/src/main/java/com/operationpotato/itemlist/api/Plugin.java)
+   the [Plugin API](https://github.com/OperationPotato/ItemList/blob/master/src/main/java/com/operationpotato/itemlist/api/Plugin.java)
 	* `registerExclusionZones`:
-		* Use **Exclusion Zones** to prevent items from being placed on your screen widgets.
+		* Add **Exclusion Zones** to prevent items from being placed on your screen widgets.
 	* `registerExcludedScreens`:
 		* Add **Excluded Screens** to automatically close the item list on your custom screens.
 	* `registerHoveredItems`:
-		* Provide **Hovered Item**s to allow recipes, usages, favorite-ing, and more on them.
+		* Provide **Hovered Items** to allow recipes, usages, favorite-ing, and more on them.
 		* Receive and Consume **Hovered Item** key events.
 	* `registerRecipeButtons`
 		* Add custom **Recipe Buttons** to let users do things from recipe screens.
         * Please add a Config option if you do this!
+    * See the [default plugin](https://github.com/OperationPotato/ItemList/blob/master/src/main/kotlin/com/operationpotato/itemlist/api/impl/DefaultPlugin.kt) for an example implementation.
 3. Add an entrypoint to your class in your `fabric.mod.json`
 	* If your plugin is written in Java:
     ```json
