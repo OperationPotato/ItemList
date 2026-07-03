@@ -29,10 +29,10 @@ maven {
 	* `registerExclusionZones`:
 		* Use **Exclusion Zones** to prevent items from being placed on your screen widgets.
 	* `registerExcludedScreens`:
-		* Use **Excluded Screens** to automatically close the item list on your custom screens.
+		* Add **Excluded Screens** to automatically close the item list on your custom screens.
 	* `registerHoveredItems`:
-		* Provide **Hovered Item** to allow recipes, usages, favorite-ing, and more on them.
-		* Consume **Hovered Item** key events.
+		* Provide **Hovered Item**s to allow recipes, usages, favorite-ing, and more on them.
+		* Receive and Consume **Hovered Item** key events.
 	* `registerRecipeButtons`
 		* Add custom **Recipe Buttons** to let users do things from recipe screens.
         * Please add a Config option if you do this!
