@@ -3,7 +3,9 @@ package com.operationpotato.itemlist.api.impl
 import com.operationpotato.itemlist.api.ExcludedScreenProvider
 import com.operationpotato.itemlist.api.ExcludedScreensManager
 import net.minecraft.client.gui.screens.Screen
+import org.jetbrains.annotations.ApiStatus
 
+@ApiStatus.Internal
 class ExcludedScreensManagerImpl : ExcludedScreensManager {
 	private val providers: MutableList<ProviderEntry<*>> = mutableListOf()
 
