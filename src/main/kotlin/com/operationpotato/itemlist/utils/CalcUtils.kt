@@ -67,7 +67,7 @@ object CalcUtils {
 			val constName = match.groupValues[2].lowercase()
 			val constValue = allConstants[constName]
 			if (constValue != null) {
-				(num * constValue).toString()
+				"%.2f".format(num * constValue)
 			} else {
 				match.value
 			}
