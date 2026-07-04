@@ -275,8 +275,9 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 		if (calculatorResult.first.isNotEmpty()) {
 			val message = Text.of(calculatorResult.first, calculatorResultColor)
-			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - 6
-			val textY = if (calculatorResult.second && !ConfigManager.get().mainList.centeredSearchBar)
+			val centered = ConfigManager.get().mainList.centeredSearchBar
+			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - if (!centered) 18 else 0
+			val textY = if (calculatorResult.second && !centered)
 				searchBox.y + (searchBox.height - McFont.height) / 2 + 1
 			else searchBox.y - 5 - McFont.height / 2
 			graphics.text(McFont.self, message, textX, textY, CommonColors.WHITE)
