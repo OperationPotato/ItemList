@@ -5,6 +5,10 @@ import com.operationpotato.itemlist.SkyBlockItemList.logger
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.SpacerTextWidget
+import com.operationpotato.itemlist.gui.loottable.LootTableScreen
+import com.operationpotato.itemlist.gui.loottable.MobLootWidget
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import com.operationpotato.itemlist.utils.SkyBlockRecipeAPI
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractContainerWidget
@@ -156,6 +160,22 @@ class RecipeScreen(val parent: Screen?, val recipes: List<AbstractRecipeWidget>,
 
 	companion object {
 		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
+			val mobId = stack.getMobId()
+			if (mobId != null) {
+				val mob = SkyBlockMobsRepo.get(mobId)
+				if (mob != null && mob.lootTables.isNotEmpty()) {
+					val widgets = mob.lootTables.map { MobLootWidget(mob, it) }
+					McClient.setScreen(LootTableScreen(parent, widgets))
+				} else {
+					Text.of("No loot tables found for ") {
+						color = TextColor.RED
+						append(stack.cleanName, TextColor.LIGHT_PURPLE)
+						append("!")
+					}.send()
+				}
+				return
+			}
+
 			val targetId = stack.getSkyBlockId() ?: return
 
 			val matchingRecipes = SkyBlockRecipeAPI.getRecipesForId(targetId)

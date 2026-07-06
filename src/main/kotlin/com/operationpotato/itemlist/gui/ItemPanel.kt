@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.ContainerSearcher
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
+import com.operationpotato.itemlist.gui.loottable.LootTableScreen
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
@@ -140,6 +141,11 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 				}
 
 				is RecipeScreen -> {
+					searchWidth = screen.getMaxWidth()
+					layoutX = screen.getLeft()
+				}
+
+				is LootTableScreen -> {
 					searchWidth = screen.getMaxWidth()
 					layoutX = screen.getLeft()
 				}
