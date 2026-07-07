@@ -1,17 +1,24 @@
 package com.operationpotato.itemlist.config
 
+import com.moulberry.lattice.WidgetFunction
 import com.moulberry.lattice.annotation.LatticeCategory
 import com.moulberry.lattice.annotation.LatticeOption
 import com.moulberry.lattice.annotation.constraint.LatticeFloatRange
 import com.moulberry.lattice.annotation.constraint.LatticeIntRange
 import com.moulberry.lattice.annotation.widget.LatticeWidgetButton
+import com.moulberry.lattice.annotation.widget.LatticeWidgetCustom
 import com.moulberry.lattice.annotation.widget.LatticeWidgetDropdown
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.moulberry.lattice.annotation.widget.LatticeWidgetSlider
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.gui.ConfigureFilterScreen
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
+import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
+import java.util.function.Consumer
+import java.util.function.Supplier
 
 class Settings {
 	@Suppress("unused")
@@ -107,6 +114,15 @@ class Settings {
 		@LatticeWidgetButton
 		var groupFamilies: Boolean = false
 
+		@Suppress("unused", "PropertyName")
+		@LatticeOption(
+			title = "Configure Custom Filter",
+			description = "Set what types of items to include in your custom filter."
+		)
+		@LatticeWidgetCustom(function = "openFilterScreen")
+		@Transient
+		var _customFilterButton: Int = 0
+
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 
 		var lastSearch: String = ""
@@ -173,5 +189,15 @@ class Settings {
 		@LatticeWidgetKeybind
 		@Transient
 		val favoriteItem = Keybinds.favoriteItem
+	}
+
+	companion object {
+		@Suppress("unused") // used in MainListSettings annotation
+		@JvmStatic
+		fun openFilterScreen(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
+			return WidgetFunction.runnableButton {
+				McClient.setScreen(ConfigureFilterScreen(McScreen.self))
+			}
+		}
 	}
 }
