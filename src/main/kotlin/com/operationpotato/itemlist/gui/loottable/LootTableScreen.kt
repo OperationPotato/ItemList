@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui.loottable
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.gui.SpacerTextWidget
 import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
@@ -8,12 +9,15 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.components.AbstractWidget.playButtonClickSound
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.ImageWidget
+import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.PageButton
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.util.CommonColors
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -35,11 +39,12 @@ class LootTableScreen(val parent: Screen?, val widgets: List<MobLootWidget>, val
 	}, false)
 
 	private var topLayout: LinearLayout = LinearLayout.horizontal()
+	private var container: FrameLayout? = null
 
 	override fun init() {
 		super.init()
 		val pages = mutableListOf(mutableListOf<MobLootWidget>())
-		val allowedSize = this@LootTableScreen.height / 5 * 4
+		val allowedSize = this@LootTableScreen.height / 5 * 4 - 30
 
 		widgets.forEach { widget ->
 			if (pages.last().sumOf { it.height + 5 } + widget.height > allowedSize) {
@@ -53,28 +58,52 @@ class LootTableScreen(val parent: Screen?, val widgets: List<MobLootWidget>, val
 		val safePageIndex = pageIndex.coerceIn(0, pageAmount)
 		visibleWidgets = pages[safePageIndex]
 
-		topLayout = LinearLayout.horizontal()
+		val layout = LinearLayout.vertical().spacing(5)
 
-		val layout = LinearLayout.vertical().spacing(5).apply {
-			if (pageAmount == 0) return@apply
+		if (pageAmount != 0) {
+			topLayout = LinearLayout.horizontal()
 			topLayout.addChild(prevPageButton) { it.alignHorizontallyLeft() }
 			//@formatter:off
 			topLayout.addChild(SpacerTextWidget(
-				getMaxWidth() - 46,
+				176 - 46,
 				Text.of("${safePageIndex + 1} / ${pages.size}"),
 				font
 			))
 			//@formatter:on
 			topLayout.addChild(nextPageButton) { it.alignHorizontallyRight() }
 			topLayout.arrangeElements()
-			addChild(topLayout)
+			layout.addChild(topLayout)
 		}
 
-		layout.apply {
-			visibleWidgets.forEach(::addChild)
-			arrangeElements()
-			FrameLayout.centerInRectangle(this, this@LootTableScreen.rectangle)
-		}.visitWidgets(this::addRenderableWidget)
+		val mob = visibleWidgets.firstOrNull()?.mob
+		if (mob != null) {
+			val innerLayout = LinearLayout.vertical().spacing(5).apply {
+				addChild(
+					StringWidget(Text.of(mob.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, font),
+					this.newCellSettings().alignHorizontallyCenter().paddingTop(8).paddingBottom(2)
+				)
+				visibleWidgets.forEach { addChild(it) }
+			}
+			innerLayout.arrangeElements()
+
+			val containerWidth = 176 + 12
+			val containerHeight = innerLayout.height + 12
+
+			val container = FrameLayout(0, 0, containerWidth, containerHeight)
+			container.addChild(ImageWidget.sprite(containerWidth, containerHeight, SkyBlockItemList.id("blank")))
+			container.addChild(
+				innerLayout,
+				container.newChildLayoutSettings().alignHorizontallyCenter().alignVerticallyTop().paddingTop(2)
+			)
+			container.arrangeElements()
+
+			this.container = container
+			layout.addChild(container)
+		}
+
+		layout.arrangeElements()
+		FrameLayout.centerInRectangle(layout, this@LootTableScreen.rectangle)
+		layout.visitWidgets(this::addRenderableWidget)
 	}
 
 	override fun onClose() {
@@ -87,9 +116,9 @@ class LootTableScreen(val parent: Screen?, val widgets: List<MobLootWidget>, val
 
 	override fun isInGameUi() = true
 
-	fun getLeft(): Int = visibleWidgets.minOf { it.x }
-	fun getRight(): Int = visibleWidgets.maxOf { it.right }
-	fun getMaxWidth(): Int = visibleWidgets.maxOf { it.width }
+	fun getLeft(): Int = container?.x ?: visibleWidgets.minOf { it.x }
+	fun getRight(): Int = container?.x?.plus(container?.width ?: 0) ?: visibleWidgets.maxOf { it.right }
+	fun getMaxWidth(): Int = container?.width ?: visibleWidgets.maxOf { it.width }
 
 	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
 		if (Keybinds.previousRecipe.matchesMouse(event)) {

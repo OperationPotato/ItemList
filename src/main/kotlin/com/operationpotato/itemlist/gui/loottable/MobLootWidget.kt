@@ -28,10 +28,8 @@ class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176, he
 	init {
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/items")))
 
-		val name = if (mob.name == lootTable.name) mob.name
-		else "${mob.name} - ${lootTable.name}"
 		container.addChild(
-			StringWidget(Text.of(name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
+			StringWidget(Text.of(lootTable.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
 			container.newChildLayoutSettings()
 				.alignHorizontallyCenter()
 				.alignVerticallyTop()
