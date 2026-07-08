@@ -39,11 +39,6 @@ class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176, he
 		val grid = GridLayout().apply { spacing(2) }
 		var index = 0
 
-		if (lootTable.coins > 0) {
-			grid.addChild(IngredientDisplay(Currency.Coin.withAmount(lootTable.coins)), 0, 0)
-			index++
-		}
-
 		lootTable.drops.forEach { drop ->
 			val stack = drop.toItemStack()
 			if (!stack.isEmpty) {

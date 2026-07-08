@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemLore
 import tech.thatgravyboat.repolib.api.mobs.drop.AttributeDrop
+import tech.thatgravyboat.repolib.api.mobs.drop.CurrencyDrop
 import tech.thatgravyboat.repolib.api.mobs.drop.EnchantmentDrop
 import tech.thatgravyboat.repolib.api.mobs.drop.ItemDrop
 import tech.thatgravyboat.repolib.api.mobs.drop.MobDrop
@@ -32,7 +33,6 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.strikethrough
-import kotlin.apply
 
 object RepoLibUtils {
 
@@ -109,13 +109,18 @@ object RepoLibUtils {
 			is PotionDrop -> SkyBlockId.potion(this.id, this.level)
 			is RuneDrop -> SkyBlockId.rune(this.id, this.tier)
 			is AttributeDrop -> SkyBlockId.attribute(this.id)
+			is CurrencyDrop -> Currency.getCurrencyById(this.currency)
 			else -> null
 		}
 
-		val stack = id?.toItem() ?: Items.BARRIER.defaultInstance.apply {
-			set(DataComponents.CUSTOM_NAME, Text.of("Unknown Drop (${drop.type()})", TextColor.RED).apply {
-				italic = false }
-			)
+		val stack = when (id) {
+			is SkyBlockId -> id.toItem()
+			is Currency -> id.stack
+			else -> Items.BARRIER.defaultInstance.apply {
+				set(DataComponents.CUSTOM_NAME, Text.of("Unknown Drop (${drop.type()})", TextColor.RED).apply {
+					italic = false
+				})
+			}
 		}
 
 		val copy = stack.copy()
@@ -126,7 +131,7 @@ object RepoLibUtils {
 				strikethrough = true
 			})
 
-			val chance = Text.of("Chance: ${drop.chance()}%") {
+			val chance = Text.of("Chance: ${(drop.chance() * 100).toFormattedString()}%") {
 				color = TextColor.GRAY
 				italic = false
 				drop.condition()?.let { append(" $it") }
