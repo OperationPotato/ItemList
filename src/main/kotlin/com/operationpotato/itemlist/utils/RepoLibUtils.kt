@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.utils
 
+import com.operationpotato.itemlist.utils.Utils.toPreciseString
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -131,7 +132,7 @@ object RepoLibUtils {
 				strikethrough = true
 			})
 
-			val chance = Text.of("Chance: ${(drop.chance() * 100).toFormattedString()}%") {
+			val chance = Text.of("Chance: ${(drop.chance() * 100).toPreciseString()}%") {
 				color = TextColor.GRAY
 				italic = false
 				drop.condition()?.let { append(" $it") }
