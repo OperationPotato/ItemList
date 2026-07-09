@@ -19,13 +19,14 @@ import tech.thatgravyboat.repolib.api.mobs.LootTable
 import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import kotlin.math.max
 
-class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176, height: Int = 86) :
-	AbstractWidget(0, 0, width, height, Text.of("[Lvl ${lootTable.mobLevel}] ${lootTable.name}")) {
+class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176) :
+	AbstractWidget(0, 0, width, calculateHeight(lootTable), Text.of("[Lvl ${lootTable.mobLevel}] ${lootTable.name}")) {
 	private val container = FrameLayout(0, 0, width, height)
 
 	init {
-		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/items")))
+		container.addChild(ImageWidget.sprite(width, height, SkyBlockItemList.id("recipe/items")))
 
 		container.addChild(
 			StringWidget(Text.of(lootTable.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
@@ -94,4 +95,12 @@ class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176, he
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
+
+	companion object {
+		private fun calculateHeight(lootTable: LootTable): Int {
+			val validDropsCount = lootTable.drops.count { !it.toItemStack().isEmpty }
+			val rows = max(1, (validDropsCount + 6) / 7)
+			return 32 + (rows * 18)
+		}
+	}
 }
