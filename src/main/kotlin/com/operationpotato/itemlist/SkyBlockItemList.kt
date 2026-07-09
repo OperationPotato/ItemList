@@ -7,8 +7,6 @@ import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
-import com.operationpotato.itemlist.gui.loottable.LootTableScreen
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback

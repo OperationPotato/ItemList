@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.operationpotato.itemlist.utils.codecs.RecipeCodecs
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
-import java.util.Optional
+import java.util.*
 
 data class Favorites(
 	var favoriteItems: List<SkyBlockId> = emptyList(),
