@@ -75,6 +75,13 @@ class Settings {
 		)
 		@LatticeWidgetDropdown
 		var rightClickAction: ItemClickAction = ItemClickAction.OPEN_INDEPENDENT_WIKI
+
+		@LatticeOption(
+			title = "Show Outside SkyBlock",
+			description = "Items will show up with missing textures if you do not have the Texturepack enabled"
+		)
+		@LatticeWidgetButton
+		var showOutsideSkyBlock: Boolean = false
 	}
 
 	class MainListSettings {
