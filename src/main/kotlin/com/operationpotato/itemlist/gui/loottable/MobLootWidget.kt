@@ -2,7 +2,6 @@ package com.operationpotato.itemlist.gui.loottable
 
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
-import com.operationpotato.itemlist.utils.Currency
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -22,7 +21,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
 class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176, height: Int = 86) :
-	AbstractWidget(0, 0, width, height, Text.of(lootTable.name)) {
+	AbstractWidget(0, 0, width, height, Text.of("[Lvl ${lootTable.mobLevel}] ${lootTable.name}")) {
 	private val container = FrameLayout(0, 0, width, height)
 
 	init {
