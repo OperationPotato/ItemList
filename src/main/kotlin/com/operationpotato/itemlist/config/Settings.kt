@@ -78,7 +78,7 @@ class Settings {
 
 		@LatticeOption(
 			title = "Show Outside SkyBlock",
-			description = "Items will show up with missing textures if you do not have the Texturepack enabled"
+			description = "Items will show up with missing textures if you do not have the SkyBlock Resource Pack enabled."
 		)
 		@LatticeWidgetButton
 		var showOutsideSkyBlock: Boolean = false
