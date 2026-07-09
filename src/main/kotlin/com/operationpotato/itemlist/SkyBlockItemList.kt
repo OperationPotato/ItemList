@@ -56,7 +56,7 @@ object SkyBlockItemList : ClientModInitializer {
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
-		if (!LocationAPI.isOnSkyBlock && !McClient.isDev) return
+		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
 		if (screen is AbstractContainerScreen<*> || screen is RecipeScreen || screen is LootTableScreen) {
 			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
 			val screenRight = when (screen) {
