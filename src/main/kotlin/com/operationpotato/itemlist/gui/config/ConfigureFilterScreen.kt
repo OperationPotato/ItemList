@@ -1,6 +1,7 @@
-package com.operationpotato.itemlist.gui
+package com.operationpotato.itemlist.gui.config
 
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.gui.AbstractPopupScreen
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Checkbox

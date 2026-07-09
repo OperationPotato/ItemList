@@ -11,8 +11,9 @@ import com.moulberry.lattice.annotation.widget.LatticeWidgetDropdown
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.moulberry.lattice.annotation.widget.LatticeWidgetSlider
 import com.operationpotato.itemlist.Keybinds
-import com.operationpotato.itemlist.gui.ConfigureFilterScreen
 import com.operationpotato.itemlist.gui.StackDisplay
+import com.operationpotato.itemlist.gui.config.ConfigureFilterScreen
+import com.operationpotato.itemlist.gui.config.CustomConstantsScreen
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -160,6 +161,15 @@ class Settings {
 		@LatticeWidgetButton
 		var requiresEquals: Boolean = false // maybe switch to true by default
 
+		@Suppress("unused", "PropertyName")
+		@LatticeOption(
+			title = "Configure Custom Constants",
+			description = "Add custom constants which can be used in the calculator."
+		)
+		@LatticeWidgetCustom(function = "openCustomConstantsScreen")
+		@Transient
+		var _customFilterButton: Int = 0
+
 		var customConstants: Map<String, Double> = mutableMapOf()
 	}
 
@@ -204,6 +214,13 @@ class Settings {
 		fun openFilterScreen(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
 			return WidgetFunction.runnableButton {
 				McClient.setScreen(ConfigureFilterScreen(McScreen.self))
+			}
+		}
+		@Suppress("unused") // used in CalculatorSettings annotation
+		@JvmStatic
+		fun openCustomConstantsScreen(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
+			return WidgetFunction.runnableButton {
+				McClient.setScreen(CustomConstantsScreen(McScreen.self))
 			}
 		}
 	}
