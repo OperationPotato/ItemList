@@ -66,6 +66,7 @@ object SkyBlockItemList : ClientModInitializer {
 
 			val availableWidth = w - screenRight
 			val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+			val tooSmall = panelWidth < 80
 
 			val itemPanel = instance ?: ItemPanel(0, 0, 0, 0)
 			instance = itemPanel
@@ -75,7 +76,7 @@ object SkyBlockItemList : ClientModInitializer {
 			itemPanel.updatePosition()
 			itemPanel.visible = ConfigManager.get().general.enabled
 			itemPanel.added()
-			if (panelWidth < 80) itemPanel.visible = false
+			if (tooSmall) itemPanel.visible = false
 
 			Screens.getWidgets(screen).add(itemPanel)
 
@@ -86,7 +87,7 @@ object SkyBlockItemList : ClientModInitializer {
 			favPanel.setSize(panelWidth - 2, h)
 			favPanel.updatePosition()
 			favPanel.visible = ConfigManager.get().general.enabled && ConfigManager.get().favoritesList.enableFavorites
-			if (panelWidth < 80) favPanel.visible = false
+			if (tooSmall) favPanel.visible = false
 
 			Screens.getWidgets(screen).add(favPanel)
 
@@ -133,7 +134,7 @@ object SkyBlockItemList : ClientModInitializer {
 
 			ScreenEvents.remove(screen).register {
 				PluginManager.onScreenClosed()
-				if (modName == null) ConfigManager.get().general.enabled = itemPanel.visible
+				if (modName == null && !tooSmall) ConfigManager.get().general.enabled = itemPanel.visible
 				favPanel.focused = null
 				favPanel.removed()
 				itemPanel.focused = null
