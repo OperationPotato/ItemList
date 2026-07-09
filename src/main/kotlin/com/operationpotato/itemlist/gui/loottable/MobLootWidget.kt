@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
+import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyles
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.ImageWidget
@@ -22,14 +23,16 @@ import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
 class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176) :
-	AbstractWidget(0, 0, width, calculateHeight(lootTable), Text.of("[Lvl ${lootTable.mobLevel}] ${lootTable.name}")) {
+	AbstractWidget(0, 0, width, calculateHeight(lootTable), Text.of(lootTable.name)) {
 	private val container = FrameLayout(0, 0, width, height)
 
 	init {
 		container.addChild(ImageWidget.sprite(width, height, SkyBlockItemList.id("recipe/items")))
 
+		val title = if (lootTable.mobLevel == 0) lootTable.name
+		else "[Lvl ${lootTable.mobLevel}] ${lootTable.name}"
 		container.addChild(
-			StringWidget(Text.of(lootTable.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
+			StringWidget(Text.of(title, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
 			container.newChildLayoutSettings()
 				.alignHorizontallyCenter()
 				.alignVerticallyTop()
