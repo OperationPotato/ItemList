@@ -4,8 +4,8 @@ import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
 import com.operationpotato.itemlist.gui.AbstractItemPanel
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -16,7 +16,7 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import java.util.Optional
+import java.util.*
 
 class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, y, width, height) {
 	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height)
@@ -76,7 +76,7 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	fun setRecipe(recipe: Optional<Recipe<*>>) {
 		FavoritesManager.favorites.pinnedRecipe = recipe
 		recipeWidget =
-			if (recipe != recipeWidget?.recipe && !recipe.isEmpty) RecipeScreen.getWidgetForRecipe(recipe.get()) else null
+			if (recipe != recipeWidget?.recipe && !recipe.isEmpty) AbstractPagedListScreen.getWidgetForRecipe(recipe.get()) else null
 		updatePosition()
 	}
 

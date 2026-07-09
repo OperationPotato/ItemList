@@ -3,7 +3,7 @@ package com.operationpotato.itemlist
 import com.moulberry.lattice.annotation.LatticeOption
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.operationpotato.itemlist.favorites.FavoritesManager
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping
 import net.minecraft.client.KeyMapping
@@ -19,7 +19,10 @@ object Keybinds {
 		Identifier.fromNamespaceAndPath("skyblock-item-list", "main")
 	)
 
-	@LatticeOption(title = "Hide Overlay", description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!")
+	@LatticeOption(
+		title = "Hide Overlay",
+		description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
+	)
 	@LatticeWidgetKeybind
 	val hideOverlay: KeyMapping = registerKeyMapping(
 		KeyMapping(
@@ -50,7 +53,10 @@ object Keybinds {
 		)
 	)
 
-	@LatticeOption(title = "Return to Previous Recipe", description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen.")
+	@LatticeOption(
+		title = "Return to Previous Recipe",
+		description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen."
+	)
 	@LatticeWidgetKeybind
 	val previousRecipe: KeyMapping = registerKeyMapping(
 		KeyMapping(
@@ -72,10 +78,10 @@ object Keybinds {
 
 	fun handleKeybind(itemStack: ItemStack, keyEvent: KeyEvent): Boolean {
 		if (viewRecipe.matches(keyEvent)) {
-			RecipeScreen.openRecipeForItem(itemStack, McScreen.self)
+			AbstractPagedListScreen.openRecipeForItem(itemStack, McScreen.self)
 			return true
 		} else if (viewUsage.matches(keyEvent)) {
-			RecipeScreen.openUsageForItem(itemStack, McScreen.self)
+			AbstractPagedListScreen.openUsageForItem(itemStack, McScreen.self)
 			return true
 		} else if (favoriteItem.matches(keyEvent)) {
 			itemStack.getSkyBlockId()?.let {

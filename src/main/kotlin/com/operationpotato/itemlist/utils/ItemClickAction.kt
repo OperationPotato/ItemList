@@ -1,6 +1,6 @@
 package com.operationpotato.itemlist.utils
 
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.IdOverlaysAPI
@@ -20,8 +20,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Suppress("unused")
 enum class ItemClickAction(val action: (ItemStack) -> Unit) {
-	OPEN_RECIPE({ stack -> RecipeScreen.openRecipeForItem(stack, McScreen.self) }),
-	OPEN_USAGE({ stack -> RecipeScreen.openUsageForItem(stack, McScreen.self) }),
+	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openRecipeForItem(stack, McScreen.self) }),
+	OPEN_USAGE({ stack -> AbstractPagedListScreen.openUsageForItem(stack, McScreen.self) }),
 	OPEN_INDEPENDENT_WIKI({ handleWiki(it, "independent") { overlay -> overlay.independent } }),
 	OPEN_OFFICIAL_WIKI({ handleWiki(it, "official") { overlay -> overlay.official } }),
 	NOTHING({ _ -> }),
