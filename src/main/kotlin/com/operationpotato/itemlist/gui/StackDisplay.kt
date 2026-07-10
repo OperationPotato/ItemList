@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
+import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
@@ -102,7 +103,7 @@ open class StackDisplay(
 
 	open fun matchesSearch(searches: List<String>): Boolean {
 		createStackIfEmpty()
-		return searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
+		return SearchUtils.matches(stackName, loreLines, searches)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
