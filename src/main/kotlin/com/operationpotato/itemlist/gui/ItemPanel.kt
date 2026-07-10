@@ -140,12 +140,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 					layoutX = screen.left
 				}
 
-				is RecipeScreen -> {
-					searchWidth = screen.getMaxWidth()
-					layoutX = screen.getLeft()
-				}
-
-				is LootTableScreen -> {
+				is AbstractPagedListScreen<*> -> {
 					searchWidth = screen.getMaxWidth()
 					layoutX = screen.getLeft()
 				}
