@@ -4,8 +4,6 @@ import com.operationpotato.itemlist.ContainerSearcher
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
-import com.operationpotato.itemlist.gui.loottable.LootTableScreen
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
 import com.operationpotato.itemlist.utils.SearchUtils

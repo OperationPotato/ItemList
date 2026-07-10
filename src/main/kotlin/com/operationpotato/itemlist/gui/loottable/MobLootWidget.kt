@@ -4,7 +4,6 @@ import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
-import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyles
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.ImageWidget
@@ -22,7 +21,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
-class MobLootWidget(val mob: Mob, val lootTable: LootTable, width: Int = 176) :
+class MobLootWidget(val mob: Mob, lootTable: LootTable, width: Int = 176) :
 	AbstractWidget(0, 0, width, calculateHeight(lootTable), Text.of(lootTable.name)) {
 	private val container = FrameLayout(0, 0, width, height)
 
