@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
@@ -35,10 +36,7 @@ class CollapsibleStackDisplay(
 
 	override fun matchesSearch(searches: List<String>): Boolean {
 		val filtered = familyItems.filter { item ->
-			val stack = item.stack.create()
-			val stackName = stack.cleanName.lowercase()
-			val loreLines = stack.getRawLore().map { it.lowercase() }
-			searches.any { stackName.contains(it) || loreLines.any { line -> line.contains(it) } }
+			SearchUtils.matchesSearch(item.stack.create(), searches)
 		}
 		filteredFamilyItems = filtered
 		return filtered.isNotEmpty()

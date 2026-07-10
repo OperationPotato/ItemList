@@ -1,18 +1,20 @@
 package com.operationpotato.itemlist
 
+import com.operationpotato.itemlist.utils.SearchUtils
 import tech.thatgravyboat.skyblockapi.api.item.replaceVisually
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 
 object ContainerSearcher {
 
 	fun shouldSearch(): Boolean = SkyBlockItemList.instance?.searchBox?.isSearchingInventory == true
 
 	fun setSearch(search: String?) {
+		val searches = search?.lowercase()?.let { SearchUtils.transformSearch(it) }
+
 		McScreen.asMenu?.menu?.items?.forEach { item ->
 			val color = when {
-				search == null -> 0
-				item.cleanName.contains(search, ignoreCase = true) -> 0
+				searches == null -> 0
+				SearchUtils.matchesSearch(item, searches) -> 0
 				else -> 0xAA555555.toInt()
 			}
 			item.replaceVisually {
