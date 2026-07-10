@@ -182,7 +182,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 	open fun getMaxWidth(): Int = visibleItems.maxOf { it.width }
 
 	companion object {
-		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
+		fun handleMob(stack: ItemStack, parent: Screen? = null): Boolean {
 			val mobId = stack.getMobId()
 			if (mobId != null) {
 				val mob = SkyBlockMobsRepo.get(mobId)
@@ -196,9 +196,13 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 						append("!")
 					}.send()
 				}
-				return
+				return true
 			}
+			return false
+		}
 
+		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
+			if (handleMob(stack, parent)) return
 			val targetId = stack.getSkyBlockId() ?: return
 
 			val matchingRecipes = SkyBlockRecipeAPI.getRecipesForId(targetId)
@@ -214,6 +218,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 		}
 
 		fun openUsageForItem(stack: ItemStack, parent: Screen? = null) {
+			if (handleMob(stack, parent)) return
 			val targetId = stack.getSkyBlockId() ?: return
 
 			val matchingRecipes = SkyBlockRecipeAPI.getUsagesForId(targetId)
