@@ -127,10 +127,13 @@ object RepoLibUtils {
 		val copy = stack.copy()
 
 		val newLoreList = buildList {
-			addAll(copy.getLore())
-			add(Text.of("           ") {
-				strikethrough = true
-			})
+			val originalLore = copy.getLore()
+			if (originalLore.isNotEmpty()) {
+				addAll(originalLore)
+				add(Text.of("           ") {
+					strikethrough = true
+				})
+			}
 
 			val chance = Text.of("Chance: ${(drop.chance() * 100).toPreciseString()}%") {
 				color = TextColor.GRAY
