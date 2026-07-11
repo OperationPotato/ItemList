@@ -29,6 +29,8 @@ object CalcUtils {
 	)
 
 	private val resolverRegex = Regex("\\b([a-zA-Z_]+)\\(([^)]+)\\)")
+	private val multiplicationOperandRegex = "[+-]?(?:\\d|\\.\\d|\\()"
+	private val numericMultiplicationRegex = Regex("(?<=[\\d)])\\s*x\\s*(?=$multiplicationOperandRegex)", RegexOption.IGNORE_CASE)
 
 	private val allConstants
 		get(): Map<String, Double> =
@@ -55,6 +57,8 @@ object CalcUtils {
 	private fun evaluateOrThrow(text: String): Double {
 		var expression = text.removePrefix("=")
 
+		expression = numericMultiplicationRegex.replace(expression, "*")
+
 		expression = resolverRegex.replace(expression) { matchResult ->
 			val name = matchResult.groupValues[1].trim().lowercase()
 			val arg = matchResult.groupValues[2].trim().uppercase()
@@ -62,16 +66,19 @@ object CalcUtils {
 			"%.2f".format(result)
 		}
 
-		expression = expression.replace(Regex("(?i)((?:\\d+)?\\.?\\d*)(\\w+)")) { match ->
+		val constantNames = allConstants.keys
+			.sortedByDescending { it.length }
+			.joinToString("|") { Regex.escape(it) }
+		val constantsRegex = Regex("(?i)((?:\\d+)?\\.?\\d*)($constantNames)(?=$|\\W|x\\s*$multiplicationOperandRegex)")
+
+		expression = expression.replace(constantsRegex) { match ->
 			val num = match.groupValues[1].toDoubleOrNull() ?: 1.0
 			val constName = match.groupValues[2].lowercase()
-			val constValue = allConstants[constName]
-			if (constValue != null) {
-				"%.2f".format(num * constValue)
-			} else {
-				match.value
-			}
+			val constValue = allConstants[constName] ?: return@replace match.value
+			"%.2f".format(num * constValue)
 		}
+
+		expression = numericMultiplicationRegex.replace(expression, "*")
 
 		return calc.eval(expression)
 	}
