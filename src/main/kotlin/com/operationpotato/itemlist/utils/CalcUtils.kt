@@ -29,7 +29,8 @@ object CalcUtils {
 	)
 
 	private val resolverRegex = Regex("\\b([a-zA-Z_]+)\\(([^)]+)\\)")
-	private val numericMultiplicationRegex = Regex("(?<=\\d)\\s*x\\s*(?=-?\\d)", RegexOption.IGNORE_CASE)
+	private val multiplicationOperandRegex = "[+-]?(?:\\d|\\.\\d|\\()"
+	private val numericMultiplicationRegex = Regex("(?<=[\\d)])\\s*x\\s*(?=$multiplicationOperandRegex)", RegexOption.IGNORE_CASE)
 
 	private val allConstants
 		get(): Map<String, Double> =
@@ -68,7 +69,7 @@ object CalcUtils {
 		val constantNames = allConstants.keys
 			.sortedByDescending { it.length }
 			.joinToString("|") { Regex.escape(it) }
-		val constantsRegex = Regex("(?i)((?:\\d+)?\\.?\\d*)($constantNames)(?=$|\\W|x\\s*-?\\d)")
+		val constantsRegex = Regex("(?i)((?:\\d+)?\\.?\\d*)($constantNames)(?=$|\\W|x\\s*$multiplicationOperandRegex)")
 
 		expression = expression.replace(constantsRegex) { match ->
 			val num = match.groupValues[1].toDoubleOrNull() ?: 1.0
