@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import java.util.Optional
+import java.util.*
 import java.util.concurrent.Future
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration.Companion.seconds

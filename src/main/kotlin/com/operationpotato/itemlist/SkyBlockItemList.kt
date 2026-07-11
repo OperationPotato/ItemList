@@ -4,9 +4,9 @@ import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
@@ -56,11 +56,11 @@ object SkyBlockItemList : ClientModInitializer {
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
 		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
-		if (screen is AbstractContainerScreen<*> || screen is RecipeScreen) {
+		if (screen is AbstractContainerScreen<*> || screen is AbstractPagedListScreen<*>) {
 			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
 			val screenRight = when (screen) {
 				is AbstractContainerScreen<*> -> screen.right
-				is RecipeScreen -> screen.getRight()
+				is AbstractPagedListScreen<*> -> screen.getRight()
 				else -> w
 			}
 

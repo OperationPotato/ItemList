@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Rect2i
 import net.minecraft.core.component.TypedDataComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
+import java.text.NumberFormat
 
 object Utils {
 
@@ -43,6 +44,14 @@ object Utils {
 			if (seconds > 0) add("${seconds}s")
 		}.joinToString(", ")
 	}
+
+	/**
+	 * Like .toFormattedString() just with way more possible decimal points.
+	 */
+	fun Number.toPreciseString(): String = NumberFormat.getNumberInstance().apply {
+		// From testing 7 was the least weird, where no 0.004000001 etc happens
+		maximumFractionDigits = 7
+	}.format(this)
 
 	fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
 		for ((type, value) in this@toLazy.componentsPatch.entrySet()) {
