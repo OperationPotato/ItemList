@@ -161,6 +161,14 @@ class Settings {
 		@LatticeWidgetButton
 		var requiresEquals: Boolean = false // maybe switch to true by default
 
+		@LatticeOption(
+			title = "Replace Calculation on Enter",
+			description = "Whether pressing the Enter key should replace the calculation with the result."
+				+ "\nOnly works if the calculation is successful.",
+		)
+		@LatticeWidgetButton
+		var replaceWithEnter: Boolean = true
+
 		@Suppress("unused", "PropertyName")
 		@LatticeOption(
 			title = "Configure Custom Constants",

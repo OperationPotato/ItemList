@@ -58,7 +58,8 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	val searchBox = FilterableEditBox(
 		McFont.self, 100, 16, // Giving it default width fixes it not starting with the input
 		Component.empty(),
-		filterButton
+		filterButton,
+		::acceptCalculatorResult,
 	)
 	var bottomLayout: LinearLayout = LinearLayout.horizontal()
 
@@ -226,6 +227,13 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			itemListWidget.currentFilter = filterButton.value
 		}
 		return text
+	}
+
+	fun acceptCalculatorResult() {
+		if (!ConfigManager.get().calculator.replaceWithEnter) return
+		if (!calculatorResult.second) return
+		searchBox.value = calculatorResult.first.replace(",", "")
+		searchBox.cursorPosition = searchBox.value.length
 	}
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {

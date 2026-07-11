@@ -2,15 +2,18 @@ package com.operationpotato.itemlist.gui
 
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
+import org.lwjgl.glfw.GLFW
 
 class FilterableEditBox(
 	font: Font,
 	width: Int,
 	height: Int,
 	narration: Component,
-	val filterButton: FilterButton
+	val filterButton: FilterButton,
+	val acceptCalcResult: Runnable,
 ) : ClearableEditBox(font, width, height, narration) {
 
 	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
@@ -28,6 +31,14 @@ class FilterableEditBox(
 			return filterButton.mouseScrolled(x, y, scrollX, scrollY)
 		}
 		return super.mouseScrolled(x, y, scrollX, scrollY)
+	}
+
+	override fun keyPressed(event: KeyEvent): Boolean {
+		if (active && isFocused && event.key == GLFW.GLFW_KEY_ENTER) {
+			acceptCalcResult.run()
+			return true
+		}
+		return super.keyPressed(event)
 	}
 
 	override fun getInnerWidth(): Int {
