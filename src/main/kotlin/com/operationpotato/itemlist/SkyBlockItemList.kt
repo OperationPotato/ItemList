@@ -21,6 +21,7 @@ import net.fabricmc.fabric.api.event.Event
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.resources.Identifier
@@ -139,6 +140,12 @@ object SkyBlockItemList : ClientModInitializer {
 				favPanel.removed()
 				itemPanel.focused = null
 				itemPanel.removed()
+			}
+
+			if (McClient.isDev && screen is CreativeModeInventoryScreen) {
+				ScreenKeyboardEvents.allowCharType(screen).register { _, event ->
+					!itemPanel.charTyped(event)
+				}
 			}
 		}
 	}
