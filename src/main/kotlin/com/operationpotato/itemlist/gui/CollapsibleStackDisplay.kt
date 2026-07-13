@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
@@ -146,7 +147,9 @@ class CollapsibleStackDisplay(
 
 				if (isChildHovered) {
 					val tooltipLines = getTooltipLines(itemStack)
-					graphics.setComponentTooltipForNextFrame(McFont.self, tooltipLines, mouseX, mouseY)
+					IconographicCompat.withItem(itemStack) {
+						graphics.setComponentTooltipForNextFrame(McFont.self, tooltipLines, mouseX, mouseY)
+					}
 				}
 			}
 		}

@@ -34,6 +34,12 @@
 				"value": "com.operationpotato.itemlist.api.impl.DefaultPlugin",
 				"adapter": "kotlin"
 			}
+		],
+		"iconographic:imc/item": [
+			{
+				"adapter": "kotlin",
+				"value": "com.operationpotato.itemlist.compat.IconographicCompat::setupItemCompat"
+			}
 		]
 	},
 	"mixins": [

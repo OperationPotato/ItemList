@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SearchUtils
@@ -80,7 +81,9 @@ open class StackDisplay(
 		createStackIfEmpty()
 		extractStack(graphics, stack, x, y, isHovered)
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(stack), mouseX, mouseY)
+			IconographicCompat.withItem(stack) {
+				graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(stack), mouseX, mouseY)
+			}
 		}
 	}
 
