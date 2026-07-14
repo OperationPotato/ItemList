@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
@@ -57,7 +58,9 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 		}
 
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(), mouseX, mouseY)
+			IconographicCompat.withItem(stack) {
+				graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(), mouseX, mouseY)
+			}
 		}
 	}
 
