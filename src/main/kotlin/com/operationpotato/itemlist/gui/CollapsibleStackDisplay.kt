@@ -6,6 +6,7 @@ import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.core.component.DataComponents
 import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
 import net.minecraft.world.item.ItemStack
@@ -148,7 +149,10 @@ class CollapsibleStackDisplay(
 				if (isChildHovered) {
 					val tooltipLines = getTooltipLines(itemStack)
 					IconographicCompat.withItem(itemStack) {
-						graphics.setComponentTooltipForNextFrame(McFont.self, tooltipLines, mouseX, mouseY)
+						graphics.setComponentTooltipForNextFrame(
+							McFont.self, tooltipLines,
+							mouseX, mouseY, itemStack.get(DataComponents.TOOLTIP_STYLE)
+						)
 					}
 				}
 			}

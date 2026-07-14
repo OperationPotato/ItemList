@@ -11,6 +11,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -82,7 +83,10 @@ open class StackDisplay(
 		extractStack(graphics, stack, x, y, isHovered)
 		if (isHovered) {
 			IconographicCompat.withItem(stack) {
-				graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(stack), mouseX, mouseY)
+				graphics.setComponentTooltipForNextFrame(
+					McFont.self, getTooltipLines(stack),
+					mouseX, mouseY, stack.get(DataComponents.TOOLTIP_STYLE)
+				)
 			}
 		}
 	}

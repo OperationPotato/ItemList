@@ -11,6 +11,7 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -59,7 +60,10 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 
 		if (isHovered) {
 			IconographicCompat.withItem(stack) {
-				graphics.setComponentTooltipForNextFrame(McFont.self, getTooltipLines(), mouseX, mouseY)
+				graphics.setComponentTooltipForNextFrame(
+					McFont.self, getTooltipLines(),
+					mouseX, mouseY, stack.get(DataComponents.TOOLTIP_STYLE)
+				)
 			}
 		}
 	}
