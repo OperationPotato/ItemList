@@ -15,44 +15,31 @@ group = providers.gradleProperty("maven_group").get()
 base.archivesName = rootProject.name
 
 repositories {
-	exclusiveContent {
-		forRepository {
-			maven("https://maven.teamresourceful.com/repository/maven-public/")
-		}
-		filter {
+	maven("https://maven.operationpotato.com/mirror")
+
+	maven("https://maven.teamresourceful.com/repository/maven-public/") {
+		content {
 			includeGroupByRegex("tech\\.thatgravyboat.*")
 			includeGroup("me.owdding")
 		}
 	}
-	exclusiveContent {
-		forRepository {
-			maven("https://api.modrinth.com/maven")
-		}
-		filter {
+	maven("https://api.modrinth.com/maven") {
+		content {
 			includeGroup("maven.modrinth")
 		}
 	}
-	exclusiveContent {
-		forRepository {
-			maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-		}
-		filter {
+	maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
+		content {
 			includeGroup("me.djtheredstoner")
 		}
 	}
-	exclusiveContent {
-		forRepository {
-			maven("https://repo.hypixel.net/repository/Hypixel/")
-		}
-		filter {
+	maven("https://repo.hypixel.net/repository/Hypixel/") {
+		content {
 			includeGroup("net.hypixel")
 		}
 	}
-	exclusiveContent {
-		forRepository {
-			maven("https://maven.terraformersmc.com/releases")
-		}
-		filter {
+	maven("https://maven.terraformersmc.com/releases") {
+		content {
 			includeGroup("com.terraformersmc")
 		}
 	}

@@ -1,5 +1,7 @@
 pluginManagement {
 	repositories {
+		maven("https://maven.operationpotato.com/mirror")
+
 		maven("https://maven.fabricmc.net/") { name = "Fabric" }
 		maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
 		mavenCentral()
