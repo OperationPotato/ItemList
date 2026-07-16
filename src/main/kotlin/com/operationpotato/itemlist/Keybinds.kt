@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.moulberry.lattice.annotation.LatticeOption
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.operationpotato.itemlist.favorites.FavoritesManager
@@ -10,7 +11,6 @@ import net.minecraft.client.KeyMapping
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
-import org.lwjgl.glfw.GLFW
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 
@@ -27,7 +27,7 @@ object Keybinds {
 	val hideOverlay: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.hideOverlay",
-			GLFW.GLFW_KEY_O,
+			InputConstants.KEY_O,
 			category
 		)
 	)
@@ -37,7 +37,7 @@ object Keybinds {
 	val viewRecipe: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.viewRecipe",
-			GLFW.GLFW_KEY_R,
+			InputConstants.KEY_R,
 			category,
 		)
 	)
@@ -48,7 +48,7 @@ object Keybinds {
 	val viewUsage: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.viewUsage",
-			GLFW.GLFW_KEY_U,
+			InputConstants.KEY_U,
 			category,
 		)
 	)
@@ -61,7 +61,7 @@ object Keybinds {
 	val previousRecipe: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.reopenPreviousRecipe",
-			GLFW.GLFW_KEY_BACKSPACE,
+			InputConstants.KEY_BACKSPACE,
 			category,
 		)
 	)
@@ -71,7 +71,7 @@ object Keybinds {
 	val favoriteItem: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.favoriteItem",
-			GLFW.GLFW_KEY_F,
+			InputConstants.KEY_F,
 			category,
 		)
 	)

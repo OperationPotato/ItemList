@@ -1,11 +1,11 @@
 package com.operationpotato.itemlist.gui
 
+import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
-import org.lwjgl.glfw.GLFW
 
 class FilterableEditBox(
 	font: Font,
@@ -34,7 +34,7 @@ class FilterableEditBox(
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {
-		if (active && isFocused && event.key == GLFW.GLFW_KEY_ENTER) {
+		if (active && isFocused && event.key == InputConstants.KEY_RETURN) {
 			acceptCalcResult.run()
 			return true
 		}
