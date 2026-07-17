@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.operationpotato.itemlist.api.impl
 
 import com.operationpotato.itemlist.api.HoveredItemConsumer
@@ -21,6 +23,7 @@ class HoveredItemManagerImpl : HoveredItemManager {
 		providers.add(provider)
 	}
 
+	@Deprecated("Deprecated in Java")
 	override fun addConsumer(consumer: HoveredItemConsumer) {
 		keyConsumers.add(consumer)
 	}
