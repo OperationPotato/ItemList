@@ -1,8 +1,6 @@
 package com.operationpotato.itemlist
 
 import com.mojang.blaze3d.platform.InputConstants
-import com.moulberry.lattice.annotation.LatticeOption
-import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
@@ -19,11 +17,6 @@ object Keybinds {
 		Identifier.fromNamespaceAndPath("skyblock-item-list", "main")
 	)
 
-	@LatticeOption(
-		title = "Hide Overlay",
-		description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
-	)
-	@LatticeWidgetKeybind
 	val hideOverlay: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.hideOverlay",
@@ -32,8 +25,6 @@ object Keybinds {
 		)
 	)
 
-	@LatticeOption(title = "View Recipe", description = "Shows the recipe of the hovered item, if there are any.")
-	@LatticeWidgetKeybind
 	val viewRecipe: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.viewRecipe",
@@ -43,8 +34,6 @@ object Keybinds {
 	)
 
 
-	@LatticeOption(title = "View Usage", description = "Shows the uses of the hovered item, if there are any.")
-	@LatticeWidgetKeybind
 	val viewUsage: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.viewUsage",
@@ -53,11 +42,6 @@ object Keybinds {
 		)
 	)
 
-	@LatticeOption(
-		title = "Return to Previous Recipe",
-		description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen."
-	)
-	@LatticeWidgetKeybind
 	val previousRecipe: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.reopenPreviousRecipe",
@@ -66,8 +50,6 @@ object Keybinds {
 		)
 	)
 
-	@LatticeOption(title = "Favorite Item", description = "Adds the hovered item or recipe to your Favorites List.")
-	@LatticeWidgetKeybind
 	val favoriteItem: KeyMapping = registerKeyMapping(
 		KeyMapping(
 			"key.skyblock-item-list.favoriteItem",
@@ -104,5 +86,6 @@ object Keybinds {
 		return false
 	}
 
+	@Suppress("EmptyMethod")
 	fun init() {}
 }
