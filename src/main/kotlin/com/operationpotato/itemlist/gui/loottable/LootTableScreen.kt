@@ -10,6 +10,7 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.util.CommonColors
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -55,6 +56,10 @@ class LootTableScreen(parent: Screen?, widgets: List<MobLootWidget>, pageIndex: 
 
 	override fun handleChildKeyPress(child: AbstractWidget, event: KeyEvent): Boolean {
 		return child is MobLootWidget && child.keyPressed(event)
+	}
+
+	override fun handleChildMouseClick(child: AbstractWidget, event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+		return child is MobLootWidget && child.mouseClicked(event, doubleClick)
 	}
 
 	override fun getHoveredStack(child: AbstractWidget): ItemStack? {

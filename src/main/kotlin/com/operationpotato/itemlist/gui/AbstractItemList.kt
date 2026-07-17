@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -201,6 +202,14 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		val mousePos = McClient.mouse
 		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
 		if (child !is StackDisplay) return false
+		if (PluginManager.provideHoveredItem(child.hoveredStack, event)) return true
+		return Keybinds.handleKeybind(child.hoveredStack, event)
+	}
+
+	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+		val child = getChildAt(event.x, event.y).getOrNull()
+		if (child !is StackDisplay) return super.mouseClicked(event, doubleClick)
+		if (child.mouseClicked(event, doubleClick)) return true
 		if (PluginManager.provideHoveredItem(child.hoveredStack, event)) return true
 		return Keybinds.handleKeybind(child.hoveredStack, event)
 	}

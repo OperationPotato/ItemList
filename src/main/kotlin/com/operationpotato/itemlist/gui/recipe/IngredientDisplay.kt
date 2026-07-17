@@ -76,6 +76,7 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 		when (event.button()) {
 			0 -> ConfigManager.get().general.leftClickAction.action(stack)
 			1 -> ConfigManager.get().general.rightClickAction.action(stack)
+			else -> Keybinds.handleKeybind(stack, event)
 		}
 	}
 

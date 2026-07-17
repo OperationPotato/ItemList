@@ -113,6 +113,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 	abstract fun buildContent(layout: LinearLayout, visibleItems: List<T>)
 	abstract fun createScreen(newPageIndex: Int): Screen
 	abstract fun handleChildKeyPress(child: AbstractWidget, event: KeyEvent): Boolean
+	abstract fun handleChildMouseClick(child: AbstractWidget, event: MouseButtonEvent, doubleClick: Boolean): Boolean
 	abstract fun getHoveredStack(child: AbstractWidget): ItemStack?
 
 	override fun onClose() {
@@ -130,6 +131,21 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			McClient.setScreen(parent)
 			return true
 		}
+
+		var child = getChildAt(event.x, event.y).getOrNull()
+		if (child is AbstractContainerWidget) child = child.getChildAt(event.x, event.y).getOrNull()
+
+		var stack: ItemStack? = null
+		if (child is AbstractWidget) {
+			if (handleChildMouseClick(child, event, doubleClick)) return true
+			stack = getHoveredStack(child)
+		}
+
+		if (stack != null) {
+			if (PluginManager.provideHoveredItem(stack, event)) return true
+			if (Keybinds.handleKeybind(stack, event)) return true
+		}
+
 		return super.mouseClicked(event, doubleClick)
 	}
 

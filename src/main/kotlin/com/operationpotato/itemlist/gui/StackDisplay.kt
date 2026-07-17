@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
@@ -100,6 +101,7 @@ open class StackDisplay(
 		when (event.button()) {
 			0 -> ConfigManager.get().general.leftClickAction.action(stack)
 			1 -> ConfigManager.get().general.rightClickAction.action(stack)
+			else -> Keybinds.handleKeybind(stack, event)
 		}
 	}
 

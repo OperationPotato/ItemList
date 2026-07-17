@@ -11,6 +11,7 @@ import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import com.operationpotato.itemlist.utils.Utils.toLazy
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import kotlin.jvm.optionals.getOrNull
@@ -70,6 +71,10 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 			return true
 		}
 		return super.keyPressed(event)
+	}
+
+	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+		return super.mouseClicked(event, doubleClick)
 	}
 
 	override fun getItems(): List<StackDisplay> = children

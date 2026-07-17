@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.SearchUtils
@@ -161,6 +162,7 @@ class CollapsibleStackDisplay(
 		when (event.button()) {
 			0 -> ConfigManager.get().general.leftClickAction.action(hoveredStack)
 			1 -> ConfigManager.get().general.rightClickAction.action(hoveredStack)
+			else -> Keybinds.handleKeybind(hoveredStack, event)
 		}
 	}
 

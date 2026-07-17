@@ -6,7 +6,9 @@ import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping
 import net.minecraft.client.KeyMapping
+import net.minecraft.client.input.InputWithModifiers
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
@@ -58,14 +60,14 @@ object Keybinds {
 		)
 	)
 
-	fun handleKeybind(itemStack: ItemStack, keyEvent: KeyEvent): Boolean {
-		if (viewRecipe.matches(keyEvent)) {
+	fun handleKeybind(itemStack: ItemStack, input: InputWithModifiers): Boolean {
+		if (viewRecipe.matches(input)) {
 			AbstractPagedListScreen.openRecipeForItem(itemStack, McScreen.self)
 			return true
-		} else if (viewUsage.matches(keyEvent)) {
+		} else if (viewUsage.matches(input)) {
 			AbstractPagedListScreen.openUsageForItem(itemStack, McScreen.self)
 			return true
-		} else if (favoriteItem.matches(keyEvent)) {
+		} else if (favoriteItem.matches(input)) {
 			itemStack.getSkyBlockId()?.let {
 				if (FavoritesManager.isFavoriteItem(it)) {
 					FavoritesManager.removeFavoriteItem(it)
@@ -84,6 +86,14 @@ object Keybinds {
 			return false
 		}
 		return false
+	}
+
+	fun KeyMapping.matches(input: InputWithModifiers): Boolean {
+		return when (input) {
+			is KeyEvent -> this.matches(input)
+			is MouseButtonEvent -> this.matchesMouse(input)
+			else -> false
+		}
 	}
 
 	@Suppress("EmptyMethod")

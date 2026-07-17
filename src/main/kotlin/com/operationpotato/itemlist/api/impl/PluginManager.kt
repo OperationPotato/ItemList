@@ -4,7 +4,7 @@ import com.operationpotato.itemlist.api.Plugin
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.InputWithModifiers
 import net.minecraft.world.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
 import tech.thatgravyboat.repolib.api.recipes.Recipe
@@ -64,8 +64,8 @@ object PluginManager {
 		return exclusionZoneManager.getHasChanged()
 	}
 
-	fun provideHoveredItem(stack: ItemStack, keyEvent: KeyEvent): Boolean {
-		return hoveredItemManager.provideHoveredItem(McScreen.self!!, stack, keyEvent)
+	fun provideHoveredItem(stack: ItemStack, event: InputWithModifiers): Boolean {
+		return hoveredItemManager.provideHoveredItem(McScreen.self!!, stack, event)
 	}
 
 	fun getHoveredItem(screen: Screen): ItemStack? {
