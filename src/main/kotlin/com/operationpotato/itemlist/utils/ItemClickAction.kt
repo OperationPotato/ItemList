@@ -23,7 +23,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Suppress("unused")
 enum class ItemClickAction(val action: (ItemStack) -> Unit, nameOverride: String? = null) {
-	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openRecipeForItem(stack, McScreen.self) }, "Open Obtaining"),
+	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openObtainingForItem(stack, McScreen.self) }, "Open Obtaining"),
 	OPEN_USAGE({ stack -> AbstractPagedListScreen.openUsageForItem(stack, McScreen.self) }),
 	OPEN_INDEPENDENT_WIKI({ handleWiki(it, "independent") { overlay -> overlay.independent } }),
 	OPEN_OFFICIAL_WIKI({ handleWiki(it, "official") { overlay -> overlay.official } }),

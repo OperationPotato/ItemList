@@ -203,7 +203,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			return false
 		}
 
-		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
+		fun openObtainingForItem(stack: ItemStack, parent: Screen? = null) {
 			if (handleMob(stack, parent)) return
 			val targetId = stack.getSkyBlockId() ?: return
 
@@ -218,9 +218,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			val allObtainingWidgets = recipeWidgets + mobWidgets
 
 			if (allObtainingWidgets.isNotEmpty()) {
-				McClient.setScreen(
-					ObtainingScreen(parent, allObtainingWidgets)
-				)
+				McClient.setScreen(ObtainingScreen(parent, allObtainingWidgets))
 			} else {
 				Text.of("No methods found to obtain ") {
 					color = TextColor.RED
