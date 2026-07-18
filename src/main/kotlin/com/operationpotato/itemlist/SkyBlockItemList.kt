@@ -142,7 +142,7 @@ object SkyBlockItemList : ClientModInitializer {
 				itemPanel.removed()
 			}
 
-			if (McClient.isDev && screen is CreativeModeInventoryScreen) {
+			if (screen is CreativeModeInventoryScreen) {
 				ScreenKeyboardEvents.allowCharType(screen).register { _, event ->
 					!itemPanel.charTyped(event)
 				}
