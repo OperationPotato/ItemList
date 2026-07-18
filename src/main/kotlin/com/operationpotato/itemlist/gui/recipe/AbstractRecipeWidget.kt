@@ -3,6 +3,7 @@ package com.operationpotato.itemlist.gui.recipe
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.utils.ItemClickAction
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.StringWidget
@@ -65,9 +66,9 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 		}
 	}
 
-	// Needed for right-clicks inside IngredientDisplay
+	// Needed for clicks inside IngredientDisplay
 	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
-		return info.button() == 0 || info.button() == 1
+		return info.button() in ItemClickAction.validButtons
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
