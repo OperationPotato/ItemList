@@ -1,7 +1,9 @@
 package com.operationpotato.itemlist.gui
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
@@ -92,15 +94,11 @@ open class StackDisplay(
 	}
 
 	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
-		return info.button() == 0 || info.button() == 1
+		return info.button() in ItemClickAction.validButtons
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		// Adding new buttons here also means the same onClick needs to be updated in CollapsibleStackDisplay and IngredientDisplay
-		when (event.button()) {
-			0 -> ConfigManager.get().general.leftClickAction.action(stack)
-			1 -> ConfigManager.get().general.rightClickAction.action(stack)
-		}
+		ItemClickAction.handleClick(event, stack)
 	}
 
 	fun scale(scaledSize: Int) {

@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui.loottable
 
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
+import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -69,8 +70,9 @@ class MobLootWidget(val mob: Mob, lootTable: LootTable, width: Int = 176) :
 		container.visitWidgets { widget -> widget.extractRenderState(graphics, mouseX, mouseY, a) }
 	}
 
+	// Needed for clicks inside IngredientDisplay
 	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
-		return info.button() == 0 || info.button() == 1
+		return info.button() in ItemClickAction.validButtons
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
