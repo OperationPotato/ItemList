@@ -22,15 +22,15 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 
 @Suppress("unused")
-enum class ItemClickAction(val action: (ItemStack) -> Unit) {
-	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openRecipeForItem(stack, McScreen.self) }),
+enum class ItemClickAction(val action: (ItemStack) -> Unit, nameOverride: String? = null) {
+	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openRecipeForItem(stack, McScreen.self) }, "Open Obtaining"),
 	OPEN_USAGE({ stack -> AbstractPagedListScreen.openUsageForItem(stack, McScreen.self) }),
 	OPEN_INDEPENDENT_WIKI({ handleWiki(it, "independent") { overlay -> overlay.independent } }),
 	OPEN_OFFICIAL_WIKI({ handleWiki(it, "official") { overlay -> overlay.official } }),
 	NOTHING({ _ -> }),
 	;
 
-	private val formattedName = toFormattedName()
+	private val formattedName = nameOverride ?: toFormattedName()
 	override fun toString() = formattedName
 
 	companion object {

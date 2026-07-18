@@ -6,6 +6,8 @@ import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.loottable.LootTableScreen
 import com.operationpotato.itemlist.gui.loottable.MobLootWidget
+import com.operationpotato.itemlist.gui.obtaining.MobDropWidget
+import com.operationpotato.itemlist.gui.obtaining.ObtainingScreen
 import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.CraftingRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.ForgeRecipeWidget
@@ -206,10 +208,21 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			val targetId = stack.getSkyBlockId() ?: return
 
 			val matchingRecipes = SkyBlockRecipeAPI.getRecipesForId(targetId)
-			if (matchingRecipes.isNotEmpty()) {
-				openRecipe(matchingRecipes, parent)
+			val recipeWidgets = matchingRecipes
+				.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
+				.mapNotNull { getWidgetForRecipe(it) }
+
+			val droppingMobs = SkyBlockMobsRepo.getMobsForId(targetId)
+			val mobWidgets = droppingMobs.map { MobDropWidget(it) }
+
+			val allObtainingWidgets = recipeWidgets + mobWidgets
+
+			if (allObtainingWidgets.isNotEmpty()) {
+				McClient.setScreen(
+					ObtainingScreen(parent, allObtainingWidgets)
+				)
 			} else {
-				Text.of("No recipes found for ") {
+				Text.of("No methods found to obtain ") {
 					color = TextColor.RED
 					append(stack.cleanName, TextColor.LIGHT_PURPLE)
 					append("!")

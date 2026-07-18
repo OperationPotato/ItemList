@@ -12,12 +12,15 @@ import net.minecraft.world.item.component.ItemLore
 import net.minecraft.world.item.component.TooltipDisplay
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.mobs.Mob
+import tech.thatgravyboat.repolib.api.mobs.drop.ItemDrop
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.RepoItemCache
 import tech.thatgravyboat.skyblockapi.platform.ResolvableProfile
 import tech.thatgravyboat.skyblockapi.utils.extentions.compoundTag
 import tech.thatgravyboat.skyblockapi.utils.extentions.toData
+import tech.thatgravyboat.skyblockapi.utils.lazy.registryBoundLazy
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
@@ -28,6 +31,25 @@ object SkyBlockMobsRepo : RepoItemCache<String>("Mobs") {
 	private const val ID_KEY = "skyblock-item-list:id"
 
 	private val repo get() = RepoAPI.mobs()
+
+	val mobsByDropId: Map<SkyBlockId, Set<Mob>> by registryBoundLazy {
+		val grouped = mutableMapOf<SkyBlockId, MutableSet<Mob>>()
+		if (RepoAPI.isInitialized()) {
+			RepoAPI.mobs().mobs().values.forEach { mob ->
+				mob.lootTables.forEach { table ->
+					table.drops.forEach { drop ->
+						if (drop is ItemDrop) {
+							val id = SkyBlockId.item(drop.id)
+							grouped.getOrPut(id) { mutableSetOf() }.add(mob)
+						}
+					}
+				}
+			}
+		}
+		grouped
+	}
+
+	fun getMobsForId(id: SkyBlockId): Set<Mob> = mobsByDropId[id] ?: emptySet()
 
 	fun get(key: String): Mob? = repo.getMob(key)
 
