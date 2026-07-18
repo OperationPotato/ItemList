@@ -1,7 +1,10 @@
 package com.operationpotato.itemlist.utils
 
+import com.mojang.blaze3d.platform.InputConstants
+import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.repolib.api.IdOverlaysAPI
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -29,6 +32,22 @@ enum class ItemClickAction(val action: (ItemStack) -> Unit) {
 
 	private val formattedName = toFormattedName()
 	override fun toString() = formattedName
+
+	companion object {
+		val validButtons = listOf(
+			InputConstants.MOUSE_BUTTON_LEFT,
+			InputConstants.MOUSE_BUTTON_RIGHT,
+			InputConstants.MOUSE_BUTTON_MIDDLE
+		)
+
+		fun handleClick(button: MouseButtonEvent, stack: ItemStack) {
+			when (button.button()) {
+				InputConstants.MOUSE_BUTTON_LEFT -> ConfigManager.get().general.leftClickAction.action(stack)
+				InputConstants.MOUSE_BUTTON_RIGHT -> ConfigManager.get().general.rightClickAction.action(stack)
+				InputConstants.MOUSE_BUTTON_MIDDLE -> ConfigManager.get().general.middleClickAction.action(stack)
+			}
+		}
+	}
 }
 
 private fun handleWiki(stack: ItemStack, type: String, getter: (IdOverlaysAPI.WikiData) -> String?) {

@@ -71,6 +71,13 @@ class Settings {
 		var leftClickAction: ItemClickAction = ItemClickAction.OPEN_RECIPE
 
 		@LatticeOption(
+			title = "Middle Click Action",
+			description = "What happens when you middle click an Item"
+		)
+		@LatticeWidgetDropdown
+		var middleClickAction: ItemClickAction = ItemClickAction.NOTHING
+
+		@LatticeOption(
 			title = "Right Click Action",
 			description = "What happens when you right click an Item"
 		)

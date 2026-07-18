@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -158,10 +159,7 @@ class CollapsibleStackDisplay(
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		when (event.button()) {
-			0 -> ConfigManager.get().general.leftClickAction.action(hoveredStack)
-			1 -> ConfigManager.get().general.rightClickAction.action(hoveredStack)
-		}
+		ItemClickAction.handleClick(event, hoveredStack)
 	}
 
 	private data class PopOutState(

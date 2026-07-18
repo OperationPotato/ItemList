@@ -3,7 +3,7 @@ package com.operationpotato.itemlist.gui.recipe
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.compat.IconographicCompat
-import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.utils.ItemClickAction
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -69,14 +69,11 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 	}
 
 	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
-		return info.button() == 0 || info.button() == 1
+		return info.button() in ItemClickAction.validButtons
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		when (event.button()) {
-			0 -> ConfigManager.get().general.leftClickAction.action(stack)
-			1 -> ConfigManager.get().general.rightClickAction.action(stack)
-		}
+		ItemClickAction.handleClick(event, stack)
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {
