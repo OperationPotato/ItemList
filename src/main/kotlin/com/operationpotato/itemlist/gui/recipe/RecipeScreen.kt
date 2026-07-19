@@ -8,19 +8,23 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 
-class RecipeScreen(parent: Screen?, recipes: List<AbstractRecipeWidget>, pageIndex: Int = 0) :
-	AbstractPagedListScreen<AbstractRecipeWidget>(parent, Text.of("Recipe Screen"), recipes, pageIndex) {
+class RecipeScreen(parent: Screen?, recipes: List<AbstractWidget>, pageIndex: Int = 0) :
+	AbstractPagedListScreen<AbstractWidget>(parent, Text.of("Recipe Screen"), recipes, pageIndex) {
 
 	override fun getTopLayoutWidth(): Int = getMaxWidth()
 
-	override fun buildContent(layout: LinearLayout, visibleItems: List<AbstractRecipeWidget>) {
+	override fun buildContent(layout: LinearLayout, visibleItems: List<AbstractWidget>) {
 		visibleItems.forEach(layout::addChild)
 	}
 
 	override fun createScreen(newPageIndex: Int): Screen = RecipeScreen(parent, items, newPageIndex)
 
 	override fun handleChildKeyPress(child: AbstractWidget, event: KeyEvent): Boolean {
-		return child is AbstractRecipeWidget && child.keyPressed(event)
+		return when (child) {
+			is AbstractRecipeWidget -> child.keyPressed(event)
+			is MobDropWidget -> child.keyPressed(event)
+			else -> false
+		}
 	}
 
 	override fun getHoveredStack(child: AbstractWidget): ItemStack? {

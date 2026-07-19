@@ -1,7 +1,6 @@
-package com.operationpotato.itemlist.gui.obtaining
+package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.SkyBlockItemList
-import com.operationpotato.itemlist.gui.recipe.IngredientDisplay
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
@@ -29,7 +28,7 @@ class MobDropWidget(val mob: Mob, width: Int = 176) : AbstractWidget(0, 0, width
 		container.addChild(ImageWidget.sprite(width, height, SkyBlockItemList.id("recipe/items")))
 
 		container.addChild(
-			StringWidget(Text.of(mob.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
+            StringWidget(Text.of(mob.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
 			container.newChildLayoutSettings()
 				.alignHorizontallyCenter()
 				.alignVerticallyTop()

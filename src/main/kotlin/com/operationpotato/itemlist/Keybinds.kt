@@ -60,7 +60,7 @@ object Keybinds {
 
 	fun handleKeybind(itemStack: ItemStack, keyEvent: KeyEvent): Boolean {
 		if (viewRecipe.matches(keyEvent)) {
-			AbstractPagedListScreen.openObtainingForItem(itemStack, McScreen.self)
+			AbstractPagedListScreen.openRecipeForItem(itemStack, McScreen.self)
 			return true
 		} else if (viewUsage.matches(keyEvent)) {
 			AbstractPagedListScreen.openUsageForItem(itemStack, McScreen.self)
