@@ -28,7 +28,7 @@ class MobDropWidget(val mob: Mob, width: Int = 176) : AbstractWidget(0, 0, width
 		container.addChild(ImageWidget.sprite(width, height, SkyBlockItemList.id("recipe/items")))
 
 		container.addChild(
-            StringWidget(Text.of(mob.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
+			StringWidget(Text.of(mob.name, CommonColors.DARK_GRAY).apply { withoutShadow() }, McFont.self),
 			container.newChildLayoutSettings()
 				.alignHorizontallyCenter()
 				.alignVerticallyTop()
