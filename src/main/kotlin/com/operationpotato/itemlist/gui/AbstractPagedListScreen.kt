@@ -10,6 +10,7 @@ import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.CraftingRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.ForgeRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.KatRecipeWidget
+import com.operationpotato.itemlist.gui.recipe.MobDropWidget
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.gui.recipe.ShopRecipeWidget
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
@@ -206,8 +207,17 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			val targetId = stack.getSkyBlockId() ?: return
 
 			val matchingRecipes = SkyBlockRecipeAPI.getRecipesForId(targetId)
-			if (matchingRecipes.isNotEmpty()) {
-				openRecipe(matchingRecipes, parent)
+			val recipeWidgets = matchingRecipes
+				.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
+				.mapNotNull { getWidgetForRecipe(it) }
+
+			val droppingMobs = SkyBlockMobsRepo.getMobsForId(targetId)
+			val mobWidgets = droppingMobs.map { MobDropWidget(it) }
+
+			val allObtainingWidgets = recipeWidgets + mobWidgets
+
+			if (allObtainingWidgets.isNotEmpty()) {
+				McClient.setScreen(RecipeScreen(parent, allObtainingWidgets))
 			} else {
 				Text.of("No recipes found for ") {
 					color = TextColor.RED
