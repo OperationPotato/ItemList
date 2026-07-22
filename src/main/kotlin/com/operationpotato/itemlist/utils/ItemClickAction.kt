@@ -26,7 +26,6 @@ enum class ItemClickAction(val action: (ItemStack) -> Unit) {
 	OPEN_RECIPE({ stack -> AbstractPagedListScreen.openRecipeForItem(stack, McScreen.self) }),
 	OPEN_USAGE({ stack -> AbstractPagedListScreen.openUsageForItem(stack, McScreen.self) }),
 	OPEN_INDEPENDENT_WIKI({ handleWiki(it, "independent") { overlay -> overlay.independent } }),
-	OPEN_OFFICIAL_WIKI({ handleWiki(it, "official") { overlay -> overlay.official } }),
 	NOTHING({ _ -> }),
 	;
 
