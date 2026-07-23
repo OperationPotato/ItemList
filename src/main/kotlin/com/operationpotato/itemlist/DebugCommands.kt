@@ -23,6 +23,12 @@ object DebugCommands {
 					ctx.source.sendFeedback(Text.of("Reset widgets!"))
 					Command.SINGLE_SUCCESS
 				})
+				.then(literal("toggleExclusionZoneDebug").executes { ctx ->
+					SkyBlockItemList.enableExclusionZoneDebug = !SkyBlockItemList.enableExclusionZoneDebug
+					val mode = if (SkyBlockItemList.enableExclusionZoneDebug) "enabled" else "disabled"
+					ctx.source.sendFeedback(Text.of("Exclusion zone visualization is now $mode"))
+					Command.SINGLE_SUCCESS
+				})
 		)
 		dispatcher.register(literal("skyblock-item-list").redirect(node))
 	}

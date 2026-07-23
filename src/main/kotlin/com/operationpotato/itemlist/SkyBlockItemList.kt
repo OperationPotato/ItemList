@@ -5,6 +5,7 @@ import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
+import com.operationpotato.itemlist.gui.ExclusionZoneDebugWidget
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
@@ -38,6 +39,7 @@ object SkyBlockItemList : ClientModInitializer {
 	val logger: Logger = LogUtils.getLogger()
 	var instance: ItemPanel? = null
 	var favoriteInstance: FavoritesPanel? = null
+	var enableExclusionZoneDebug: Boolean = false
 
 	override fun onInitializeClient() {
 		ConfigManager.load()
@@ -146,6 +148,10 @@ object SkyBlockItemList : ClientModInitializer {
 				ScreenKeyboardEvents.allowCharType(screen).register { _, event ->
 					!itemPanel.charTyped(event)
 				}
+			}
+
+			if (enableExclusionZoneDebug) {
+				Screens.getWidgets(screen).add(ExclusionZoneDebugWidget())
 			}
 		}
 	}
