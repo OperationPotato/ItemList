@@ -49,7 +49,8 @@ class Settings {
 
 		@LatticeOption(
 			title = "Enable Non-Pixelated Item Scaling",
-			description = "Uses a custom item renderer when scaling above 100%.\nThis results in better looking items, at the cost of some performance.",
+			description = "Uses a custom item renderer when scaling above 100%." +
+				"\nThis results in better looking items, at the cost of some performance.",
 			translate = false
 		)
 		@LatticeWidgetButton
@@ -86,7 +87,8 @@ class Settings {
 
 		@LatticeOption(
 			title = "Show Outside SkyBlock",
-			description = "Items will show up with missing textures if you do not have the SkyBlock Resource Pack enabled."
+			description = "Items will show up with missing textures if you do not have the SkyBlock Resource Pack enabled." +
+				"\nTo get textures, you can use \"/sbapi pack stable\" to apply Hypixel's Pack."
 		)
 		@LatticeWidgetButton
 		var showOutsideSkyBlock: Boolean = false
