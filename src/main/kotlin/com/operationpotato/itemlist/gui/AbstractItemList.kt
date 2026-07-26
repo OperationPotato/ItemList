@@ -198,6 +198,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {
+		if (!isActive) return false
 		val mousePos = McClient.mouse
 		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
 		if (child !is StackDisplay) return false
