@@ -202,6 +202,7 @@ class Settings {
 
 		@LatticeOption(title = "View Recipe", description = "Shows the recipes of the hovered item, if there are any.")
 		@LatticeWidgetKeybind(allowModifiers = true)
+		@Transient
 		val viewRecipe = LatticeKeybindInterface(Keybinds.viewRecipe)
 
 
