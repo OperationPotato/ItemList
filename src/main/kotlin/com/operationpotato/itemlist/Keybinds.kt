@@ -58,6 +58,14 @@ object Keybinds {
 		)
 	)
 
+	val focusSearch: KeyMapping = registerKeyMapping(
+		KeyMapping(
+			"key.skyblock-item-list.focusSearch",
+			InputConstants.UNKNOWN.value,
+			category,
+		)
+	)
+
 	fun handleKeybind(itemStack: ItemStack, keyEvent: KeyEvent): Boolean {
 		if (viewRecipe.matches(keyEvent)) {
 			AbstractPagedListScreen.openRecipeForItem(itemStack, McScreen.self)

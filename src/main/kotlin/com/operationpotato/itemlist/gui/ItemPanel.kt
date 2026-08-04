@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.ContainerSearcher
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
@@ -257,6 +258,11 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		if (!this.visible) return false
 		if (this.searchBox.isFocused) {
 			this.searchBox.keyPressed(event)
+			return true
+		}
+		if (Keybinds.focusSearch.matches(event)) {
+			this.focused = this.searchBox
+			McScreen.self?.focused = this
 			return true
 		}
 		return itemListWidget.keyPressed(event)
