@@ -3,6 +3,7 @@ package com.operationpotato.itemlist
 import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
+import com.operationpotato.itemlist.utils.KeyMappingWithModifiers
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping
 import net.minecraft.client.KeyMapping
@@ -18,15 +19,16 @@ object Keybinds {
 	)
 
 	val hideOverlay: KeyMapping = registerKeyMapping(
-		KeyMapping(
+		KeyMappingWithModifiers(
 			"key.skyblock-item-list.hideOverlay",
 			InputConstants.KEY_O,
-			category
+			category,
+			defaultCtrl = true,
 		)
 	)
 
 	val viewRecipe: KeyMapping = registerKeyMapping(
-		KeyMapping(
+		KeyMappingWithModifiers(
 			"key.skyblock-item-list.viewRecipe",
 			InputConstants.KEY_R,
 			category,
@@ -35,7 +37,7 @@ object Keybinds {
 
 
 	val viewUsage: KeyMapping = registerKeyMapping(
-		KeyMapping(
+		KeyMappingWithModifiers(
 			"key.skyblock-item-list.viewUsage",
 			InputConstants.KEY_U,
 			category,
@@ -43,7 +45,7 @@ object Keybinds {
 	)
 
 	val previousRecipe: KeyMapping = registerKeyMapping(
-		KeyMapping(
+		KeyMappingWithModifiers(
 			"key.skyblock-item-list.reopenPreviousRecipe",
 			InputConstants.KEY_BACKSPACE,
 			category,
@@ -51,7 +53,7 @@ object Keybinds {
 	)
 
 	val favoriteItem: KeyMapping = registerKeyMapping(
-		KeyMapping(
+		KeyMappingWithModifiers(
 			"key.skyblock-item-list.favoriteItem",
 			InputConstants.KEY_F,
 			category,
