@@ -194,7 +194,7 @@ class Settings {
 	class KeybindSettings {
 		@LatticeOption(
 			title = "Hide Overlay",
-			description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
+			description = "Hides the Item List and Favorites List."
 		)
 		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
