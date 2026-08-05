@@ -223,6 +223,11 @@ class Settings {
 		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
 		val favoriteItem = LatticeKeybindInterface(Keybinds.favoriteItem)
+
+		@LatticeOption(title = "Jump to Search", description = "Focuses the Search Bar when the overlay is open.")
+		@LatticeWidgetKeybind
+		@Transient
+		val focusSearch = LatticeKeybindInterface(Keybinds.focusSearch)
 	}
 
 	companion object {
