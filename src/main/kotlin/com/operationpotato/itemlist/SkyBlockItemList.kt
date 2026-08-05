@@ -114,7 +114,7 @@ object SkyBlockItemList : ClientModInitializer {
 			val keyPress = ScreenKeyboardEvents.allowKeyPress(screen)
 			keyPress.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 			keyPress.register(latePhase) { screen, event ->
-				if (event.hasControlDownWithQuirk() && Keybinds.hideOverlay.matches(event)) {
+				if (Keybinds.hideOverlay.matches(event)) {
 					if (modName != null) {
 						Text.of("Item list was previously hidden by $modName.").withColor(TextColor.YELLOW).send()
 						modName = null

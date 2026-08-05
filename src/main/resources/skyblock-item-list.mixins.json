@@ -5,7 +5,10 @@
 	"client": [
 		"EditBoxMixin",
 		"EditBoxMixin$ClearableEditBoxMisin",
-		"InventoryScreenMixin"
+		"InventoryScreenMixin",
+		"KeyBindsListKeyEntryMixin",
+		"KeyBindsScreenMixin",
+		"OptionsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

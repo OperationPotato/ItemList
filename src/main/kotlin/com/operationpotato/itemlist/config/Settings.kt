@@ -194,40 +194,40 @@ class Settings {
 	class KeybindSettings {
 		@LatticeOption(
 			title = "Hide Overlay",
-			description = "Hides the Item List and Favorites List.\nRequires holding Ctrl/Cmd!"
+			description = "Hides the Item List and Favorites List."
 		)
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val hideOverlay = Keybinds.hideOverlay
+		val hideOverlay = LatticeKeybindInterface(Keybinds.hideOverlay)
 
 		@LatticeOption(title = "View Recipe", description = "Shows the recipes of the hovered item, if there are any.")
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val viewRecipe = Keybinds.viewRecipe
+		val viewRecipe = LatticeKeybindInterface(Keybinds.viewRecipe)
 
 
 		@LatticeOption(title = "View Usage", description = "Shows the uses of the hovered item, if there are any.")
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val viewUsage = Keybinds.viewUsage
+		val viewUsage = LatticeKeybindInterface(Keybinds.viewUsage)
 
 		@LatticeOption(
 			title = "Return to Previous Recipe",
 			description = "While in a recipe screen, pressing this allows you to go back to the previous recipe screen."
 		)
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val previousRecipe = Keybinds.previousRecipe
+		val previousRecipe = LatticeKeybindInterface(Keybinds.previousRecipe)
 
 		@LatticeOption(title = "Favorite Item", description = "Adds the hovered item or recipe to your Favorites List.")
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val favoriteItem = Keybinds.favoriteItem
+		val favoriteItem = LatticeKeybindInterface(Keybinds.favoriteItem)
 
 		@LatticeOption(title = "Jump to Search", description = "Focuses the Search Bar when the overlay is open.")
-		@LatticeWidgetKeybind
+		@LatticeWidgetKeybind(allowModifiers = true)
 		@Transient
-		val focusSearch = Keybinds.focusSearch
+		val focusSearch = LatticeKeybindInterface(Keybinds.focusSearch)
 	}
 
 	companion object {
@@ -238,6 +238,7 @@ class Settings {
 				McClient.setScreen(ConfigureFilterScreen(McScreen.self))
 			}
 		}
+
 		@Suppress("unused") // used in CalculatorSettings annotation
 		@JvmStatic
 		fun openCustomConstantsScreen(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
