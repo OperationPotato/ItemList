@@ -21,7 +21,7 @@ class KeyMappingWithModifiers(
 		var prefix = ""
 		if (requiresCtrl) prefix += if (InputQuirks.REPLACE_CTRL_KEY_WITH_CMD_KEY) "Cmd+" else "Ctrl+"
 		if (requiresAlt) prefix += "Alt+"
-		if (requiresShift) prefix += "Alt+"
+		if (requiresShift) prefix += "Shift+"
 		return Component.literal(prefix).append(super.translatedKeyMessage)
 	}
 
