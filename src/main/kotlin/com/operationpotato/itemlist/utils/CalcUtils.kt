@@ -7,6 +7,7 @@ import tech.thatgravyboat.skyblockapi.api.remote.hypixel.itemdata.ItemData
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.BazaarAPI
 import tech.thatgravyboat.skyblockapi.api.remote.hypixel.pricing.LowestBinAPI
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
+import java.util.Locale
 
 object CalcUtils {
 
@@ -63,7 +64,7 @@ object CalcUtils {
 			val name = matchResult.groupValues[1].trim().lowercase()
 			val arg = matchResult.groupValues[2].trim().uppercase()
 			val result = customResolvers[name]?.invoke(arg) ?: return@replace matchResult.value
-			"%.2f".format(result)
+			"%.2f".format(Locale.ROOT, result)
 		}
 
 		val constantNames = allConstants.keys
@@ -75,7 +76,7 @@ object CalcUtils {
 			val num = match.groupValues[1].toDoubleOrNull() ?: 1.0
 			val constName = match.groupValues[2].lowercase()
 			val constValue = allConstants[constName] ?: return@replace match.value
-			"%.2f".format(num * constValue)
+			"%.2f".format(Locale.ROOT, num * constValue)
 		}
 
 		expression = numericMultiplicationRegex.replace(expression, "*")
