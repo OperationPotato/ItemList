@@ -233,7 +233,9 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	fun acceptCalculatorResult() {
 		if (!ConfigManager.get().calculator.replaceWithEnter) return
 		if (!calculatorResult.second) return
-		searchBox.value = calculatorResult.first.replace(",", "")
+		var result = calculatorResult.first.replace(",", "")
+		if (!ConfigManager.get().calculator.requiresEquals) result = result.removePrefix("= ")
+		searchBox.value = result
 		searchBox.cursorPosition = searchBox.value.length
 	}
 
