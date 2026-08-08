@@ -5,7 +5,6 @@ import com.moulberry.lattice.keybind.KeybindInterface
 import com.moulberry.lattice.keybind.LatticeInputType
 import com.operationpotato.itemlist.utils.KeyMappingWithModifiers
 import net.minecraft.client.KeyMapping
-import net.minecraft.client.input.InputQuirks
 import net.minecraft.network.chat.Component
 
 class LatticeKeybindInterface(val keyMapping: KeyMapping) : KeybindInterface {
@@ -26,10 +25,7 @@ class LatticeKeybindInterface(val keyMapping: KeyMapping) : KeybindInterface {
 		}
 		keyMapping.setKey(value)
 		if (keyMapping is KeyMappingWithModifiers) {
-			val ctrlDown = if (InputQuirks.REPLACE_CTRL_KEY_WITH_CMD_KEY) {
-				superMod || ctrlMod
-			} else ctrlMod
-			keyMapping.setModifiers(ctrlDown, shiftMod, altMod)
+			keyMapping.setModifiers(ctrlMod, shiftMod, altMod, superMod)
 		}
 	}
 
