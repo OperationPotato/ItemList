@@ -7,7 +7,9 @@ import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.HoveredItemManager
 import com.operationpotato.itemlist.api.Plugin
 import com.operationpotato.itemlist.api.RecipeButtonManager
+import com.operationpotato.itemlist.api.supportedscreen.SupportedScreenManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.screens.Screen
@@ -35,6 +37,16 @@ class DefaultPlugin : Plugin {
 	override fun registerExclusionZones(exclusionZoneManager: ExclusionZoneManager) {
 		exclusionZoneManager.addProvider(InventoryScreen::class.java, ::provide)
 		exclusionZoneManager.addProvider(CreativeModeInventoryScreen::class.java, ::provide)
+	}
+
+	override fun registerSupportedScreens(manager: SupportedScreenManager) {
+		manager.addProvider(AbstractContainerScreen::class.java) { screen, _, _ ->
+			if (screen is InventoryScreen && McPlayer.self?.hasInfiniteMaterials() == true) return@addProvider OptionalInt.empty()
+			return@addProvider OptionalInt.of(screen.right)
+		}
+		manager.addProvider(AbstractPagedListScreen::class.java) { screen, _, _ ->
+			return@addProvider OptionalInt.of(screen.getRight())
+		}
 	}
 
 	override fun registerRecipeButtons(manager: RecipeButtonManager) {

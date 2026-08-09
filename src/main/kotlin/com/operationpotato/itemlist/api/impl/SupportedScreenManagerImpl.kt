@@ -17,7 +17,9 @@ class SupportedScreenManagerImpl : SupportedScreenManager {
 		for ((provider, screenClass) in providers) {
 			if (screenClass.isInstance(screen)) {
 				@Suppress("UNCHECKED_CAST")
-				return (provider as SupportedScreenProvider<Screen>).getRightBound(screen, width, height)
+				val rightBound = (provider as SupportedScreenProvider<Screen>).getRightBound(screen, width, height)
+				if (rightBound.isEmpty) return null
+				return rightBound.asInt
 			}
 		}
 		return null

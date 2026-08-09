@@ -30,7 +30,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.extentions.containerWidth
 import tech.thatgravyboat.skyblockapi.utils.extentions.left
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.Future
@@ -273,14 +272,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 	override fun updateWidth() {
 		val screen = McScreen.self ?: return
-		val customRightBound = PluginManager.getScreenRightBound(screen, screen.width, screen.height)
-
-		val rightBound = when {
-			customRightBound != null -> customRightBound
-			screen is AbstractContainerScreen<*> -> screen.right
-			screen is AbstractPagedListScreen<*> -> screen.getRight()
-			else -> return
-		}
+		val rightBound = PluginManager.getScreenRightBound(screen, screen.width, screen.height) ?: return
 
 		val availableWidth = screen.width - rightBound
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()

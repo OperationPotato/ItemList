@@ -2,6 +2,8 @@ package com.operationpotato.itemlist.api.supportedscreen;
 
 import net.minecraft.client.gui.screens.Screen;
 
+import java.util.OptionalInt;
+
 public interface SupportedScreenProvider<T extends Screen> {
-	int getRightBound(T screen, int screenWidth, int screenHeight);
+	OptionalInt getRightBound(T screen, int screenWidth, int screenHeight);
 }
