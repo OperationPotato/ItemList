@@ -18,6 +18,7 @@ object PluginManager {
 	private val excludedScreensManager = ExcludedScreensManagerImpl()
 	private val hoveredItemManager = HoveredItemManagerImpl()
 	private val recipeButtonsManager = RecipeButtonsManagerImpl()
+	private val supportedScreenManager = SupportedScreenManagerImpl()
 
 	init {
 		registerPlugins()
@@ -29,6 +30,7 @@ object PluginManager {
 			plugin.registerExcludedScreens(excludedScreensManager)
 			plugin.registerHoveredItems(hoveredItemManager)
 			plugin.registerRecipeButtons(recipeButtonsManager)
+			plugin.registerSupportedScreens(supportedScreenManager)
 		}
 	}
 
@@ -74,5 +76,9 @@ object PluginManager {
 
 	fun getRecipeButtons(recipe: Recipe<*>): List<AbstractWidget> {
 		return recipeButtonsManager.getButtons(recipe)
+	}
+
+	fun getScreenRightBound(screen: Screen, width: Int, height: Int): Int? {
+		return supportedScreenManager.getRightBound(screen, width, height)
 	}
 }

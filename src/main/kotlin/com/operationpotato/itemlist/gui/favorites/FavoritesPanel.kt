@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui.favorites
 
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
@@ -60,9 +61,17 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
+		val screen = McScreen.self ?: return
+		val customRightBound = PluginManager.getScreenRightBound(screen, screen.width, screen.height)
+
+		val rightBound = when {
+			customRightBound != null -> customRightBound
+			screen is AbstractContainerScreen<*> -> screen.right
+			screen is AbstractPagedListScreen<*> -> screen.getRight()
+			else -> return
+		}
+
+		val availableWidth = screen.width - rightBound
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 		x = 0
 		width = panelWidth - 2

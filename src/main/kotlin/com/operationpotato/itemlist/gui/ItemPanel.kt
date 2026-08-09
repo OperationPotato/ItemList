@@ -3,6 +3,7 @@ package com.operationpotato.itemlist.gui
 import com.operationpotato.itemlist.ContainerSearcher
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.SkyBlockItemList
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
@@ -271,9 +272,17 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
+		val screen = McScreen.self ?: return
+		val customRightBound = PluginManager.getScreenRightBound(screen, screen.width, screen.height)
+
+		val rightBound = when {
+			customRightBound != null -> customRightBound
+			screen is AbstractContainerScreen<*> -> screen.right
+			screen is AbstractPagedListScreen<*> -> screen.getRight()
+			else -> return
+		}
+
+		val availableWidth = screen.width - rightBound
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 		x = screen.width - panelWidth
 		width = panelWidth - 2

@@ -59,11 +59,16 @@ object SkyBlockItemList : ClientModInitializer {
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
 		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
-		if (screen is AbstractContainerScreen<*> || screen is AbstractPagedListScreen<*>) {
-			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
-			val screenRight = when (screen) {
-				is AbstractContainerScreen<*> -> screen.right
-				is AbstractPagedListScreen<*> -> screen.getRight()
+
+		val customRightBound = PluginManager.getScreenRightBound(screen, w, h)
+
+		if (screen is AbstractContainerScreen<*> || screen is AbstractPagedListScreen<*> || customRightBound != null) {
+			if (screen is InventoryScreen && (mc.player?.hasInfiniteMaterials() ?: false)) return
+
+			val screenRight = when {
+				customRightBound != null -> customRightBound
+				screen is AbstractContainerScreen<*> -> screen.right
+				screen is AbstractPagedListScreen<*> -> screen.getRight()
 				else -> w
 			}
 
