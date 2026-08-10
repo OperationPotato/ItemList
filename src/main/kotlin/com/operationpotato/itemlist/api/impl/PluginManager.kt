@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.api.impl
 
 import com.operationpotato.itemlist.api.Plugin
+import com.operationpotato.itemlist.api.supportedscreen.ScreenBounds
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
@@ -78,7 +79,7 @@ object PluginManager {
 		return recipeButtonsManager.getButtons(recipe)
 	}
 
-	fun getScreenRightBound(screen: Screen, width: Int, height: Int): Int? {
-		return supportedScreenManager.getRightBound(screen, width, height)
+	fun getScreenBounds(screen: Screen, width: Int, height: Int): ScreenBounds? {
+		return supportedScreenManager.getBounds(screen, width, height)
 	}
 }

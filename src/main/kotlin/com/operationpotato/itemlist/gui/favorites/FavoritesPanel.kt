@@ -60,10 +60,9 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 
 	override fun updateWidth() {
 		val screen = McScreen.self ?: return
-		val rightBound = PluginManager.getScreenRightBound(screen, screen.width, screen.height) ?: return
+		val leftBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.left ?: return
 
-		val availableWidth = screen.width - rightBound
-		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+		val panelWidth = (leftBound * ConfigManager.get().general.maxWidth).toInt()
 		x = 0
 		width = panelWidth - 2
 		updatePosition()

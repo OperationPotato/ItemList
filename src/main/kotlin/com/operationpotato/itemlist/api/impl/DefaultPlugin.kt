@@ -7,6 +7,7 @@ import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.HoveredItemManager
 import com.operationpotato.itemlist.api.Plugin
 import com.operationpotato.itemlist.api.RecipeButtonManager
+import com.operationpotato.itemlist.api.supportedscreen.ScreenBounds
 import com.operationpotato.itemlist.api.supportedscreen.SupportedScreenManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
@@ -26,6 +27,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import tech.thatgravyboat.skyblockapi.utils.extentions.getHoveredSlot
+import tech.thatgravyboat.skyblockapi.utils.extentions.left
 import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.extentions.top
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -41,11 +43,13 @@ class DefaultPlugin : Plugin {
 
 	override fun registerSupportedScreens(manager: SupportedScreenManager) {
 		manager.addProvider(AbstractContainerScreen::class.java) { screen, _, _ ->
-			if (screen is InventoryScreen && McPlayer.self?.hasInfiniteMaterials() == true) return@addProvider OptionalInt.empty()
-			return@addProvider OptionalInt.of(screen.right)
+			if (screen is InventoryScreen && McPlayer.self?.hasInfiniteMaterials() == true)
+				return@addProvider Optional.empty()
+
+			return@addProvider Optional.of(ScreenBounds(screen.left, screen.right))
 		}
 		manager.addProvider(AbstractPagedListScreen::class.java) { screen, _, _ ->
-			return@addProvider OptionalInt.of(screen.getRight())
+			return@addProvider Optional.of(ScreenBounds(screen.getLeft(), screen.getRight()))
 		}
 	}
 
