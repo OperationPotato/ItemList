@@ -56,7 +56,7 @@ object SkyBlockItemList : ClientModInitializer {
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
 		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
 
-		val screenRight = PluginManager.getScreenRightBound(screen, w, h)
+		val screenRight = PluginManager.getScreenBounds(screen, w, h)?.right
 
 		if (screenRight != null) {
 			val availableWidth = w - screenRight
