@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.api;
 
 import com.operationpotato.itemlist.api.supportedscreen.SupportedScreenManager;
+import org.jetbrains.annotations.ApiStatus;
 
 public interface Plugin {
 	/**
@@ -29,5 +30,6 @@ public interface Plugin {
 	/**
 	 * Allows rendering the item list on custom screens with its boundary.
 	 */
+	@ApiStatus.Experimental
 	default void registerSupportedScreens(SupportedScreenManager manager) {}
 }
