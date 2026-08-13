@@ -16,7 +16,7 @@ class SupportedScreenManagerImpl : SupportedScreenManager {
 	}
 
 	fun getBounds(screen: Screen, width: Int, height: Int): ScreenBounds? {
-		for ((provider, screenClass) in providers) {
+		for ((provider, screenClass) in providers.reversed()) {
 			if (screenClass.isInstance(screen)) {
 				@Suppress("UNCHECKED_CAST")
 				val bounds = (provider as SupportedScreenProvider<Screen>).getBounds(screen, width, height)
