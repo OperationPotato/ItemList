@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.api.impl
 
 import com.operationpotato.itemlist.api.Plugin
+import com.operationpotato.itemlist.api.supportedscreen.ScreenBounds
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.screens.Screen
@@ -18,6 +19,7 @@ object PluginManager {
 	private val excludedScreensManager = ExcludedScreensManagerImpl()
 	private val hoveredItemManager = HoveredItemManagerImpl()
 	private val recipeButtonsManager = RecipeButtonsManagerImpl()
+	private val supportedScreenManager = SupportedScreenManagerImpl()
 
 	init {
 		registerPlugins()
@@ -29,6 +31,7 @@ object PluginManager {
 			plugin.registerExcludedScreens(excludedScreensManager)
 			plugin.registerHoveredItems(hoveredItemManager)
 			plugin.registerRecipeButtons(recipeButtonsManager)
+			plugin.registerSupportedScreens(supportedScreenManager)
 		}
 	}
 
@@ -74,5 +77,9 @@ object PluginManager {
 
 	fun getRecipeButtons(recipe: Recipe<*>): List<AbstractWidget> {
 		return recipeButtonsManager.getButtons(recipe)
+	}
+
+	fun getScreenBounds(screen: Screen, width: Int, height: Int): ScreenBounds? {
+		return supportedScreenManager.getBounds(screen, width, height)
 	}
 }

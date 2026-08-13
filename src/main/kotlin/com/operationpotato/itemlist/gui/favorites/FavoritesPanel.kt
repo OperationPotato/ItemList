@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui.favorites
 
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
@@ -8,11 +9,9 @@ import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.input.KeyEvent
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -60,10 +59,10 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
-		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+		val screen = McScreen.self ?: return
+		val leftBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.left ?: return
+
+		val panelWidth = (leftBound * ConfigManager.get().general.maxWidth).toInt()
 		x = 0
 		width = panelWidth - 2
 		updatePosition()

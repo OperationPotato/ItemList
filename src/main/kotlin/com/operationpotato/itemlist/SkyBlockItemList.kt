@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
-import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.ExclusionZoneDebugWidget
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
@@ -21,15 +20,12 @@ import net.fabricmc.fabric.api.client.screen.v1.Screens
 import net.fabricmc.fabric.api.event.Event
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
-import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.resources.Identifier
 import org.slf4j.Logger
 import tech.thatgravyboat.skyblockapi.api.location.LocationAPI
 import tech.thatgravyboat.skyblockapi.helpers.McClient
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
@@ -59,14 +55,10 @@ object SkyBlockItemList : ClientModInitializer {
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
 		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
-		if (screen is AbstractContainerScreen<*> || screen is AbstractPagedListScreen<*>) {
-			if (screen is InventoryScreen && mc.player?.hasInfiniteMaterials() ?: false) return
-			val screenRight = when (screen) {
-				is AbstractContainerScreen<*> -> screen.right
-				is AbstractPagedListScreen<*> -> screen.getRight()
-				else -> w
-			}
 
+		val screenRight = PluginManager.getScreenBounds(screen, w, h)?.right
+
+		if (screenRight != null) {
 			val availableWidth = w - screenRight
 			val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 			val tooSmall = panelWidth < 80

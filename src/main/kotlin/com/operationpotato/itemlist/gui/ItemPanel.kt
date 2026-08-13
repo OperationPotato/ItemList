@@ -3,6 +3,7 @@ package com.operationpotato.itemlist.gui
 import com.operationpotato.itemlist.ContainerSearcher
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.SkyBlockItemList
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
@@ -19,7 +20,6 @@ import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.layouts.SpacerElement
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.PageButton
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
@@ -27,9 +27,6 @@ import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.containerWidth
-import tech.thatgravyboat.skyblockapi.utils.extentions.left
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.Future
@@ -133,22 +130,18 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		var searchWidth = width - 16
 		var layoutX = x + 15 + itemListWidget.horizontalPadding
 		if (ConfigManager.get().mainList.centeredSearchBar) {
-			when (val screen = McScreen.self) {
-				null -> {}
-				is AbstractContainerScreen<*> -> {
-					searchWidth = screen.containerWidth
-					layoutX = screen.left
-				}
+			val screen = McScreen.self ?: return
+			val bounds = PluginManager.getScreenBounds(screen, screen.width, screen.height)
 
-				is AbstractPagedListScreen<*> -> {
-					searchWidth = screen.getMaxWidth()
-					layoutX = screen.getLeft()
-				}
+			if (bounds == null) {
+				searchWidth = screen.width / 4
+				layoutX = (screen.width - searchWidth) / 2
+			} else {
+				val leftBounds = bounds.left
+				val rightBounds = bounds.right
 
-				else -> {
-					searchWidth = screen.width / 4
-					layoutX = (screen.width - searchWidth) / 2
-				}
+				searchWidth = rightBounds - leftBounds
+				layoutX = leftBounds
 			}
 		}
 
@@ -271,9 +264,10 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
+		val screen = McScreen.self ?: return
+		val rightBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.right ?: return
+
+		val availableWidth = screen.width - rightBound
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 		x = screen.width - panelWidth
 		width = panelWidth - 2
