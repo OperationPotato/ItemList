@@ -19,7 +19,7 @@ class ExclusionZoneDebugWidget : AbstractWidget(0, 0, 0, 0, Component.empty()) {
 		mouseY: Int,
 		a: Float
 	) {
-		PluginManager.getExclusionZones().forEach { it ->
+		PluginManager.getExclusionZones().forEach {
 			val area = it.area
 			graphics.fill(area.x, area.y, area.right, area.bottom, color)
 		}

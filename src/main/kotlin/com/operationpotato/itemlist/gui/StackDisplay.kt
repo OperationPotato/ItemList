@@ -1,6 +1,5 @@
 package com.operationpotato.itemlist.gui
 
-import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ItemClickAction

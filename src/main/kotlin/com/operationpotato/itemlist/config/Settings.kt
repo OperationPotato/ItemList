@@ -22,7 +22,6 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 
 class Settings {
-	@Suppress("unused")
 	val version = ConfigManager.CONFIG_VERSION
 
 	@LatticeCategory(name = "General Settings")
@@ -38,7 +37,6 @@ class Settings {
 	val calculator = CalculatorSettings()
 
 	@LatticeCategory(name = "Keybinds")
-	@Suppress("unused")
 	@Transient
 	val keybinds = KeybindSettings()
 

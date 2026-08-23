@@ -54,8 +54,7 @@ object PluginManager {
 	}
 
 	fun isInAnyExclusionZone(x: Double, y: Double): Boolean {
-		for (zone in getExclusionZones()) {
-			val rect = zone.area
+		for ((rect) in getExclusionZones()) {
 			if (x >= rect.x && x < rect.x + rect.width && y >= rect.y && y < rect.y + rect.height) {
 				return true
 			}

@@ -1,7 +1,6 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.compat.IconographicCompat
-import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
