@@ -29,6 +29,7 @@ import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 open class StackDisplay(
 	val lazyStack: LazyItemStack,
@@ -41,6 +42,7 @@ open class StackDisplay(
 
 	val stackName: String by lazy { stack.cleanName.lowercase() }
 	val loreLines: List<String> by lazy { stack.getRawLore().map { it.lowercase() } }
+	val itemId: String? by lazy { stack.getSkyBlockId() }
 
 	open val hoveredStack: ItemStack get() = stack
 
@@ -108,7 +110,7 @@ open class StackDisplay(
 
 	open fun matchesSearch(searches: List<Search>): Boolean {
 		createStackIfEmpty()
-		return SearchUtils.matches(stackName, loreLines, searches)
+		return SearchUtils.matches(stackName, loreLines, itemId, searches)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}

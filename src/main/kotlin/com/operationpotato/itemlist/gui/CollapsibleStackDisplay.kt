@@ -1,11 +1,9 @@
 package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.compat.IconographicCompat
-import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
-import com.operationpotato.itemlist.utils.search.IdentifierSearch
 import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
@@ -18,9 +16,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
-import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
-import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 import kotlin.math.ceil
 
 class CollapsibleStackDisplay(

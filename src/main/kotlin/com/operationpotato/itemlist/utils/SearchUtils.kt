@@ -9,6 +9,7 @@ import net.minecraft.util.FormattedCharSequence
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
+import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 // TODO: Better search filtering
 object SearchUtils {
@@ -32,17 +33,18 @@ object SearchUtils {
 
 	fun highlightSearch(text: String, offset: Int): FormattedCharSequence {
 		return { visitor ->
-			var color = false
+			var color: Int? = null // persists until the next space
 			for (i in text.indices) {
 				val codePoint = text.codePointAt(i)
-				var style = Style.EMPTY
+				var style = Style.EMPTY // for this codepoint only
 				when (codePoint) {
-					'@'.code -> if (i == 0) color = true
-					' '.code -> color = false
+					'@'.code -> if (i == 0) color = CommonColors.COSMOS_PINK
+					' '.code -> color = null
 					'|'.code -> style = style.withColor(CommonColors.SOFT_YELLOW)
+					'#'.code -> color = CommonColors.GREEN
 				}
-				if (color) {
-					style = style.withColor(CommonColors.COSMOS_PINK)
+				if (color != null) {
+					style = style.withColor(color)
 				}
 				visitor.accept(i, style, codePoint)
 			}
@@ -50,13 +52,22 @@ object SearchUtils {
 		}
 	}
 
-	fun matches(stackName: String, loreLines: List<String>, searches: List<String>): Boolean {
-		return searches.any { search -> stackName.contains(search) || loreLines.any { line -> line.contains(search) } }
+	fun matches(stackName: String, loreLines: List<String>, skyblockId: String?, searches: List<Search>): Boolean {
+		val combinedLore = loreLines.joinToString(" ")
+		return searches.any {
+			return@any when (it) {
+				is IdentifierSearch -> if (skyblockId == null) false else it.matches("id:${skyblockId}")
+				is TextSearch -> it.matches(stackName) || it.matches(combinedLore)
+				else -> false
+			}
+		}
 	}
 
-	fun matchesSearch(stack: ItemStack, searches: List<String>): Boolean {
+	fun matchesSearch(stack: ItemStack, searches: List<Search>): Boolean {
+		if (stack.isEmpty) return false
 		val stackName = stack.cleanName.lowercase()
 		val loreLines = stack.getRawLore().map { it.lowercase() }
-		return matches(stackName, loreLines, searches)
+		val skyblockId = stack.getSkyBlockId()
+		return matches(stackName, loreLines, skyblockId, searches)
 	}
 }
