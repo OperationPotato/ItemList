@@ -1,15 +1,18 @@
 package com.operationpotato.itemlist.gui
 
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
+import com.operationpotato.itemlist.compat.IconographicCompat
+import com.operationpotato.itemlist.config.ConfigManager
+import com.operationpotato.itemlist.utils.ItemClickAction
+import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import com.operationpotato.itemlist.utils.search.IdentifierSearch
 import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.core.component.DataComponents
 import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
 import net.minecraft.world.item.ItemStack
-import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
@@ -39,13 +42,7 @@ class CollapsibleStackDisplay(
 
 	override fun matchesSearch(searches: List<Search>): Boolean {
 		val filtered = familyItems.filter { item ->
-			val stack = item.stack.create()
-			val stackName = stack.cleanName.lowercase()
-			val loreLines = stack.getRawLore().map { it.lowercase() }
-			searches.any { search ->
-				if (search is IdentifierSearch) search.matches("id:${stack.getSkyBlockId() ?: ""}")
-				else search.matches(stackName) || loreLines.any { search.matches(it) }
-			}
+			SearchUtils.matchesSearch(item.stack.create(), searches)
 		}
 		filteredFamilyItems = filtered
 		return filtered.isNotEmpty()
@@ -156,16 +153,19 @@ class CollapsibleStackDisplay(
 
 				if (isChildHovered) {
 					val tooltipLines = getTooltipLines(itemStack)
-					graphics.setComponentTooltipForNextFrame(McClient.gui.font, tooltipLines, mouseX, mouseY)
+					IconographicCompat.withItem(itemStack) {
+						graphics.setComponentTooltipForNextFrame(
+							McFont.self, tooltipLines,
+							mouseX, mouseY, itemStack.get(DataComponents.TOOLTIP_STYLE)
+						)
+					}
 				}
 			}
 		}
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(hoveredStack, McScreen.self)
-		}
+		ItemClickAction.handleClick(event, hoveredStack)
 	}
 
 	private data class PopOutState(

@@ -1,22 +1,21 @@
 package com.operationpotato.itemlist.gui.favorites
 
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
 import com.operationpotato.itemlist.gui.AbstractItemPanel
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.input.KeyEvent
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.Text.send
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
-import java.util.Optional
+import java.util.*
 
 class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, y, width, height) {
 	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height)
@@ -31,8 +30,11 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	override fun updatePosition() {
 		val recipe = recipeWidget
 		if (recipe != null && width != 0) {
-			recipe.setPosition(x + (width - recipe.width) / 2, 5)
-			if (recipe.width > width) {
+			if (width > recipe.width) {
+				recipe.setPosition(x + (width - recipe.width) / 2, 5)
+			} else if (width > 3 * recipe.width / 4) {
+				recipe.setPosition(x + (width - recipe.width) + 4, 5)
+			} else {
 				Text.of("Your screen is too small to pin this recipe!").withColor(TextColor.RED).send()
 				removeRecipe()
 				return
@@ -57,10 +59,10 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
-		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+		val screen = McScreen.self ?: return
+		val leftBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.left ?: return
+
+		val panelWidth = (leftBound * ConfigManager.get().general.maxWidth).toInt()
 		x = 0
 		width = panelWidth - 2
 		updatePosition()
@@ -73,7 +75,7 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	fun setRecipe(recipe: Optional<Recipe<*>>) {
 		FavoritesManager.favorites.pinnedRecipe = recipe
 		recipeWidget =
-			if (recipe != recipeWidget?.recipe && !recipe.isEmpty) RecipeScreen.getWidgetForRecipe(recipe.get()) else null
+			if (recipe != recipeWidget?.recipe && !recipe.isEmpty) AbstractPagedListScreen.getWidgetForRecipe(recipe.get()) else null
 		updatePosition()
 	}
 

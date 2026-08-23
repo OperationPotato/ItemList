@@ -2,12 +2,16 @@ package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.compat.IconographicCompat
+import com.operationpotato.itemlist.utils.ItemClickAction
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -17,7 +21,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.translate
 
@@ -56,14 +59,21 @@ class IngredientDisplay(val stack: ItemStack, val showStackSize: Boolean = true)
 		}
 
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McClient.gui.font, getTooltipLines(), mouseX, mouseY)
+			IconographicCompat.withItem(stack) {
+				graphics.setComponentTooltipForNextFrame(
+					McFont.self, getTooltipLines(),
+					mouseX, mouseY, stack.get(DataComponents.TOOLTIP_STYLE)
+				)
+			}
 		}
 	}
 
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() in ItemClickAction.validButtons
+	}
+
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(stack, McScreen.self)
-		}
+		ItemClickAction.handleClick(event, stack)
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {

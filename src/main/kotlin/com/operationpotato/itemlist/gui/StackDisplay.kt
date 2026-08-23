@@ -1,16 +1,19 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
-import com.operationpotato.itemlist.gui.recipe.RecipeScreen
+import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
+import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
-import com.operationpotato.itemlist.utils.search.IdentifierSearch
 import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
@@ -18,15 +21,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.helpers.McClient
+import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
-import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.scale
 import tech.thatgravyboat.skyblockapi.platform.translate
 import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
-import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 
 open class StackDisplay(
 	val lazyStack: LazyItemStack,
@@ -82,14 +84,21 @@ open class StackDisplay(
 		createStackIfEmpty()
 		extractStack(graphics, stack, x, y, isHovered)
 		if (isHovered) {
-			graphics.setComponentTooltipForNextFrame(McClient.gui.font, getTooltipLines(stack), mouseX, mouseY)
+			IconographicCompat.withItem(stack) {
+				graphics.setComponentTooltipForNextFrame(
+					McFont.self, getTooltipLines(stack),
+					mouseX, mouseY, stack.get(DataComponents.TOOLTIP_STYLE)
+				)
+			}
 		}
 	}
 
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() in ItemClickAction.validButtons
+	}
+
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0) {
-			RecipeScreen.openRecipeForItem(stack, McScreen.self)
-		}
+		ItemClickAction.handleClick(event, stack)
 	}
 
 	fun scale(scaledSize: Int) {
@@ -99,10 +108,7 @@ open class StackDisplay(
 
 	open fun matchesSearch(searches: List<Search>): Boolean {
 		createStackIfEmpty()
-		return searches.any { search ->
-			if (search is IdentifierSearch) search.matches("id:${stack.getSkyBlockId() ?: ""}")
-			else search.matches(stackName) || loreLines.any { search.matches(it) }
-		}
+		return SearchUtils.matches(stackName, loreLines, searches)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}

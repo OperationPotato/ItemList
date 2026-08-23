@@ -1,27 +1,25 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.ContainerSearcher
+import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.SkyBlockItemList
+import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
-import com.operationpotato.itemlist.utils.ComponentUtils
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.ThreadUtils
 import com.operationpotato.itemlist.utils.ThreadUtils.cancelAndSubmit
-import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.components.CycleButton
-import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.layouts.SpacerElement
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.PageButton
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
@@ -29,7 +27,6 @@ import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
-import tech.thatgravyboat.skyblockapi.utils.extentions.right
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import java.util.concurrent.Future
@@ -47,24 +44,25 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	}, false)
 	var topLayout: LinearLayout = LinearLayout.horizontal()
 
-	val settingsButton: Button = Button.builder(Component.literal("⚙")) {
+	val settingsButton: Button = SettingsButton(0, 0) {
 		SkyBlockItemList.instance?.removed()
 		SkyBlockItemList.favoriteInstance?.removed()
 		McClient.setScreen(ConfigScreen.createScreen(McScreen.self))
 	}.apply {
-		size(16, 16)
-	}.build()
-	val filterButton: CycleButton<SkyBlockItemCategory> =
-		CycleButton.builder(SkyBlockItemCategory::asComponent, SkyBlockItemCategory.ALL)
-			.withValues(SkyBlockItemCategory.entries)
-			.withTooltip(::createFilterTooltip)
-			.create(Component.empty(), ::onFilterButtonClick)
-	val searchBox: EditBox = EditBox(
-		McFont.self, 100, 16, Component.empty() // Giving it default width fixes it not starting with the input
+		setTooltip(Tooltip.create(Text.of("Settings")))
+		setSize(16, 16)
+	}
+	val filterButton = FilterButton(SkyBlockItemCategory.ALL, ::onFilterSelected)
+	val searchBox = FilterableEditBox(
+		McFont.self, 100, 16, // Giving it default width fixes it not starting with the input
+		Component.empty(),
+		filterButton,
+		::acceptCalculatorResult,
 	)
 	var bottomLayout: LinearLayout = LinearLayout.horizontal()
 
-	val children: List<AbstractWidget> = listOf(nextPageButton, prevPageButton, filterButton, searchBox, settingsButton, itemListWidget)
+	val children: List<AbstractWidget> = listOf(nextPageButton, prevPageButton, searchBox, settingsButton, itemListWidget)
+	val searchHint = Component.literal("Search or Calculate...")
 
 	var filterFuture: Future<*>? = null
 	var searchFuture: Future<*>? = null
@@ -79,13 +77,15 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			itemListWidget.currentFilter = filterButton.value
 
 		searchBox.addFormatter(SearchUtils::highlightSearch)
-		searchBox.setHint(Component.literal("Search or Calculate..."))
+		searchBox.setHint(searchHint)
 		searchBox.setResponder { text ->
 			addSuggestions(text)
 			val isExpression = text.isExpression()
 			updateListVisibility(text, isExpression)
 			if (isExpression) calculateAsync(text)
 			else searchAsync(text)
+
+			if (ContainerSearcher.shouldSearch()) ContainerSearcher.setSearch(text)
 		}
 		searchBox.setMaxLength(999)
 		searchBox.value = ConfigManager.get().mainList.lastSearch
@@ -103,7 +103,8 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		positionBottomBar()
 
 		itemListWidget.setPosition(x, y)
-		itemListWidget.setSize(width - 2, height - 20)
+		val itemListHeight = if (ConfigManager.get().mainList.centeredSearchBar) height else height - 20
+		itemListWidget.setSize(width - 2, itemListHeight)
 		itemListWidget.positioningCallback = {
 			McClient.runOrNextTick { positionTopBar() }
 			McClient.runOrNextTick { updateSearchResult() }
@@ -126,32 +127,38 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 	fun positionBottomBar() {
 		filterButton.setSize(16, 16)
-		searchBox.width = width - 10 - filterButton.width * 3
+		var searchWidth = width - 16
+		var layoutX = x + 15 + itemListWidget.horizontalPadding
+		if (ConfigManager.get().mainList.centeredSearchBar) {
+			val screen = McScreen.self ?: return
+			val bounds = PluginManager.getScreenBounds(screen, screen.width, screen.height)
+
+			if (bounds == null) {
+				searchWidth = screen.width / 4
+				layoutX = (screen.width - searchWidth) / 2
+			} else {
+				val leftBounds = bounds.left
+				val rightBounds = bounds.right
+
+				searchWidth = rightBounds - leftBounds
+				layoutX = leftBounds
+			}
+		}
+
+		searchBox.width = searchWidth - settingsButton.width
+		if (searchBox.width > McFont.width(searchHint)) searchBox.setHint(searchHint)
+		else searchBox.setHint(Component.literal("Search..."))
 
 		bottomLayout = LinearLayout.horizontal()
-		bottomLayout.defaultCellSetting().paddingRight(4)
-		bottomLayout.setPosition(x + 15 + itemListWidget.horizontalPadding, y + height - 20)
+		bottomLayout.setPosition(layoutX, y + height - 20)
 		bottomLayout.addChild(searchBox)
-		bottomLayout.addChild(filterButton)
 		bottomLayout.addChild(settingsButton)
 		bottomLayout.arrangeElements()
+		filterButton.setPosition(searchBox.x + searchBox.width - 17, searchBox.y)
 	}
 
-	fun createFilterTooltip(category: SkyBlockItemCategory): Tooltip {
-		val options = ComponentUtils.getCycleEnumOptions(category)
-		var line = Component.empty().append(category.asComponent().withStyle(ChatFormatting.GREEN))
-		line = line.append(ComponentUtils.joinComponents(options))
-		return Tooltip.create(line, null)
-	}
-
-	fun onFilterButtonClick(btn: CycleButton<SkyBlockItemCategory>, category: SkyBlockItemCategory) {
+	fun onFilterSelected(category: SkyBlockItemCategory) {
 		ConfigManager.get().mainList.lastFilter = category
-		val color = if (category == SkyBlockItemCategory.ALL) {
-			ChatFormatting.WHITE
-		} else {
-			ChatFormatting.GREEN
-		}
-		btn.message = Component.literal("F").withStyle(color)
 		filterAsync(category)
 	}
 
@@ -216,7 +223,26 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		return text
 	}
 
+	fun acceptCalculatorResult() {
+		if (!ConfigManager.get().calculator.replaceWithEnter) return
+		if (!calculatorResult.second) return
+		var result = calculatorResult.first.replace(",", "")
+		if (!ConfigManager.get().calculator.requiresEquals) result = result.removePrefix("= ")
+		searchBox.value = result
+		searchBox.cursorPosition = searchBox.value.length
+	}
+
+	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
+		if (!this.isActive) return false
+		return children().any { it.isMouseOver(mouseX, mouseY) }
+	}
+
+	fun added() {
+		if (ContainerSearcher.shouldSearch()) ContainerSearcher.setSearch(searchBox.value)
+	}
+
 	override fun removed() {
+		ContainerSearcher.setSearch(null)
 		ConfigManager.get().mainList.itemSize = itemListWidget.itemSize
 	}
 
@@ -229,13 +255,19 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			this.searchBox.keyPressed(event)
 			return true
 		}
+		if (Keybinds.focusSearch.matches(event)) {
+			this.focused = this.searchBox
+			McScreen.self?.focused = this
+			return true
+		}
 		return itemListWidget.keyPressed(event)
 	}
 
 	override fun updateWidth() {
-		val screen = McScreen.self
-		if (screen !is AbstractContainerScreen<*>) return
-		val availableWidth = screen.width - screen.right
+		val screen = McScreen.self ?: return
+		val rightBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.right ?: return
+
+		val availableWidth = screen.width - rightBound
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
 		x = screen.width - panelWidth
 		width = panelWidth - 2
@@ -252,8 +284,10 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 		if (calculatorResult.first.isNotEmpty()) {
 			val message = Text.of(calculatorResult.first, calculatorResultColor)
-			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - 6
-			val textY = if (calculatorResult.second) searchBox.y + (searchBox.height - McFont.height) / 2 + 1
+			val centered = ConfigManager.get().mainList.centeredSearchBar
+			val textX = searchBox.x + searchBox.width - McFont.self.width(message) - if (!centered) 18 else 0
+			val textY = if (calculatorResult.second && !centered)
+				searchBox.y + (searchBox.height - McFont.height) / 2 + 1
 			else searchBox.y - 5 - McFont.height / 2
 			graphics.text(McFont.self, message, textX, textY, CommonColors.WHITE)
 		}

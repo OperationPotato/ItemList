@@ -1,8 +1,9 @@
-package com.operationpotato.itemlist.api
+package com.operationpotato.itemlist.api.impl
 
 import net.minecraft.client.renderer.Rect2i
+import org.jetbrains.annotations.ApiStatus
 
-
+@ApiStatus.Internal
 data class ExclusionZone(
 	val area: Rect2i
 ) {

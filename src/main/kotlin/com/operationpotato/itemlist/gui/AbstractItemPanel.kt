@@ -1,7 +1,9 @@
 package com.operationpotato.itemlist.gui
 
+import net.minecraft.client.gui.ComponentPath
 import net.minecraft.client.gui.components.AbstractContainerWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.gui.navigation.FocusNavigationEvent
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.Component
@@ -33,4 +35,5 @@ abstract class AbstractItemPanel(
 
 	override fun contentHeight(): Int = height
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
+	override fun nextFocusPath(navigationEvent: FocusNavigationEvent): ComponentPath? = null
 }

@@ -3,7 +3,12 @@
 	"package": "com.operationpotato.itemlist.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"InventoryScreenMixin"
+		"EditBoxMixin",
+		"EditBoxMixin$ClearableEditBoxMisin",
+		"InventoryScreenMixin",
+		"KeyBindsListKeyEntryMixin",
+		"KeyBindsScreenMixin",
+		"OptionsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

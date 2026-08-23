@@ -27,7 +27,7 @@ Check out [the gallery](https://modrinth.com/mod/skyblock-item-list/gallery) to 
 	* Easily receive keybind events without needing to create and maintain problematic mixins.
 	* Add custom buttons to recipes.
 	* For more information, see the 
-      [Plugin API](https://github.com/OperationPotato/ItemList/blob/master/src/main/java/com/operationpotato/itemlist/api/Plugin.java)
+      [Plugin API](https://github.com/OperationPotato/ItemList/blob/master/API.md)
       on GitHub.
 
 # Usage Guide

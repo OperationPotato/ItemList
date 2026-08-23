@@ -1,6 +1,5 @@
 package com.operationpotato.itemlist.utils
 
-import com.mojang.serialization.Codec
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.StringRepresentable
@@ -25,7 +24,5 @@ enum class SkyBlockItemCategory(val formattedName: String) : StringRepresentable
 
 	companion object {
 		val NON_ENTITIES = entries.filter { it != MOB && it != NPC }
-
-		val CODEC: Codec<SkyBlockItemCategory> = StringRepresentable.fromEnum { entries.toTypedArray() }
 	}
 }

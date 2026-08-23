@@ -1,5 +1,8 @@
 package com.operationpotato.itemlist.api;
 
+import com.operationpotato.itemlist.api.supportedscreen.SupportedScreenManager;
+import org.jetbrains.annotations.ApiStatus;
+
 public interface Plugin {
 	/**
 	 * Exclusion zones are areas of the screen where items from the list will not be placed.<br>
@@ -23,4 +26,10 @@ public interface Plugin {
 	 * Allows adding custom buttons on recipes.
 	 */
 	default void registerRecipeButtons(RecipeButtonManager manager) {}
+
+	/**
+	 * Allows rendering the item list on custom screens with its boundary.
+	 */
+	@ApiStatus.Experimental
+	default void registerSupportedScreens(SupportedScreenManager manager) {}
 }

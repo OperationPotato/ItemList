@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.operationpotato.itemlist.SkyBlockItemList.logger
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.utils.Utils.overlaps
 import net.minecraft.client.gui.components.AbstractWidget
@@ -56,12 +57,16 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 		var col = 0
 		var row = 0
 		excludedAreas = calcExcludedAreas(x, y, maxCols, maxRows, itemSize)
-		val maxArea = (maxCols + 1) * (maxRows + 1)
+		val maxArea = maxCols * maxRows
 		if (maxArea - excludedAreas.size <= 0) return
 		val iterator = children.iterator()
+		val exclusionSpacers = mutableListOf<Triple<SpacerElement, Int, Int>>()
 		while (iterator.hasNext()) {
 			if (excludedAreas.contains(Pair(col, row))) {
-				layout.addChild(SpacerElement(itemSize, itemSize), row, col)
+				if (page == 0) {
+					val spacer = layout.addChild(SpacerElement(itemSize, itemSize), row, col)
+					exclusionSpacers.add(Triple(spacer, row, col))
+				}
 			} else {
 				layout.addChild(iterator.next(), row, col)
 			}
@@ -75,7 +80,13 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 				col = 0
 				gridLayouts.add(layout)
 				layout = MarkedGridLayout(x, y)
+				exclusionSpacers.forEach { (spacer, row, col) -> layout.addChild(spacer, row, col) }
 				page += 1
+				if (page > children.size) {
+					gridLayouts.clear()
+					logger.error("[SkyBlock Item List] Something went terribly wrong trying to position items! n=${children.size} s=$maxCols*$maxRows, x=${excludedAreas.size}")
+					break
+				}
 			}
 		}
 		gridLayouts.add(layout)
@@ -149,6 +160,12 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 	override fun getHeight(): Int {
 		return getPageLayout(activePage)?.height ?: -1
 	}
+
+	//? if >=26.2 {
+	override fun removeChildren() {
+		gridLayouts.forEach { it.removeChildren() }
+	}
+	//? }
 
 	class MarkedGridLayout(x: Int, y: Int) : GridLayout(x, y) {
 		val children: List<AbstractWidget> by lazy { getWidgets() }

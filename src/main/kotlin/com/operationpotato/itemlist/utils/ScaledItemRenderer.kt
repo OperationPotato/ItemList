@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.item.TrackingItemStackRenderState
 import net.minecraft.client.renderer.state.gui.BlitRenderState
 import net.minecraft.client.renderer.state.gui.GuiItemRenderState
@@ -26,10 +26,13 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.*
 
+//? if <26.2
+//import net.minecraft.client.renderer.MultiBufferSource
+
 // Taken with Permission from Meowdding-Lib and modified a bit ~J10a1n15
 // https://github.com/meowdding/meowdding-lib/blob/master/src/main/kotlin/me/owdding/lib/displays/item/ItemStateRenderer.kt
-class ScaledItemRenderer(buffer: MultiBufferSource.BufferSource) :
-	PictureInPictureRenderer<ScaledItemRenderer.State>(buffer) {
+class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSource)*//*? }*/ :
+	PictureInPictureRenderer<ScaledItemRenderer.State>(/*? if <26.2 {*//*buffer*//*? }*/) {
 
 	private var textureView: GpuTextureView? = null
 	private var lastState: State? = null
@@ -38,21 +41,32 @@ class ScaledItemRenderer(buffer: MultiBufferSource.BufferSource) :
 		return this.lastState != null && this.lastState == state
 	}
 
-	override fun renderToTexture(state: State, stack: PoseStack) {
+	override fun renderToTexture(
+		state: State,
+		stack: PoseStack,
+		//? if >=26.2
+		submitNodeCollector: SubmitNodeCollector
+	) {
 		this.lastState = state
 		this.textureView = RenderSystem.outputColorTextureOverride
 
 		stack.scale(1f, -1f, -1f)
 		val item = state.state
 
-		McClient.self.gameRenderer.lighting.setupFor(
+		//~ if <26.2 'lighting().' -> 'lighting.'
+		McClient.self.gameRenderer.lighting().setupFor(
 			if (item.itemStackRenderState().usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT
 		)
 
-		val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
-		item.itemStackRenderState()
-			.submit(stack, featureRenderer.submitNodeStorage, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0)
-		featureRenderer.renderAllFeatures()
+		//? if <26.2
+		//val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
+		item.itemStackRenderState().submit(
+			//~ if <26.2 'submitNodeCollector' -> 'featureRenderer.submitNodeStorage'
+			stack, submitNodeCollector,
+			LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0
+		)
+		//? if <26.2
+		//featureRenderer.renderAllFeatures()
 	}
 
 	override fun getTranslateY(height: Int, ignored: Int): Float {

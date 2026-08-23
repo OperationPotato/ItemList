@@ -22,7 +22,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 class ForgeRecipeWidget(recipe: ForgeRecipe) : AbstractRecipeWidget(recipe, 176, 86, "Forge Recipe") {
 
 	init {
-		// TODO: switch to a 3x3 input field
+		// TODO: maybe switch to a 3x3 input field
 		container.addChild(ImageWidget.sprite(176, 86, SkyBlockItemList.id("recipe/forge")))
 
 		addExtra()

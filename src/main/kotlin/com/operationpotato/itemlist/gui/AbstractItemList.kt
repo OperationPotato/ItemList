@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
-import java.util.Optional
+import java.util.*
 import java.util.concurrent.Future
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration.Companion.seconds
@@ -136,7 +136,8 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		scrollY: Double
 	): Boolean {
 		if (!visible) return false
-		if (!this.isMouseOver(x, y)) return false
+		if (!super.isMouseOver(x, y)) return false
+		if (PluginManager.isInAnyExclusionZone(x, y)) return false
 		if (McClient.self.hasControlDown()) {
 			scrollItemSize(scrollY)
 		} else {
@@ -197,6 +198,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {
+		if (!isActive) return false
 		val mousePos = McClient.mouse
 		val child = getChildAt(mousePos.first, mousePos.second).getOrNull()
 		if (child !is StackDisplay) return false

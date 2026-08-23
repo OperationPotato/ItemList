@@ -34,6 +34,12 @@
 				"value": "com.operationpotato.itemlist.api.impl.DefaultPlugin",
 				"adapter": "kotlin"
 			}
+		],
+		"iconographic:imc/item": [
+			{
+				"adapter": "kotlin",
+				"value": "com.operationpotato.itemlist.compat.IconographicCompat::setupItemCompat"
+			}
 		]
 	},
 	"mixins": [
@@ -42,9 +48,9 @@
 	"accessWidener": "skyblock-item-list.classtweaker",
 	"depends": {
 		"fabricloader": ">=0.19.2",
-		"minecraft": "~26.1",
+		"minecraft": "${minecraft}",
 		"java": ">=25",
-		"fabric-api": "*",
+		"fabric-api": ">=${fabric_api}",
 		"fabric-language-kotlin": "*",
 		"skyblock-api": ">=${sbapi}"
 	}

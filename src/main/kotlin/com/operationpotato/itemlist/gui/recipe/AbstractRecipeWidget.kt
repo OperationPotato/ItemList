@@ -3,6 +3,7 @@ package com.operationpotato.itemlist.gui.recipe
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.utils.ItemClickAction
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.StringWidget
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.repolib.api.recipes.Recipe
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -62,6 +64,11 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 		container.visitWidgets { widget ->
 			widget.extractRenderState(graphics, mouseX, mouseY, a)
 		}
+	}
+
+	// Needed for clicks inside IngredientDisplay
+	override fun isValidClickButton(info: MouseButtonInfo): Boolean {
+		return info.button() in ItemClickAction.validButtons
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {

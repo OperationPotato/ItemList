@@ -1,6 +1,5 @@
 package com.operationpotato.itemlist.api.impl
 
-import com.operationpotato.itemlist.api.ExclusionZone
 import com.operationpotato.itemlist.api.ExclusionZoneManager
 import com.operationpotato.itemlist.api.ExclusionZoneProvider
 import net.minecraft.client.gui.screens.Screen
