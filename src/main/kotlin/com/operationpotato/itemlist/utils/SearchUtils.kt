@@ -9,17 +9,20 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getRawLore
 
 // TODO: Better search filtering
 object SearchUtils {
-	fun transformSearch(raw: String): List<String> {
-		return raw.split("|").map { it.trim() }
+	fun transformSearch(raw: String): List<List<String>> {
+		return raw.split("|").map { group -> group.split("&").map { it.trim() } }
 	}
 
 	fun isDistinctSearch(a: String, b: String): Boolean {
 		val aFilter = transformSearch(a)
 		val bFilter = transformSearch(b)
 		if (bFilter.size != aFilter.size) return true
-		aFilter.forEachIndexed { index, aSearch ->
-			val bSearch = bFilter[index]
-			if (!bSearch.startsWith(aSearch)) return true
+		aFilter.forEachIndexed { index, aGroup ->
+			val bGroup = bFilter[index]
+			if (bGroup.size != aGroup.size) return true
+			aGroup.forEachIndexed { i, aSearch ->
+				if (!bGroup[i].startsWith(aSearch)) return true
+			}
 		}
 		return false
 	}
@@ -34,6 +37,7 @@ object SearchUtils {
 					'@'.code -> if (i == 0) color = true
 					' '.code -> color = false
 					'|'.code -> style = style.withColor(CommonColors.SOFT_YELLOW)
+					'&'.code -> style = style.withColor(CommonColors.SOFT_YELLOW)
 				}
 				if (color) {
 					style = style.withColor(CommonColors.COSMOS_PINK)
@@ -44,13 +48,15 @@ object SearchUtils {
 		}
 	}
 
-	fun matches(stackName: String, loreLines: List<String>, searches: List<String>): Boolean {
-		return searches.any { search -> stackName.contains(search) || loreLines.any { line -> line.contains(search) } }
+	fun matches(stackName: String, loreLines: List<String>, groups: List<List<String>>): Boolean {
+		return groups.any { group ->
+			group.all { search -> stackName.contains(search) || loreLines.any { line -> line.contains(search) } }
+		}
 	}
 
-	fun matchesSearch(stack: ItemStack, searches: List<String>): Boolean {
+	fun matchesSearch(stack: ItemStack, groups: List<List<String>>): Boolean {
 		val stackName = stack.cleanName.lowercase()
 		val loreLines = stack.getRawLore().map { it.lowercase() }
-		return matches(stackName, loreLines, searches)
+		return matches(stackName, loreLines, groups)
 	}
 }

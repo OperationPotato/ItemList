@@ -105,7 +105,7 @@ open class StackDisplay(
 		this.scale = scaledSize / STACK_SIZE.toFloat()
 	}
 
-	open fun matchesSearch(searches: List<String>): Boolean {
+	open fun matchesSearch(searches: List<List<String>>): Boolean {
 		createStackIfEmpty()
 		return SearchUtils.matches(stackName, loreLines, searches)
 	}

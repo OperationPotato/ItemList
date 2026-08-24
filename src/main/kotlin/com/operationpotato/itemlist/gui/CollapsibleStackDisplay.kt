@@ -34,7 +34,7 @@ class CollapsibleStackDisplay(
 			return stack
 		}
 
-	override fun matchesSearch(searches: List<String>): Boolean {
+	override fun matchesSearch(searches: List<List<String>>): Boolean {
 		val filtered = familyItems.filter { item ->
 			SearchUtils.matchesSearch(item.stack.create(), searches)
 		}
