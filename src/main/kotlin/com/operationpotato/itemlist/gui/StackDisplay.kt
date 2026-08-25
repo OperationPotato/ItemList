@@ -4,8 +4,8 @@ import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
-import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
+import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -105,9 +105,9 @@ open class StackDisplay(
 		this.scale = scaledSize / STACK_SIZE.toFloat()
 	}
 
-	open fun matchesSearch(searches: List<List<String>>): Boolean {
+	open fun matchesSearch(search: Search): Boolean {
 		createStackIfEmpty()
-		return SearchUtils.matches(stackName, loreLines, searches)
+		return search.matches(stackName, loreLines)
 	}
 
 	override fun updateWidgetNarration(output: NarrationElementOutput) {}
