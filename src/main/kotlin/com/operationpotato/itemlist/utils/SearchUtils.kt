@@ -56,7 +56,7 @@ object SearchUtils {
 		val combinedLore = loreLines.joinToString(" ")
 		return searches.any {
 			return@any when (it) {
-				is IdentifierSearch -> if (skyblockId == null) false else it.matches("id:${skyblockId}")
+				is IdentifierSearch -> if (skyblockId == null) false else it.matches(skyblockId)
 				is TextSearch -> it.matches(stackName) || it.matches(combinedLore)
 				else -> false
 			}
