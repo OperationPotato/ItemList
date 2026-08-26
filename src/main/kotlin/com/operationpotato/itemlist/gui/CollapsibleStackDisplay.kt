@@ -96,8 +96,7 @@ class CollapsibleStackDisplay(
 			isExpanded = true
 			hoveredChildIndex = -1
 		} else if (isExpanded) {
-			val overExpanded =
-				mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
+			val overExpanded = mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 			if (overExpanded) {
 				val relX = (mouseX - popoutX) / (STACK_SIZE * scale)
 				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)
