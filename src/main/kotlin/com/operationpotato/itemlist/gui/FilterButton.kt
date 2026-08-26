@@ -12,15 +12,13 @@ import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
-import net.minecraft.util.ARGB
 import net.minecraft.util.CommonColors
-import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.function.Consumer
 
 class FilterButton(default: SkyBlockItemCategory, val consumer: Consumer<SkyBlockItemCategory>) :
 	CycleButton<SkyBlockItemCategory>(
 		0, 0, 16, 16,
-		Component.empty(), Component.empty(),
+		Component.empty(), Component.literal("Filter"),
 		0,
 		default,
 		{ default },
@@ -33,6 +31,7 @@ class FilterButton(default: SkyBlockItemCategory, val consumer: Consumer<SkyBloc
 		{ _, _ -> null },
 	) {
 
+	var color: Int = CommonColors.WHITE
 
 	override fun shouldTakeFocusAfterInteraction(): Boolean = false
 
@@ -44,7 +43,7 @@ class FilterButton(default: SkyBlockItemCategory, val consumer: Consumer<SkyBloc
 			y,
 			width,
 			height,
-			if (message.style.color == null) CommonColors.WHITE else ARGB.opaque(message.color)
+			color
 		)
 	}
 
@@ -63,17 +62,26 @@ class FilterButton(default: SkyBlockItemCategory, val consumer: Consumer<SkyBloc
 		return true
 	}
 
+	override fun setValue(newValue: SkyBlockItemCategory) {
+		super.setValue(newValue)
+		updateColor(this, this.value)
+	}
+
 	companion object {
 		val FILTER: Identifier = SkyBlockItemList.id("filter")
 
 		fun onValueChanged(btn: CycleButton<SkyBlockItemCategory>, category: SkyBlockItemCategory) {
-			val color = when (category) {
+			if (btn !is FilterButton) return
+			updateColor(btn, category)
+			btn.consumer.accept(category)
+		}
+
+		fun updateColor(btn: FilterButton, category: SkyBlockItemCategory) {
+			btn.color = when (category) {
 				SkyBlockItemCategory.ALL -> CommonColors.WHITE
 				SkyBlockItemCategory.CUSTOM -> CommonColors.SOFT_YELLOW
 				else -> CommonColors.GREEN
 			}
-			btn.message = Component.literal("F").withColor(color)
-			if (btn is FilterButton) btn.consumer.accept(category)
 		}
 
 		fun createFilterTooltip(category: SkyBlockItemCategory): Tooltip {

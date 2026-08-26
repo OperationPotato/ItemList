@@ -36,8 +36,8 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 				val x = startX + (col * itemSize)
 				val y = startY + (row * itemSize)
 				val gridRect = Rect2i(x, y, itemSize, itemSize)
-				for (zone in activeExclusionZones) {
-					if (zone.area.overlaps(gridRect)) {
+				for ((area) in activeExclusionZones) {
+					if (area.overlaps(gridRect)) {
 						excludedAreas.add(Pair(col, row))
 						break
 					}
