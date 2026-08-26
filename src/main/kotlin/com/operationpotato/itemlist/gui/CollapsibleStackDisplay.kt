@@ -4,6 +4,7 @@ import com.operationpotato.itemlist.compat.IconographicCompat
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItems
+import com.operationpotato.itemlist.utils.search.Search
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.core.component.DataComponents
@@ -34,7 +35,7 @@ class CollapsibleStackDisplay(
 			return stack
 		}
 
-	override fun matchesSearch(searches: List<String>): Boolean {
+	override fun matchesSearch(searches: List<Search>): Boolean {
 		val filtered = familyItems.filter { item ->
 			SearchUtils.matchesSearch(item.stack.create(), searches)
 		}
