@@ -35,9 +35,9 @@ class CollapsibleStackDisplay(
 			return stack
 		}
 
-	override fun matchesSearch(search: Search): Boolean {
+	override fun matchesSearch(searches: List<Search>): Boolean {
 		val filtered = familyItems.filter { item ->
-			SearchUtils.matchesSearch(item.stack.create(), search)
+			SearchUtils.matchesSearch(item.stack.create(), searches)
 		}
 		filteredFamilyItems = filtered
 		return filtered.isNotEmpty()
@@ -96,7 +96,8 @@ class CollapsibleStackDisplay(
 			isExpanded = true
 			hoveredChildIndex = -1
 		} else if (isExpanded) {
-			val overExpanded = mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
+			val overExpanded =
+				mouseX >= popoutX && mouseX < popoutX + expandedWidth && mouseY >= popoutY && mouseY < popoutY + expandedHeight
 			if (overExpanded) {
 				val relX = (mouseX - popoutX) / (STACK_SIZE * scale)
 				val relY = (mouseY - popoutY) / (STACK_SIZE * scale)

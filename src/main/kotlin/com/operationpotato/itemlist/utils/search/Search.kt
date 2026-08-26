@@ -1,5 +1,7 @@
 package com.operationpotato.itemlist.utils.search
 
 interface Search {
-	fun matches(stackName: String, loreLines: List<String>): Boolean
+	fun matches(input: String): Boolean
+	fun contains(otherSearch: Search): Boolean
 }
+
