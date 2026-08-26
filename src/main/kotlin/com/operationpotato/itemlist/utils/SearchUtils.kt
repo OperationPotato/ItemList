@@ -52,14 +52,17 @@ object SearchUtils {
 		}
 	}
 
+	private fun evaluateSearch(search: Search, stackName: String, combinedLore: String, skyblockId: String?) =
+		when (search) {
+			is IdentifierSearch -> if (skyblockId == null) false else search.matches(skyblockId)
+			is TextSearch -> search.matches(stackName) || search.matches(combinedLore)
+			else -> false
+		}
+
 	fun matches(stackName: String, loreLines: List<String>, skyblockId: String?, searches: List<Search>): Boolean {
 		val combinedLore = loreLines.joinToString(" ")
 		return searches.any {
-			return@any when (it) {
-				is IdentifierSearch -> if (skyblockId == null) false else it.matches(skyblockId)
-				is TextSearch -> it.matches(stackName) || it.matches(combinedLore)
-				else -> false
-			}
+			return@any evaluateSearch(it, stackName, combinedLore, skyblockId)
 		}
 	}
 
