@@ -1,12 +1,9 @@
 package com.operationpotato.itemlist.utils
 
+import com.operationpotato.itemlist.utils.search.AndSearch
 import com.operationpotato.itemlist.utils.search.IdentifierSearch
 import com.operationpotato.itemlist.utils.search.Search
 import com.operationpotato.itemlist.utils.search.TextSearch
-import com.operationpotato.itemlist.utils.search.AndSearch
-import com.operationpotato.itemlist.utils.search.OrSearch
-import com.operationpotato.itemlist.utils.search.Search
-import com.operationpotato.itemlist.utils.search.TermSearch
 import net.minecraft.network.chat.Style
 import net.minecraft.util.CommonColors
 import net.minecraft.util.FormattedCharSequence
@@ -19,16 +16,14 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 object SearchUtils {
 	fun transformSearch(raw: String): List<Search> {
 		return raw.split("|").map {
-			if (it.startsWith("#")) IdentifierSearch(it.trim().substring(1))
-			else TextSearch(it.trim())
+			val part = it.trim()
+			if (part.startsWith("#")) IdentifierSearch(part.substring(1))
+			else it.split("&").map { text ->
+				TextSearch(text.trim())
+			}.let { res ->
+				if (res.size == 1) res.first() else AndSearch(res)
+			}
 		}
-
-	fun transformSearch(raw: String): Search {
-		val groups = raw.split("|").map { group ->
-			group.split("&").map { term -> TermSearch(term.trim()) }
-		}
-		val conditions = groups.map { terms -> if (terms.size == 1) terms.first() else AndSearch(terms) }
-		return if (conditions.size == 1) conditions.first() else OrSearch(conditions)
 	}
 
 	fun isDistinctSearch(a: String, b: String): Boolean {
@@ -67,6 +62,7 @@ object SearchUtils {
 		when (search) {
 			is IdentifierSearch -> if (skyblockId == null) false else search.matches(skyblockId)
 			is TextSearch -> search.matches(stackName) || search.matches(combinedLore)
+			is AndSearch -> search.matches(stackName) || search.matches(combinedLore)
 			else -> false
 		}
 
