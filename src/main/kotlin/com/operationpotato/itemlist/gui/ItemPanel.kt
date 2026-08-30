@@ -8,6 +8,7 @@ import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
+import com.operationpotato.itemlist.utils.HideListType
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.ThreadUtils
@@ -67,6 +68,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	var filterFuture: Future<*>? = null
 	var searchFuture: Future<*>? = null
 
+	private var isExpression: Boolean = false
 	private var calculatorResult: Pair<String, Boolean> = "" to false
 	private var calculatorResultColor: Int = 0
 
@@ -80,8 +82,8 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.setHint(searchHint)
 		searchBox.setResponder { text ->
 			addSuggestions(text)
-			val isExpression = text.isExpression()
-			updateListVisibility(text, isExpression)
+			isExpression = text.isExpression()
+			updateListVisibility(text, ConfigManager.get().mainList.lastFilter, isExpression)
 			if (isExpression) calculateAsync(text)
 			else searchAsync(text)
 
@@ -91,8 +93,13 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 		searchBox.value = ConfigManager.get().mainList.lastSearch
 	}
 
-	fun updateListVisibility(search: String, isExpression: Boolean) {
-		itemListWidget.visible = !ConfigManager.get().mainList.hideItemsWithoutSearch || (search.isNotEmpty() && !isExpression)
+	fun updateListVisibility(search: String, category: SkyBlockItemCategory, isExpression: Boolean) {
+		val hasSearch by lazy { search.isNotEmpty() && !isExpression }
+		itemListWidget.visible = when (ConfigManager.get().mainList.hideListWhen) {
+			HideListType.SEARCH -> hasSearch
+			HideListType.FILTER -> hasSearch || category != SkyBlockItemCategory.ALL
+			HideListType.NEVER -> true
+		}
 		// top bar layout might not be initialized yet, so:
 		prevPageButton.visible = itemListWidget.visible
 		nextPageButton.visible = itemListWidget.visible
@@ -159,6 +166,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 	fun onFilterSelected(category: SkyBlockItemCategory) {
 		ConfigManager.get().mainList.lastFilter = category
+		updateListVisibility(ConfigManager.get().mainList.lastSearch, category, isExpression)
 		filterAsync(category)
 	}
 

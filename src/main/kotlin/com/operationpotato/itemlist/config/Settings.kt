@@ -14,6 +14,7 @@ import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.gui.config.ConfigureFilterScreen
 import com.operationpotato.itemlist.gui.config.CustomConstantsScreen
+import com.operationpotato.itemlist.utils.HideListType
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import tech.thatgravyboat.skyblockapi.helpers.McClient
@@ -110,11 +111,11 @@ class Settings {
 		var centeredSearchBar: Boolean = false
 
 		@LatticeOption(
-			title = "Hide Items Without Search",
-			description = "Hides items when there is no active search.\nThis is recommended to improve performance."
+			title = "Hide List When",
+			description = "Whether to hide the list automatically based on one of two conditions.\nThis is recommended to improve performance."
 		)
-		@LatticeWidgetButton
-		var hideItemsWithoutSearch: Boolean = true
+		@LatticeWidgetDropdown
+		var hideListWhen: HideListType = HideListType.SEARCH
 
 		@LatticeOption(
 			title = "Hide Vanilla Items",

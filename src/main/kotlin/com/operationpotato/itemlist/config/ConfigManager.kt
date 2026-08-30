@@ -9,7 +9,7 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import java.nio.file.Files
 
 object ConfigManager {
-	const val CONFIG_VERSION = 2
+	const val CONFIG_VERSION = 3
 	private val file = McClient.config.resolve("skyblock-item-list", "config.json")
 	private var settings: Settings = Settings()
 	private val GSON = GsonBuilder().setPrettyPrinting().create()
@@ -70,8 +70,20 @@ object ConfigManager {
 					}
 				}
 			}
-			@Suppress("AssignedValueIsNeverRead")
 			version = 2 // Not useful here but when someone migrates from version 1 to 3 this is needed I think
+		}
+
+		if (version < 3) {
+			if (json.has("mainList")) {
+				val mainList = json.getAsJsonObject("mainList")
+				if (mainList.has("hideItemsWithoutSearch") && mainList.get("hideItemsWithoutSearch").asBoolean) {
+					mainList.addProperty("hideItemsWhen", "SEARCH")
+				} else {
+					mainList.addProperty("hideItemsWhen", "NEVER")
+				}
+			}
+			@Suppress("AssignedValueIsNeverRead")
+			version = 3
 		}
 
 	}
