@@ -38,7 +38,7 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 		val searchFilters = SearchUtils.transformSearch(lower)
 		visibleChildren = visibleChildren.filter { it.matchesSearch(searchFilters) }
 		val textSearches = searchFilters.filterIsInstance<TextSearch>().map { it.text.trim() }
-		if (textSearches.isNotEmpty()) {
+		if (textSearches.isNotEmpty() && ConfigManager.get().mainList.prioritizePrefixMatches) {
 			visibleChildren = visibleChildren.sortedBy { item ->
 				val name = item.stackName
 				textSearches.minOf { term ->
