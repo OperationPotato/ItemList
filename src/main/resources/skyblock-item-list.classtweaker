@@ -12,7 +12,7 @@ accessible method net/minecraft/client/gui/components/CycleButton <init> (IIIILn
 #? >26.2 {
 accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer textureView Lcom/mojang/renderpearl/api/textures/GpuTextureView;
 #? } else {
-accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer textureView Lcom/mojang/blaze3d/textures/GpuTextureView;
+#accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer textureView Lcom/mojang/blaze3d/textures/GpuTextureView;
 #? }
 
 #? >26.2 {
