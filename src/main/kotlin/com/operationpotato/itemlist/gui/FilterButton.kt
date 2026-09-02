@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.utils.ComponentUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
@@ -49,8 +50,8 @@ class FilterButton(default: SkyBlockItemCategory, val consumer: Consumer<SkyBloc
 
 	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
 		if (!isActive || !isMouseOver(event.x, event.y)) return false
-		if (event.button() == 0) onClick(event, doubleClick)
-		else if (event.button() == 1) {
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) onClick(event, doubleClick)
+		else if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 			value = when (value) {
 				SkyBlockItemCategory.ALL -> SkyBlockItemCategory.CUSTOM
 				SkyBlockItemCategory.CUSTOM -> SkyBlockItemCategory.ALL

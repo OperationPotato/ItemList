@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.ContainerSearcher
 import com.operationpotato.itemlist.SkyBlockItemList.id
 import net.minecraft.client.gui.Font
@@ -19,7 +20,7 @@ open class ClearableEditBox(font: Font, width: Int, height: Int, narration: Comp
 
 	override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
 		if (!this.isActive) return false
-		if (event.button() == 0 && doubleClick) {
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && doubleClick) {
 			isSearchingInventory = !isSearchingInventory
 			if (isSearchingInventory) {
 				ContainerSearcher.setSearch(value)
@@ -28,7 +29,7 @@ open class ClearableEditBox(font: Font, width: Int, height: Int, narration: Comp
 			}
 			return true
 		}
-		if (event.button() == 1) {
+		if (event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 			value = ""
 			return true
 		}
