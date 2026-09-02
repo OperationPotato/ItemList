@@ -29,16 +29,12 @@ import java.util.*
 
 //~ if >26.2 'blaze3d' -> 'renderpearl.api'
 import com.mojang.renderpearl.api.textures.FilterMode
-//~ if >26.2 'blaze3d' -> 'renderpearl.api'
-import com.mojang.renderpearl.api.textures.GpuTextureView
 
 // Taken with Permission from Meowdding-Lib and modified a bit ~J10a1n15
 // https://github.com/meowdding/meowdding-lib/blob/master/src/main/kotlin/me/owdding/lib/displays/item/ItemStateRenderer.kt
 class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSource)*//*? }*/ :
 	PictureInPictureRenderer<ScaledItemRenderer.State>(/*? if <26.2 {*//*buffer*//*? }*/) {
 
-	//? if <=26.2
-	/*private var textureView: GpuTextureView? = null*/
 	private var lastState: State? = null
 
 	override fun textureIsReadyToBlit(state: State): Boolean {
@@ -52,8 +48,6 @@ class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSour
 		submitNodeCollector: SubmitNodeCollector
 	) {
 		this.lastState = state
-		//? if <=26.2
-		/*this.textureView = RenderSystem.outputColorTextureOverride*/
 
 		stack.scale(1f, -1f, -1f)
 		val item = state.state
