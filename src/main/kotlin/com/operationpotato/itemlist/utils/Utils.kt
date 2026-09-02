@@ -57,6 +57,7 @@ object Utils {
 	fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
 		//~ if >26.2 'componentsPatch.entrySet()' -> 'componentsPatch.map.entries'
 		for ((type, value) in this@toLazy.componentsPatch.map.entries) {
+			//? if >26.2
 			if (value !is Optional<*>) continue
 			if (value.isEmpty) {
 				this.remove(type)
