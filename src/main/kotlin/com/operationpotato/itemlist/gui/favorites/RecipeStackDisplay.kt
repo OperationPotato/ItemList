@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.gui.favorites
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
@@ -29,7 +30,7 @@ class RecipeStackDisplay(val recipe: Recipe<*>, lazyStack: LazyItemStack, type: 
 	}
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
-		if (event.button() == 0 && event.hasControlDownWithQuirk()) {
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && event.hasControlDownWithQuirk()) {
 			SkyBlockItemList.favoriteInstance?.setRecipe(recipe)
 		} else {
 			 super.onClick(event, doubleClick)
