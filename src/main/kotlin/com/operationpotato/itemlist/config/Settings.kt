@@ -130,6 +130,13 @@ class Settings {
 		@LatticeWidgetButton
 		var groupFamilies: Boolean = false
 
+		@LatticeOption(
+			title = "Prioritize Prefix Matches",
+			description = "Show items starting with the search query first, followed by items containing the query in the middle."
+		)
+		@LatticeWidgetButton
+		var prioritizePrefixMatches: Boolean = true
+
 		@Suppress("unused", "PropertyName")
 		@LatticeOption(
 			title = "Configure Custom Filter",

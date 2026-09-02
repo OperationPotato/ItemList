@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.SearchUtils
+import com.operationpotato.itemlist.utils.search.TextSearch
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockItems
 import tech.thatgravyboat.repolib.api.RepoAPI
@@ -36,6 +37,19 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 		if (lower.isEmpty()) return
 		val searchFilters = SearchUtils.transformSearch(lower)
 		visibleChildren = visibleChildren.filter { it.matchesSearch(searchFilters) }
+		val textSearches = searchFilters.filterIsInstance<TextSearch>().map { it.text.trim() }
+		if (textSearches.isNotEmpty() && ConfigManager.get().mainList.prioritizePrefixMatches) {
+			visibleChildren = visibleChildren.sortedBy { item ->
+				val name = item.stackName
+				textSearches.minOf { term ->
+					when {
+						name.startsWith(term) -> 0
+						name.contains(term) -> 1
+						else -> 2
+					}
+				}
+			}
+		}
 	}
 
 	override fun getItems(): List<StackDisplay> = visibleChildren
