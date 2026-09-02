@@ -43,6 +43,8 @@ repositories {
 			includeGroup("com.terraformersmc")
 		}
 	}
+
+	mavenLocal()
 }
 
 dependencies {

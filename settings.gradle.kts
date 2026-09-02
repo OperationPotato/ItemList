@@ -17,12 +17,13 @@ plugins {
 
 stonecutter {
 	create(rootProject) {
+		version("26.3", "26.3-pre-1")
 		version("26.2")
 		version("26.1", "26.1.2")
 	}
 }
 
-val versions = listOf("26.2", "26.1")
+val versions = listOf("26.3", "26.2", "26.1")
 
 dependencyResolutionManagement {
 	versionCatalogs {
