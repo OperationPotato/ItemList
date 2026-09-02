@@ -7,6 +7,7 @@ import net.minecraft.core.component.TypedDataComponent
 import net.minecraft.world.item.ItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import java.text.NumberFormat
+import java.util.Optional
 
 object Utils {
 
@@ -54,7 +55,9 @@ object Utils {
 	}.format(this)
 
 	fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
-		for ((type, value) in this@toLazy.componentsPatch.entrySet()) {
+		//~ if >26.2 'componentsPatch.entrySet()' -> 'componentsPatch.map.entries'
+		for ((type, value) in this@toLazy.componentsPatch.map.entries) {
+			if (value !is Optional<*>) continue
 			if (value.isEmpty) {
 				this.remove(type)
 			} else {
