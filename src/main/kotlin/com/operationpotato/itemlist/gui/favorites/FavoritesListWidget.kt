@@ -9,11 +9,16 @@ import com.operationpotato.itemlist.utils.RepoLibUtils.result
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
-import com.operationpotato.itemlist.utils.Utils.toLazy
 import net.minecraft.client.input.KeyEvent
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import kotlin.jvm.optionals.getOrNull
+
+//? if 26.3 {
+import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack.Companion.toLazy
+//? } else {
+//import com.operationpotato.itemlist.utils.Utils.toLazy
+//? }
 
 class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
 	var children: List<StackDisplay> = emptyList()

@@ -14,7 +14,3 @@ accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer te
 #? } else {
 #accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer textureView Lcom/mojang/blaze3d/textures/GpuTextureView;
 #? }
-
-#? >26.2 {
-accessible field net/minecraft/core/component/DataComponentPatch map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
-#? }
