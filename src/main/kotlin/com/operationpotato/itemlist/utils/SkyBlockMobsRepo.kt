@@ -26,7 +26,7 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
 import kotlin.jvm.optionals.getOrNull
 
-object SkyBlockMobsRepo : RepoItemCache<String>("Mobs") {
+object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 	val npcSuffixes = listOf("NPC", "Rift NPC")
 	private const val ID_KEY = "skyblock-item-list:id"
 
