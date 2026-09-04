@@ -56,6 +56,7 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 		val stack = realStack.withComponents {
 			// Set fake id for favorites & links
 			val customData = realStack[DataComponents.CUSTOM_DATA]?.copyTag() ?: CompoundTag()
+			customData.remove("id") // remove NEU id, breaks favorites
 			customData.putString(ID_KEY, key)
 			this[DataComponents.CUSTOM_DATA] = customData.toData()
 
