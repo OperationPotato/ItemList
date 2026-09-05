@@ -90,6 +90,7 @@ loom {
 
 tasks.processResources {
 	inputs.property("version", project.property("version"))
+	inputs.property("fabric_loader", libs.versions.fabric.loader)
 	inputs.property("sbapi", versionedLibs.version("skyblock.api"))
 	inputs.property("fabric_api", versionedLibs.version("fabric.api"))
 	inputs.property("minecraft", versionedLibs.version("mcRange"))
@@ -97,6 +98,7 @@ tasks.processResources {
 	filesMatching("fabric.mod.json") {
 		val props = mapOf(
 			"version" to inputs.properties["version"],
+			"fabric_loader" to inputs.properties["fabric_loader"],
 			"sbapi" to inputs.properties["sbapi"],
 			"fabric_api" to inputs.properties["fabric_api"],
 			"minecraft" to inputs.properties["minecraft"],
