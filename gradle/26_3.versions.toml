@@ -2,7 +2,7 @@
 minecraft = "26.3-pre-2"
 mcRange = "~26.3-"
 fabric-api = "0.159.4+26.3"
-skyblock-api = "4.2.23-SNAPSHOT"
+skyblock-api = "4.2.23"
 modmenu = "21.0.0-alpha.1"
 
 [libraries]
