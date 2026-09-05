@@ -53,7 +53,8 @@ object Utils {
 		maximumFractionDigits = 7
 	}.format(this)
 
-	fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
+	//? if <26.3 {
+	/*fun ItemStack.toLazy(): LazyItemStack = LazyItemStack(this.item, this.count) {
 		for ((type, value) in this@toLazy.componentsPatch.entrySet()) {
 			if (value.isEmpty) {
 				this.remove(type)
@@ -62,4 +63,5 @@ object Utils {
 			}
 		}
 	}
+	*///? }
 }

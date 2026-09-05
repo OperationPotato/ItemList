@@ -1,0 +1,12 @@
+[versions]
+minecraft = "26.3-pre-2"
+mcRange = "~26.3-"
+fabric-api = "0.159.4+26.3"
+skyblock-api = "4.2.23"
+modmenu = "21.0.0-alpha.1"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+skyblock-api = { module = "tech.thatgravyboat:skyblock-api", version.ref = "skyblock-api" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
