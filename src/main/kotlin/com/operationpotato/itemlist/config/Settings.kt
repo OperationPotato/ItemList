@@ -137,6 +137,13 @@ class Settings {
 		@LatticeWidgetButton
 		var prioritizePrefixMatches: Boolean = true
 
+		@LatticeOption(
+			title = "Fuzzy Search",
+			description = "Match items even when the search contains small typos or missing characters."
+		)
+		@LatticeWidgetButton
+		var fuzzySearch: Boolean = false
+
 		@Suppress("unused", "PropertyName")
 		@LatticeOption(
 			title = "Configure Custom Filter",
