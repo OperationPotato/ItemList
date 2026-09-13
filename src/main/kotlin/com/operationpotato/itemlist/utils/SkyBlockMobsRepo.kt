@@ -8,11 +8,13 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemLore
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.mobs.Mob
+import tech.thatgravyboat.repolib.api.mobs.drop.AttributeDrop
 import tech.thatgravyboat.repolib.api.mobs.drop.ItemDrop
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
 import tech.thatgravyboat.skyblockapi.api.repo.apis.RepoItemCache
+import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockAttributesRepo
 import tech.thatgravyboat.skyblockapi.utils.extentions.toData
 import tech.thatgravyboat.skyblockapi.utils.lazy.registryBoundLazy
 import tech.thatgravyboat.skyblockapi.utils.text.Text
@@ -33,9 +35,16 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 			RepoAPI.mobs().mobs().values.forEach { mob ->
 				mob.lootTables.forEach { table ->
 					table.drops.forEach { drop ->
-						if (drop is ItemDrop) {
-							val id = SkyBlockId.item(drop.id)
-							grouped.getOrPut(id) { mutableSetOf() }.add(mob)
+						when (drop) {
+							is ItemDrop -> {
+								val id = SkyBlockId.item(drop.id)
+								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
+							}
+							is AttributeDrop -> {
+								val attributeId = SkyBlockAttributesRepo.get(drop.id)?.attributeId ?: return@forEach
+								val id = SkyBlockId.attribute(attributeId)
+								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
+							}
 						}
 					}
 				}
