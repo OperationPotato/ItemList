@@ -44,6 +44,9 @@ repositories {
 		}
 	}
 
+	flatDir {
+		dir("libs")
+	}
 	mavenLocal()
 }
 
@@ -66,7 +69,7 @@ dependencies {
 	}
 
 	includeImplementation(libs.keval)
-	includeImplementation(libs.lattice)
+	includeImplementation(versionedLibs.findLibrary("lattice").orElse(libs.lattice)!!)
 
 	compileOnly(versionedLibs.library("modmenu"))
 }
