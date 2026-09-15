@@ -19,8 +19,10 @@ class LatticeKeybindInterface(val keyMapping: KeyMapping) : KeybindInterface {
 		superMod: Boolean
 	) {
 		val value = when (type) {
-			LatticeInputType.KEYSYM -> InputConstants.Type.KEYSYM.getOrCreate(value)
-			LatticeInputType.SCANCODE -> InputConstants.Type.SCANCODE.getOrCreate(value)
+			//~ if 26.3 '.KEYSYM' -> '.KEYBOARD'
+			LatticeInputType.KEYBOARD -> InputConstants.Type.KEYBOARD.getOrCreate(value)
+			//? if <26.3
+			/*LatticeInputType.SCANCODE -> InputConstants.Type.SCANCODE.getOrCreate(value)*/
 			LatticeInputType.MOUSE -> InputConstants.Type.MOUSE.getOrCreate(value)
 		}
 		keyMapping.setKey(value)

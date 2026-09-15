@@ -43,6 +43,10 @@ repositories {
 			includeGroup("com.terraformersmc")
 		}
 	}
+
+	flatDir {
+		dir("libs")
+	}
 }
 
 dependencies {
@@ -64,7 +68,7 @@ dependencies {
 	}
 
 	includeImplementation(libs.keval)
-	includeImplementation(libs.lattice)
+	includeImplementation(versionedLibs.findLibrary("lattice").orElse(libs.lattice)!!)
 
 	compileOnly(versionedLibs.library("modmenu"))
 }
