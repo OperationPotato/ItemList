@@ -47,7 +47,6 @@ repositories {
 	flatDir {
 		dir("libs")
 	}
-	mavenLocal()
 }
 
 dependencies {
