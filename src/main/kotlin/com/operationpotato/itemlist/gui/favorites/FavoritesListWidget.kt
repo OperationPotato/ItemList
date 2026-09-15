@@ -10,6 +10,7 @@ import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import net.minecraft.client.input.KeyEvent
+import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack.Companion.toLazy
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import kotlin.jvm.optionals.getOrNull

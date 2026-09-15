@@ -47,7 +47,7 @@
 	],
 	"accessWidener": "skyblock-item-list.classtweaker",
 	"depends": {
-		"fabricloader": ">=0.19.2",
+		"fabricloader": ">=${fabric_loader}",
 		"minecraft": "${minecraft}",
 		"java": ">=25",
 		"fabric-api": ">=${fabric_api}",
