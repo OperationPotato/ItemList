@@ -15,12 +15,6 @@ import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import kotlin.jvm.optionals.getOrNull
 
-//? if 26.3 {
-import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack.Companion.toLazy
-//? } else {
-//import com.operationpotato.itemlist.utils.Utils.toLazy
-//? }
-
 class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
 	var children: List<StackDisplay> = emptyList()
 	override var alwaysShowPageText = false
