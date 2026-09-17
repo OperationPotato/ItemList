@@ -2,7 +2,6 @@ package com.operationpotato.itemlist.utils
 
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.textures.FilterMode
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.navigation.ScreenRectangle
@@ -27,6 +26,9 @@ import java.util.*
 
 //? if <26.2
 //import net.minecraft.client.renderer.MultiBufferSource
+
+//~ if >26.2 'blaze3d' -> 'renderpearl.api'
+import com.mojang.renderpearl.api.textures.FilterMode
 
 // Taken with Permission from Meowdding-Lib and modified a bit ~J10a1n15
 // https://github.com/meowdding/meowdding-lib/blob/master/src/main/kotlin/me/owdding/lib/displays/item/ItemStateRenderer.kt
