@@ -1,5 +1,6 @@
 package com.operationpotato.itemlist.utils
 
+import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.search.AndSearch
 import com.operationpotato.itemlist.utils.search.IdentifierSearch
 import com.operationpotato.itemlist.utils.search.Search
@@ -15,11 +16,12 @@ import tech.thatgravyboat.skyblockapi.utils.extentions.getSkyBlockId
 // TODO: Better search filtering
 object SearchUtils {
 	fun transformSearch(raw: String): List<Search> {
+		val fuzzy = ConfigManager.get().mainList.fuzzySearch
 		return raw.split("|").map {
 			val part = it.trim()
 			if (part.startsWith("#")) IdentifierSearch(part.substring(1))
 			else it.split("&").map { text ->
-				TextSearch(text.trim())
+				TextSearch(text.trim(), fuzzy)
 			}.let { res ->
 				if (res.size == 1) res.first() else AndSearch(res)
 			}
@@ -27,6 +29,7 @@ object SearchUtils {
 	}
 
 	fun isDistinctSearch(a: String, b: String): Boolean {
+		if (ConfigManager.get().mainList.fuzzySearch) return true
 		val aFilter = transformSearch(a)
 		val bFilter = transformSearch(b)
 		if (bFilter.size != aFilter.size) return true
