@@ -74,6 +74,8 @@ class KatRecipeWidget(recipe: KatRecipe) : AbstractRecipeWidget(recipe, 176, 86,
 			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(outputX, outputY))
 		}
 
+		if (hasExtraItems) addRequirementsArrow(98, 35) else addRequirementsArrow(87, 35)
+
 		container.arrangeElements()
 	}
 }
