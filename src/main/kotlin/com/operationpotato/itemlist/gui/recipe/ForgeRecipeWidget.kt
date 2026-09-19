@@ -56,6 +56,8 @@ class ForgeRecipeWidget(recipe: ForgeRecipe) : AbstractRecipeWidget(recipe, 176,
 			container.addChild(IngredientDisplay(outputStack), container.topLeftAlignment(134, 35))
 		}
 
+		addRequirementsArrow(100, 35)
+
 		container.arrangeElements()
 	}
 }

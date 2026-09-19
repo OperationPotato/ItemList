@@ -38,6 +38,8 @@ class CraftingRecipeWidget(recipe: CraftingRecipe) : AbstractRecipeWidget(recipe
 
 		container.addChild(grid, container.topLeftAlignment(30, 17))
 
+		addRequirementsArrow(90, 35)
+
 		container.arrangeElements()
 	}
 }

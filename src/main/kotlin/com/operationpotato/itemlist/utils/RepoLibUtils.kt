@@ -101,6 +101,16 @@ object RepoLibUtils {
 		return stacks
 	}
 
+	fun Recipe<*>.getOutput(): CraftingIngredient? {
+		return when (this) {
+			is ForgeRecipe -> this.result
+			is KatRecipe -> this.output
+			is ShopRecipe -> this.result
+			is CraftingRecipe -> this.result
+			else -> null
+		}
+	}
+
 	fun MobDrop.toItemStack(): ItemStack {
 		val drop = this
 		val id = when (this) {
