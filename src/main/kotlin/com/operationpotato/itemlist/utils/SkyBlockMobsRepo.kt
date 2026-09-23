@@ -10,6 +10,7 @@ import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.repolib.api.mobs.drop.AttributeDrop
 import tech.thatgravyboat.repolib.api.mobs.drop.ItemDrop
+import tech.thatgravyboat.repolib.api.mobs.drop.PetDrop
 import tech.thatgravyboat.skyblockapi.api.location.SkyBlockIsland
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack
@@ -43,6 +44,10 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 							is AttributeDrop -> {
 								val attributeId = SkyBlockAttributesRepo.get(drop.id)?.attributeId ?: return@forEach
 								val id = SkyBlockId.attribute(attributeId)
+								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
+							}
+							is PetDrop -> {
+								val id = SkyBlockId.pet(drop.id, drop.tier)
 								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
 							}
 						}
