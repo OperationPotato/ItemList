@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.TooltipWidget
@@ -9,6 +10,7 @@ import com.operationpotato.itemlist.utils.RepoLibUtils.getOutput
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.ImageWidget
 import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
@@ -36,6 +38,7 @@ import java.util.function.Consumer
 abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: Int, val title: String? = null) :
 	AbstractWidget(0, 0, width, height, Text.of(title ?: "Recipe Widget")) {
 
+	private val requirementArrowOverlay = SkyBlockItemList.id("recipe/requirement_arrow")
 	protected val container = FrameLayout(0, 0, width, height)
 
 	// TODO: use RepoLib stuff when that updates
@@ -90,6 +93,10 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 			}
 		)
 
+		container.addChild(
+			ImageWidget.sprite(arrowWidth, arrowHeight, requirementArrowOverlay),
+			container.topLeftAlignment(x, y)
+		)
 		container.addChild(TooltipWidget(tooltip, arrowWidth, arrowHeight), container.topLeftAlignment(x, y))
 	}
 
