@@ -1,13 +1,16 @@
 package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.SkyBlockItemList
+import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.utils.ItemClickAction
 import com.operationpotato.itemlist.utils.RepoLibUtils.toItemStack
 import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.ImageWidget
 import net.minecraft.client.gui.components.StringWidget
+import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.GridLayout
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -17,6 +20,7 @@ import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.CommonColors
 import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.skyblockapi.helpers.McFont
+import tech.thatgravyboat.skyblockapi.helpers.McScreen
 import tech.thatgravyboat.skyblockapi.utils.text.Text
 import kotlin.math.max
 
@@ -48,6 +52,22 @@ class MobDropWidget(val mob: Mob, width: Int = 176) : AbstractWidget(0, 0, width
 		}
 
 		container.addChild(grid, container.topLeftAlignment(26, 17))
+
+		if (mob.lootTables.size > 1) {
+			val linkButton = Button.builder(Text.of("M")) { _ ->
+				AbstractPagedListScreen.handleMob(mob, McScreen.self)
+			}.apply {
+				size(12, 12)
+				tooltip(Tooltip.create(Text.of("Open Mob Drops Screen")))
+			}.build()
+
+			container.addChild(
+				linkButton,
+				container.newChildLayoutSettings().alignVerticallyBottom().alignHorizontallyRight()
+					.paddingBottom(5).paddingRight(5)
+			)
+		}
+
 		container.arrangeElements()
 	}
 

@@ -29,6 +29,7 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import tech.thatgravyboat.repolib.api.mobs.Mob
 import tech.thatgravyboat.repolib.api.recipes.CraftingRecipe
 import tech.thatgravyboat.repolib.api.recipes.ForgeRecipe
 import tech.thatgravyboat.repolib.api.recipes.KatRecipe
@@ -188,8 +189,7 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 			if (mobId != null) {
 				val mob = SkyBlockMobsRepo.get(mobId)
 				if (mob != null && mob.lootTables.isNotEmpty()) {
-					val widgets = mob.lootTables.map { MobLootWidget(mob, it) }
-					McClient.setScreen(LootTableScreen(parent, widgets))
+					handleMob(mob, parent)
 				} else {
 					Text.of("No loot tables found for ") {
 						color = TextColor.RED
@@ -200,6 +200,11 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 				return true
 			}
 			return false
+		}
+
+		fun handleMob(mob: Mob, parent: Screen?) {
+			val widgets = mob.lootTables.map { MobLootWidget(mob, it) }
+			McClient.setScreen(LootTableScreen(parent, widgets))
 		}
 
 		fun openRecipeForItem(stack: ItemStack, parent: Screen? = null) {
