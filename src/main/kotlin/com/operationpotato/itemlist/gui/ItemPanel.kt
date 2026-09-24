@@ -9,6 +9,7 @@ import com.operationpotato.itemlist.config.ConfigScreen
 import com.operationpotato.itemlist.utils.CalcUtils
 import com.operationpotato.itemlist.utils.CalcUtils.isExpression
 import com.operationpotato.itemlist.utils.HideListType
+import com.operationpotato.itemlist.utils.ItemListSide
 import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.ThreadUtils
@@ -273,11 +274,12 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 
 	override fun updateWidth() {
 		val screen = McScreen.self ?: return
-		val rightBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.right ?: return
+		val bounds = PluginManager.getScreenBounds(screen, screen.width, screen.height) ?: return
+		val isRightSide = ConfigManager.get().general.listSide == ItemListSide.RIGHT
 
-		val availableWidth = screen.width - rightBound
+		val availableWidth = if (isRightSide) screen.width - bounds.right else bounds.left
 		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
-		x = screen.width - panelWidth
+		x = if (isRightSide) screen.width - panelWidth else 0
 		width = panelWidth - 2
 		updatePosition()
 	}

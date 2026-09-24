@@ -7,6 +7,7 @@ import com.operationpotato.itemlist.gui.AbstractItemList
 import com.operationpotato.itemlist.gui.AbstractItemPanel
 import com.operationpotato.itemlist.gui.AbstractPagedListScreen
 import com.operationpotato.itemlist.gui.recipe.AbstractRecipeWidget
+import com.operationpotato.itemlist.utils.ItemListSide
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.input.KeyEvent
@@ -60,10 +61,12 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 
 	override fun updateWidth() {
 		val screen = McScreen.self ?: return
-		val leftBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.left ?: return
+		val bounds = PluginManager.getScreenBounds(screen, screen.width, screen.height) ?: return
+		val isRightSide = ConfigManager.get().general.listSide == ItemListSide.RIGHT
 
-		val panelWidth = (leftBound * ConfigManager.get().general.maxWidth).toInt()
-		x = 0
+		val availableWidth = if (isRightSide) bounds.left else screen.width - bounds.right
+		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+		x = if (isRightSide) 0 else screen.width - panelWidth
 		width = panelWidth - 2
 		updatePosition()
 	}
