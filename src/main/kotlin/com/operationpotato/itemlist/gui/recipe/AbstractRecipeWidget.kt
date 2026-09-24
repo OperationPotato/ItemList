@@ -1,11 +1,16 @@
 package com.operationpotato.itemlist.gui.recipe
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.api.impl.PluginManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
+import com.operationpotato.itemlist.gui.TooltipWidget
 import com.operationpotato.itemlist.utils.ItemClickAction
+import com.operationpotato.itemlist.utils.RepoLibUtils.getOutput
+import com.operationpotato.itemlist.utils.Utils.topLeftAlignment
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.ImageWidget
 import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
@@ -14,15 +19,42 @@ import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.util.CommonColors
+import tech.thatgravyboat.repolib.api.RepoAPI
+import tech.thatgravyboat.repolib.api.idoverlays.Requirement
 import tech.thatgravyboat.repolib.api.recipes.Recipe
+import tech.thatgravyboat.repolib.api.recipes.ingredient.AttributeIngredient
+import tech.thatgravyboat.repolib.api.recipes.ingredient.EnchantmentIngredient
+import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
+import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
+import tech.thatgravyboat.repolib.api.recipes.ingredient.PotionIngredient
+import tech.thatgravyboat.repolib.api.recipes.ingredient.RuneIngredient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
+import tech.thatgravyboat.skyblockapi.utils.text.TextColor
+import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import java.util.function.Consumer
 
 abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: Int, val title: String? = null) :
 	AbstractWidget(0, 0, width, height, Text.of(title ?: "Recipe Widget")) {
 
+	private val requirementArrowOverlay = SkyBlockItemList.id("recipe/requirement_arrow")
 	protected val container = FrameLayout(0, 0, width, height)
+
+	// TODO: use RepoLib stuff when that updates
+	protected val requirement: List<Requirement>? = if (RepoAPI.isInitialized()) {
+		when (val ingredient = recipe.getOutput()) {
+			is ItemIngredient -> RepoAPI.overlays().getItem(ingredient.id())
+			is PetIngredient -> RepoAPI.overlays().getPet(ingredient.id(), ingredient.tier())
+			is EnchantmentIngredient -> RepoAPI.overlays().getEnchantment(ingredient.id(), ingredient.level())
+			is RuneIngredient -> RepoAPI.overlays().getRune(ingredient.id(), ingredient.tier())
+			is AttributeIngredient -> RepoAPI.overlays().getAttribute(ingredient.id())
+			is PotionIngredient -> RepoAPI.overlays().getPotion(ingredient.id(), ingredient.level())
+			else -> null
+		}?.requirements
+	} else {
+		null
+	}
 
 	fun visitItems(consumer: Consumer<AbstractWidget>) = container.visitWidgets(consumer)
 
@@ -46,6 +78,26 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 			container.newChildLayoutSettings().alignVerticallyBottom().alignHorizontallyRight()
 				.paddingBottom(5).paddingRight(5)
 		)
+	}
+
+	protected fun addRequirementsArrow(x: Int, y: Int, arrowWidth: Int = 22, arrowHeight: Int = 15) {
+		val requirements = requirement ?: return
+
+		val tooltip = Text.multiline(
+			Text.of("Requires: ", TextColor.GRAY),
+			requirements.map {
+				Text.of(" - ") {
+					color = TextColor.DARK_GRAY
+					append(it.formattedString(), TextColor.GRAY)
+				}
+			}
+		)
+
+		container.addChild(
+			ImageWidget.sprite(arrowWidth, arrowHeight, requirementArrowOverlay),
+			container.topLeftAlignment(x, y)
+		)
+		container.addChild(TooltipWidget(tooltip, arrowWidth, arrowHeight), container.topLeftAlignment(x, y))
 	}
 
 	override fun setX(x: Int) {

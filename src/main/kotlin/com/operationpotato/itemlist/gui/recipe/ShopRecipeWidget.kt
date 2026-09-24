@@ -43,6 +43,8 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 			container.topLeftAlignment(103, 16)
 		)
 
+		addRequirementsArrow(100, 35)
+
 		container.arrangeElements()
 	}
 }
