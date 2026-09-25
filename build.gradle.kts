@@ -43,10 +43,6 @@ repositories {
 			includeGroup("com.terraformersmc")
 		}
 	}
-
-	flatDir {
-		dir("libs")
-	}
 }
 
 dependencies {
