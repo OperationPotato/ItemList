@@ -66,7 +66,7 @@ class Settings {
 
 		@LatticeOption(
 			title = "Item List Side",
-			description = "Choose which side of the screen your Item List appears on — Left or Right."
+			description = "The side of the screen that the Item List appears on."
 				+ "\nThe Favorites list automatically moves to the opposite side."
 		)
 		@LatticeWidgetDropdown
