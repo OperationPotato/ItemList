@@ -73,6 +73,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	private var calculatorResultColor: Int = 0
 
 	init {
+		preferRightSide = true
 		filterButton.value = ConfigManager.get().mainList.lastFilter
 		filterButton.message = Component.literal("F")
 		if (ConfigManager.get().mainList.lastFilter != SkyBlockItemCategory.ALL)
@@ -269,17 +270,6 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			return true
 		}
 		return itemListWidget.keyPressed(event)
-	}
-
-	override fun updateWidth() {
-		val screen = McScreen.self ?: return
-		val rightBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.right ?: return
-
-		val availableWidth = screen.width - rightBound
-		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
-		x = screen.width - panelWidth
-		width = panelWidth - 2
-		updatePosition()
 	}
 
 	override fun extractWidgetRenderState(
