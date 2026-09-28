@@ -64,7 +64,7 @@ object SkyBlockItems {
 		return RepoAPI.pets().pets().map { (k, v) ->
 			v.tiers.map { x ->
 				val maxLevel = 100 + x.value.variablesOffset
-				SkyBlockPetsRepo.Query(id = k, rarity = SkyBlockRarity.fromName(x.key), level = maxLevel)
+				SkyBlockPetsRepo.Query(id = k, rarity = SkyBlockRarity.fromName(x.key), level = maxLevel, showStatBounds = true)
 			}
 		}.flatten()
 	}
