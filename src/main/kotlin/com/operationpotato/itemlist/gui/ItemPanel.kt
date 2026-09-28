@@ -72,8 +72,9 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	private var calculatorResult: Pair<String, Boolean> = "" to false
 	private var calculatorResultColor: Int = 0
 
+	override val preferRightSide: Boolean = true
+
 	init {
-		preferRightSide = true
 		filterButton.value = ConfigManager.get().mainList.lastFilter
 		filterButton.message = Component.literal("F")
 		if (ConfigManager.get().mainList.lastFilter != SkyBlockItemCategory.ALL)

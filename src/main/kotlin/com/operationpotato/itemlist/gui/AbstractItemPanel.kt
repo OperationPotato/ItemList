@@ -16,7 +16,7 @@ abstract class AbstractItemPanel(
 	x: Int, y: Int, width: Int, height: Int,
 ) : AbstractContainerWidget(x, y, width, height, Component.empty(), defaultSettings(0)) {
 
-	protected var preferRightSide: Boolean = true
+	protected open val preferRightSide: Boolean = true
 
 	abstract fun getListWidget(): AbstractItemList
 	abstract fun updatePosition()

@@ -19,8 +19,9 @@ class FavoritesPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPane
 	val listWidget = FavoritesListWidget(width - AbstractItemList.PADDING, height)
 	var recipeWidget: AbstractRecipeWidget? = null
 
+	override val preferRightSide = false
+
 	init {
-		preferRightSide = false
 		listWidget.itemSize = ConfigManager.get().favoritesList.favoritesItemSize
 		val pinnedRecipe = FavoritesManager.favorites.pinnedRecipe
 		setRecipe(pinnedRecipe)
