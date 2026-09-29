@@ -72,6 +72,8 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 	private var calculatorResult: Pair<String, Boolean> = "" to false
 	private var calculatorResultColor: Int = 0
 
+	override val preferRightSide: Boolean = true
+
 	init {
 		filterButton.value = ConfigManager.get().mainList.lastFilter
 		filterButton.message = Component.literal("F")
@@ -269,17 +271,6 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			return true
 		}
 		return itemListWidget.keyPressed(event)
-	}
-
-	override fun updateWidth() {
-		val screen = McScreen.self ?: return
-		val rightBound = PluginManager.getScreenBounds(screen, screen.width, screen.height)?.right ?: return
-
-		val availableWidth = screen.width - rightBound
-		val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
-		x = screen.width - panelWidth
-		width = panelWidth - 2
-		updatePosition()
 	}
 
 	override fun extractWidgetRenderState(

@@ -7,6 +7,7 @@ import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.ExclusionZoneDebugWidget
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
+import com.operationpotato.itemlist.utils.ItemListSide
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
@@ -56,17 +57,23 @@ object SkyBlockItemList : ClientModInitializer {
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
 		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
 
-		val screenRight = PluginManager.getScreenBounds(screen, w, h)?.right
+		val bounds = PluginManager.getScreenBounds(screen, w, h)
 
-		if (screenRight != null) {
-			val availableWidth = w - screenRight
-			val panelWidth = (availableWidth * ConfigManager.get().general.maxWidth).toInt()
+		if (bounds != null) {
+			val isRightSide = ConfigManager.get().general.listSide == ItemListSide.RIGHT
+
+			val itemAvailableWidth = if (isRightSide) w - bounds.right else bounds.left
+			val panelWidth = (itemAvailableWidth * ConfigManager.get().general.maxWidth).toInt()
 			val tooSmall = panelWidth < 80
 
 			val itemPanel = instance ?: ItemPanel(0, 0, 0, 0)
 			instance = itemPanel
 
-			itemPanel.setPosition(w - panelWidth, 0)
+			if (isRightSide) {
+				itemPanel.setPosition(w - panelWidth, 0)
+			} else {
+				itemPanel.setPosition(0, 0)
+			}
 			itemPanel.setSize(panelWidth - 2, h)
 			itemPanel.updatePosition()
 			itemPanel.visible = ConfigManager.get().general.enabled
@@ -78,11 +85,18 @@ object SkyBlockItemList : ClientModInitializer {
 			val favPanel = favoriteInstance ?: FavoritesPanel(0, 0, 0, 0)
 			favoriteInstance = favPanel
 
-			favPanel.setPosition(0, 0)
-			favPanel.setSize(panelWidth - 2, h)
+			val favAvailableWidth = if (isRightSide) bounds.left else w - bounds.right
+			val favPanelWidth = (favAvailableWidth * ConfigManager.get().general.maxWidth).toInt()
+
+			if (isRightSide) {
+				favPanel.setPosition(0, 0)
+			} else {
+				favPanel.setPosition(w - favPanelWidth, 0)
+			}
+			favPanel.setSize(favPanelWidth - 2, h)
 			favPanel.updatePosition()
 			favPanel.visible = ConfigManager.get().general.enabled && ConfigManager.get().favoritesList.enableFavorites
-			if (tooSmall) favPanel.visible = false
+			if (favPanelWidth < 80) favPanel.visible = false
 
 			Screens.getWidgets(screen).add(favPanel)
 

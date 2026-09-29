@@ -16,6 +16,7 @@ import com.operationpotato.itemlist.gui.config.ConfigureFilterScreen
 import com.operationpotato.itemlist.gui.config.CustomConstantsScreen
 import com.operationpotato.itemlist.utils.HideListType
 import com.operationpotato.itemlist.utils.ItemClickAction
+import com.operationpotato.itemlist.utils.ItemListSide
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McScreen
@@ -62,6 +63,14 @@ class Settings {
 		@LatticeFloatRange(min = 0.25f, max = 1f, clampMin = 0.25f, clampMax = 1f)
 		@LatticeWidgetSlider
 		var maxWidth: Float = 1f
+
+		@LatticeOption(
+			title = "Item List Side",
+			description = "The side of the screen that the Item List appears on."
+				+ "\nThe Favorites list automatically moves to the opposite side."
+		)
+		@LatticeWidgetDropdown
+		var listSide: ItemListSide = ItemListSide.RIGHT
 
 		@LatticeOption(
 			title = "Left Click Action",
