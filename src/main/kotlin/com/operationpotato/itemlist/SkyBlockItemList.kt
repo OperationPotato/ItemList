@@ -45,6 +45,9 @@ object SkyBlockItemList : ClientModInitializer {
 		ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 		ScreenEvents.AFTER_INIT.register(latePhase, ::addItemListWidget)
 		ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> resetWidget() }
+		ClientLifecycleEvents.CLIENT_STARTED.register { _ ->
+			if (ConfigManager.get().mainList.clearSearchOnRestart) ConfigManager.get().mainList.lastSearch = ""
+		}
 		ClientLifecycleEvents.CLIENT_STOPPING.register {
 			ConfigManager.save()
 			FavoritesManager.save()
