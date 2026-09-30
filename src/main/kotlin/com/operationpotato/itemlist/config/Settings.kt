@@ -158,7 +158,7 @@ class Settings {
 			description = "Start with an empty search bar after restarting the game."
 		)
 		@LatticeWidgetButton
-		var clearSearchOnRestart: Boolean = true
+		var clearSearchOnRestart: Boolean = false
 
 		@Suppress("unused", "PropertyName")
 		@LatticeOption(
