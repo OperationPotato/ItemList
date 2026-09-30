@@ -153,6 +153,13 @@ class Settings {
 		@LatticeWidgetButton
 		var fuzzySearch: Boolean = false
 
+		@LatticeOption(
+			title = "Clear Search on Restart",
+			description = "Start with an empty search bar after restarting the game."
+		)
+		@LatticeWidgetButton
+		var clearSearchOnRestart: Boolean = true
+
 		@Suppress("unused", "PropertyName")
 		@LatticeOption(
 			title = "Configure Custom Filter",
@@ -164,8 +171,6 @@ class Settings {
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 
-		// Session only, so a restart starts with an empty search bar
-		@Transient
 		var lastSearch: String = ""
 		var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM
 	}

@@ -92,6 +92,7 @@ class ItemPanel(x: Int, y: Int, width: Int, height: Int) : AbstractItemPanel(x, 
 			if (ContainerSearcher.shouldSearch()) ContainerSearcher.setSearch(text)
 		}
 		searchBox.setMaxLength(999)
+		if (ConfigManager.get().mainList.clearSearchOnRestart) ConfigManager.get().mainList.lastSearch = ""
 		searchBox.value = ConfigManager.get().mainList.lastSearch
 	}
 
