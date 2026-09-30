@@ -164,6 +164,8 @@ class Settings {
 
 		var customFilters: MutableList<SkyBlockItemCategory> = SkyBlockItemCategory.NON_ENTITIES.toMutableList()
 
+		// Session only, so a restart starts with an empty search bar
+		@Transient
 		var lastSearch: String = ""
 		var lastFilter: SkyBlockItemCategory = SkyBlockItemCategory.CUSTOM
 	}
