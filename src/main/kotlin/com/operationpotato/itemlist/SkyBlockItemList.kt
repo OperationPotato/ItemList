@@ -58,7 +58,7 @@ object SkyBlockItemList : ClientModInitializer {
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {
-		if (!LocationAPI.isOnSkyBlock && !McClient.isDev && !ConfigManager.get().general.showOutsideSkyBlock) return
+		if (!isEnabled()) return
 
 		val bounds = PluginManager.getScreenBounds(screen, w, h)
 
@@ -174,6 +174,8 @@ object SkyBlockItemList : ClientModInitializer {
 		instance = null
 		favoriteInstance = null
 	}
+
+	fun isEnabled() = LocationAPI.isOnSkyBlock || McClient.isDev || ConfigManager.get().general.showOutsideSkyBlock
 
 	@JvmStatic
 	fun id(path: String): Identifier = Identifier.fromNamespaceAndPath("skyblock-item-list", path)

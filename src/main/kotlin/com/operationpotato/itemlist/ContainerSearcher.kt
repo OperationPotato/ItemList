@@ -11,7 +11,7 @@ object ContainerSearcher {
 
 	init {
 		SkyBlockAPI.eventBus.register<InventoryChangeEvent> {
-			if (shouldSearch()) {
+			if (SkyBlockItemList.isEnabled() && shouldSearch()) {
 				// Instead of rechecking every item, just recheck the updated item
 				setItemSearch(SkyBlockItemList.instance?.searchBox?.value, it.item)
 			}
