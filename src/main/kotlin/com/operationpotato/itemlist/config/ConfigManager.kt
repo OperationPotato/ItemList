@@ -82,7 +82,7 @@ object ConfigManager {
 					mainList.addProperty("hideItemsWhen", "NEVER")
 				}
 			}
-			@Suppress("AssignedValueIsNeverRead")
+			@Suppress("ASSIGNED_VALUE_IS_NEVER_READ")
 			version = 3
 		}
 

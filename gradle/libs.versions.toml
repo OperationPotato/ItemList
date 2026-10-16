@@ -1,12 +1,11 @@
 [versions]
 fabric-loader = "0.19.3"
-fabric-language-kotlin = "1.13.11+kotlin.2.3.21"
-fabric-loom = "1.16-SNAPSHOT"
-kotlin = "2.3.21"
+fabric-language-kotlin = "1.14.2+kotlin.2.4.21"
+fabric-loom = "1.18-SNAPSHOT"
+kotlin = "2.4.0"
 
 keval = "1.1.1"
 lattice = "2.1.0"
-
 
 [libraries]
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
