@@ -97,6 +97,7 @@ tasks.processResources {
 	inputs.property("fabric_loader", libs.versions.fabric.loader)
 	inputs.property("sbapi", versionedLibs.version("skyblock.api"))
 	inputs.property("fabric_api", versionedLibs.version("fabric.api"))
+	inputs.property("flk", libs.versions.fabric.language.kotlin)
 	inputs.property("minecraft", versionedLibs.version("mcRange"))
 
 	filesMatching("fabric.mod.json") {
@@ -105,6 +106,7 @@ tasks.processResources {
 			"fabric_loader" to inputs.properties["fabric_loader"],
 			"sbapi" to inputs.properties["sbapi"],
 			"fabric_api" to inputs.properties["fabric_api"],
+			"flk" to inputs.properties["flk"],
 			"minecraft" to inputs.properties["minecraft"],
 		)
 		expand(props)
