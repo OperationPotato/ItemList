@@ -1,4 +1,7 @@
+import net.fabricmc.loom.task.ValidateAccessWidenerTask
+import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	alias(libs.plugins.fabric.loom)
@@ -76,10 +79,11 @@ fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>
 
 loom {
 	runConfigs["client"].apply {
-		ideConfigGenerated(true)
-		runDir = "../../run"
+		generateRunConfig = true
+		runDirectory = project.file("../../run")
 		val modsDir = rootProject.projectDir.resolve("run/mods/${sc.current.project}/")
-		vmArg("-Dfabric.modsFolder=\"$modsDir\"")
+		modsDir.mkdirs()
+		jvmArguments.add("-Dfabric.modsFolder=$modsDir")
 	}
 
 	accessWidenerPath = sc.process(
@@ -107,6 +111,10 @@ tasks.processResources {
 	}
 }
 
+tasks.withType<ValidateAccessWidenerTask>().configureEach {
+	dependsOn("stonecutterGenerate")
+}
+
 tasks.withType<JavaCompile>().configureEach {
 	options.release = 25
 }
@@ -114,6 +122,12 @@ tasks.withType<JavaCompile>().configureEach {
 kotlin {
 	compilerOptions {
 		jvmTarget = JvmTarget.JVM_25
+		freeCompilerArgs.add("-Xrender-internal-diagnostic-names")
+	}
+	sourceSets.all {
+		languageSettings {
+			languageVersion = "2.4"
+		}
 	}
 }
 
@@ -122,6 +136,21 @@ java {
 
 	sourceCompatibility = JavaVersion.VERSION_25
 	targetCompatibility = JavaVersion.VERSION_25
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+	compilerOptions {
+		allWarningsAsErrors = true
+		extraWarnings = true
+		freeCompilerArgs.addAll(
+			// 0 (all cores) triggers a race condition in JvmIrCodegenFactory's parallel codegen on Kotlin 2.4.x,
+			// leaving corrupt .class files that break subsequent incremental builds.
+			// see: https://youtrack.jetbrains.com/issue/KT-85498/
+			"-Xbackend-threads=1",
+			"-Xintrinsic-const-evaluation",
+			"-Xcontext-sensitive-resolution",
+		)
+	}
 }
 
 tasks.register<Jar>("apiJar") {

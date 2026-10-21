@@ -2,8 +2,17 @@ pluginManagement {
 	repositories {
 		maven("https://maven.operationpotato.com/mirror")
 
-		maven("https://maven.fabricmc.net/") { name = "Fabric" }
-		maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
+		maven("https://maven.fabricmc.net") {
+			content {
+				includeGroup("net.fabricmc")
+			}
+		}
+		maven("https://maven.kikugie.dev/snapshots") {
+			content {
+				includeGroup("dev.kikugie")
+			}
+		}
+
 		mavenCentral()
 		gradlePluginPortal()
 	}
@@ -12,7 +21,7 @@ pluginManagement {
 rootProject.name = "skyblock-item-list"
 
 plugins {
-	id("dev.kikugie.stonecutter") version "0.9.6"
+	id("dev.kikugie.stonecutter") version "0.10-beta.1"
 }
 
 stonecutter {
