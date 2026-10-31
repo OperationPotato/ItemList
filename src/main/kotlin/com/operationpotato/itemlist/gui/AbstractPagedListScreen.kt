@@ -11,6 +11,7 @@ import com.operationpotato.itemlist.gui.recipe.CraftingRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.ForgeRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.KatRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.MobDropWidget
+import com.operationpotato.itemlist.gui.recipe.NpcShopWidget
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.gui.recipe.ShopRecipeWidget
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
@@ -216,10 +217,15 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 				.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
 				.mapNotNull { getWidgetForRecipe(it) }
 
+			val shopWidgets = matchingRecipes.filterIsInstance<ShopRecipe>()
+				.map { it.npc }
+				.distinct()
+				.map { NpcShopWidget(it) }
+
 			val droppingMobs = SkyBlockMobsRepo.getMobsForId(targetId)
 			val mobWidgets = droppingMobs.map { MobDropWidget(it) }
 
-			val allObtainingWidgets = recipeWidgets + mobWidgets
+			val allObtainingWidgets = recipeWidgets + shopWidgets + mobWidgets
 
 			if (allObtainingWidgets.isNotEmpty()) {
 				McClient.setScreen(RecipeScreen(parent, allObtainingWidgets))
