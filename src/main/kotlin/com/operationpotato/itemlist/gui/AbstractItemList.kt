@@ -2,6 +2,7 @@ package com.operationpotato.itemlist.gui
 
 import com.operationpotato.itemlist.Keybinds
 import com.operationpotato.itemlist.api.impl.PluginManager
+import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.utils.ThreadUtils
 import com.operationpotato.itemlist.utils.ThreadUtils.cancelAndSubmit
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -140,7 +141,7 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		if (PluginManager.isInAnyExclusionZone(x, y)) return false
 		if (McClient.self.hasControlDown()) {
 			scrollItemSize(scrollY)
-		} else {
+		} else if (ConfigManager.get().general.scrollToNavigate){
 			scrollPage(scrollY < 0)
 		}
 		return true

@@ -1,5 +1,4 @@
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -83,7 +82,10 @@ loom {
 		runDirectory = project.file("../../run")
 		val modsDir = rootProject.projectDir.resolve("run/mods/${sc.current.project}/")
 		modsDir.mkdirs()
-		jvmArguments.add("-Dfabric.modsFolder=$modsDir")
+		jvmArguments.addAll(
+			"-Dfabric.modsFolder=$modsDir",
+			"-XX:StackShadowPages=32", // Fixes Crashing on windows on 26.3, see https://github.com/PrismLauncher/PrismLauncher/issues/6073
+		)
 	}
 
 	accessWidenerPath = sc.process(
