@@ -50,8 +50,11 @@ class ShopRecipeWidget(recipe: ShopRecipe) : AbstractRecipeWidget(recipe, 176, 8
 
 		val npcDisplay = IngredientDisplay(
 			npcItem,
-			clickOverride = { event ->
-				event.button() == InputConstants.MOUSE_BUTTON_LEFT && AbiphoneCallnames.call(npcItem)
+			clickOverride = if (callTooltip.isNotEmpty()) {
+				{ event ->
+					event.button() == InputConstants.MOUSE_BUTTON_LEFT && AbiphoneCallnames.call(npcItem) }
+			} else {
+				null
 			},
 			extraTooltip = callTooltip,
 		)

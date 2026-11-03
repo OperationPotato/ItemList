@@ -29,8 +29,7 @@ class IngredientDisplay(
 	val showStackSize: Boolean = true,
 	private val clickOverride: ((MouseButtonEvent) -> Boolean)? = null,
 	private val extraTooltip: List<Component> = emptyList(),
-) :
-	AbstractWidget(0, 0, STACK_SIZE, STACK_SIZE, Component.empty()) {
+) : AbstractWidget(0, 0, STACK_SIZE, STACK_SIZE, Component.empty()) {
 
 	fun getTooltipLines(): List<Component> {
 		val tooltipStyle = if (McClient.options.advancedItemTooltips) {
