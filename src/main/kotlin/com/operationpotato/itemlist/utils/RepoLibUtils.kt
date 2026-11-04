@@ -173,16 +173,6 @@ object RepoLibUtils {
 		return copy
 	}
 
-	fun CraftingIngredient.amount(): Int = when (this) {
-		is ItemIngredient -> this.count
-		is PetIngredient -> this.count
-		is EnchantmentIngredient -> this.count
-		is AttributeIngredient -> this.count
-		is PotionIngredient -> this.count
-		is CurrencyIngredient -> this.count
-		else -> 1
-	}
-
 	fun ShopRecipe.toDisplayStack(): ItemStack? {
 		val stack = this.result.toItem()?.takeIf { !it.isEmpty } ?: return null
 		val costs = this.inputs.mapNotNull { ingredient ->
@@ -208,14 +198,11 @@ object RepoLibUtils {
 			costs.forEach { (ingredient, cost) ->
 				add(Text.of("") {
 					italic = false
-					if (ingredient !is CurrencyIngredient) {
-						append("${ingredient.amount().toFormattedString()}x ", TextColor.GREEN)
-					}
-					append(cost.cleanName, TextColor.WHITE)
+						append("${ingredient.count().toFormattedString()}x ", TextColor.GREEN)
+						append(cost.cleanName, TextColor.GOLD)
 				})
 			}
 		}
-
 		copy.set(DataComponents.LORE, ItemLore(newLoreList, newLoreList))
 		return copy
 	}
