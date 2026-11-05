@@ -82,10 +82,7 @@ loom {
 		runDirectory = project.file("../../run")
 		val modsDir = rootProject.projectDir.resolve("run/mods/${sc.current.project}/")
 		modsDir.mkdirs()
-		jvmArguments.addAll(
-			"-Dfabric.modsFolder=$modsDir",
-			"-XX:StackShadowPages=32", // Fixes Crashing on windows on 26.3, see https://github.com/PrismLauncher/PrismLauncher/issues/6073
-		)
+		jvmArguments.add("-Dfabric.modsFolder=$modsDir")
 	}
 
 	accessWidenerPath = sc.process(
