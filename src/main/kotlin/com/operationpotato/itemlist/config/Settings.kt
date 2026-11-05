@@ -73,6 +73,14 @@ class Settings {
 		var listSide: ItemListSide = ItemListSide.RIGHT
 
 		@LatticeOption(
+			title = "Scroll to Navigate",
+			description = "Scroll to navigate between the different pages." +
+				"\nDisabling this will not affect Ctrl+Scroll to resize the Items."
+		)
+		@LatticeWidgetButton
+		var scrollToNavigate: Boolean = true
+
+		@LatticeOption(
 			title = "Left Click Action",
 			description = "What happens when you left click an Item"
 		)

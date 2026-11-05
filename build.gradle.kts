@@ -1,5 +1,4 @@
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
-import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
