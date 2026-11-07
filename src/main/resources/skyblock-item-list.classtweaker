@@ -14,3 +14,6 @@ accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer te
 #? } else {
 #accessible field net/minecraft/client/gui/render/pip/PictureInPictureRenderer textureView Lcom/mojang/blaze3d/textures/GpuTextureView;
 #? }
+
+# Misc.
+accessible field net/minecraft/world/item/component/CustomData tag Lnet/minecraft/nbt/CompoundTag;

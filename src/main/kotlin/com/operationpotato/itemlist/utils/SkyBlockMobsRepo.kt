@@ -27,6 +27,7 @@ import kotlin.jvm.optionals.getOrNull
 object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 	val npcSuffixes = listOf("NPC", "Rift NPC")
 	private const val ID_KEY = "skyblock-item-list:id"
+	private const val NPC_KEY = "skyblock-item-list:is_npc"
 
 	private val repo get() = RepoAPI.mobs()
 
@@ -41,11 +42,13 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 								val id = SkyBlockId.item(drop.id)
 								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
 							}
+
 							is AttributeDrop -> {
 								val attributeId = SkyBlockAttributesRepo.get(drop.id)?.attributeId ?: return@forEach
 								val id = SkyBlockId.attribute(attributeId)
 								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
 							}
+
 							is PetDrop -> {
 								val id = SkyBlockId.pet(drop.id, drop.tier)
 								grouped.getOrPut(id) { mutableSetOf() }.add(mob)
@@ -72,6 +75,11 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 			val customData = realStack[DataComponents.CUSTOM_DATA]?.copyTag() ?: CompoundTag()
 			customData.remove("id") // remove NEU id, breaks favorites
 			customData.putString(ID_KEY, key)
+
+			val type = key.substringAfterLast("_")
+			val isNpc = npcSuffixes.any { type == it }
+			customData.putBoolean(NPC_KEY, isNpc)
+
 			this[DataComponents.CUSTOM_DATA] = customData.toData()
 
 			// Add pos to lore
@@ -109,5 +117,6 @@ object SkyBlockMobsRepo : RepoItemCache<String>("sbil:Mobs") {
 		)
 	}
 
-	fun ItemStack.getMobId(): String? = this.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getString(ID_KEY)?.getOrNull()
+	fun ItemStack.getMobId(): String? = this.get(DataComponents.CUSTOM_DATA)?.tag?.getString(ID_KEY)?.getOrNull()
+	fun ItemStack.isNpc(): Boolean = this.get(DataComponents.CUSTOM_DATA)?.tag?.getBooleanOr(NPC_KEY, false) ?: false
 }
