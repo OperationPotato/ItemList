@@ -193,10 +193,10 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 				if (stack.isNpc()) {
 					// Handle NPC Shop Recipes
 					val npcRecipes = SkyBlockRecipeAPI.getShopRecipesForNpc(mobId)
-					val condensed = NpcShopWidget(mobId)
-					val widgets = listOf(condensed) + npcRecipes.toWidgets()
 
 					if (npcRecipes.isNotEmpty()) {
+						val condensed = NpcShopWidget(mobId)
+						val widgets = listOf(condensed) + npcRecipes.toWidgets()
 						McClient.setScreen(RecipeScreen(parent, widgets))
 						return true
 					}
