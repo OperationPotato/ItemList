@@ -54,7 +54,7 @@ object SkyBlockItemList : ClientModInitializer {
 		}
 		if (McClient.isDev) ClientCommandRegistrationCallback.EVENT.register(DebugCommands::register)
 
-		PictureInPictureRendererRegistry.register { ScaledItemRenderer(/*? if <26.2 {*//*it.bufferSource() *//*? }*/) }
+		PictureInPictureRendererRegistry.register { ScaledItemRenderer() }
 	}
 
 	fun addItemListWidget(mc: Minecraft, screen: Screen, w: Int, h: Int) {

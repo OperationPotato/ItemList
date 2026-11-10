@@ -24,16 +24,12 @@ import tech.thatgravyboat.skyblockapi.helpers.McLevel
 import tech.thatgravyboat.skyblockapi.helpers.McPlayer
 import java.util.*
 
-//? if <26.2
-//import net.minecraft.client.renderer.MultiBufferSource
-
 //~ if >26.2 'blaze3d' -> 'renderpearl.api'
 import com.mojang.renderpearl.api.textures.FilterMode
 
 // Taken with Permission from Meowdding-Lib and modified a bit ~J10a1n15
 // https://github.com/meowdding/meowdding-lib/blob/master/src/main/kotlin/me/owdding/lib/displays/item/ItemStateRenderer.kt
-class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSource)*//*? }*/ :
-	PictureInPictureRenderer<ScaledItemRenderer.State>(/*? if <26.2 {*//*buffer*//*? }*/) {
+class ScaledItemRenderer : PictureInPictureRenderer<ScaledItemRenderer.State>() {
 
 	private var lastState: State? = null
 
@@ -44,7 +40,6 @@ class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSour
 	override fun renderToTexture(
 		state: State,
 		stack: PoseStack,
-		//? if >=26.2
 		submitNodeCollector: SubmitNodeCollector
 	) {
 		this.lastState = state
@@ -57,15 +52,11 @@ class ScaledItemRenderer /*? if <26.2 {*//*(buffer: MultiBufferSource.BufferSour
 			if (item.itemStackRenderState().usesBlockLight()) Lighting.Entry.ITEMS_3D else Lighting.Entry.ITEMS_FLAT
 		)
 
-		//? if <26.2
-		//val featureRenderer = McClient.self.gameRenderer.featureRenderDispatcher
 		item.itemStackRenderState().submit(
 			//~ if <26.2 'submitNodeCollector' -> 'featureRenderer.submitNodeStorage'
 			stack, submitNodeCollector,
 			LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0
 		)
-		//? if <26.2
-		//featureRenderer.renderAllFeatures()
 	}
 
 	override fun getTranslateY(height: Int, ignored: Int): Float {
