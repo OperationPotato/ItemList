@@ -21,7 +21,7 @@ pluginManagement {
 rootProject.name = "skyblock-item-list"
 
 plugins {
-	id("dev.kikugie.stonecutter") version "0.10-beta.1"
+	id("dev.kikugie.stonecutter") version "0.10"
 }
 
 stonecutter {
