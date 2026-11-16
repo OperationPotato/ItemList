@@ -1,3 +1,7 @@
+import com.operationpotato.catalogs.CatalogExtensions.library
+import com.operationpotato.catalogs.CatalogExtensions.version
+import com.operationpotato.catalogs.CatalogExtensions.versionedLibs
+import com.operationpotato.catalogs.DependencyHandlerExtensions.includeImplementation
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -7,10 +11,6 @@ plugins {
 	alias(libs.plugins.kotlin)
 	alias(libs.plugins.publish)
 }
-
-val versionedLibs = the<VersionCatalogsExtension>().find("versionedLibs${sc.current.project.replace(".", "")}").get()
-fun VersionCatalog.library(name: String): Provider<MinimalExternalModuleDependency> = this.findLibrary(name).get()
-fun VersionCatalog.version(name: String): VersionConstraint = this.findVersion(name).get()
 
 version = providers.gradleProperty("mod_version").get() + "+" + sc.current.version
 group = providers.gradleProperty("maven_group").get()
@@ -69,11 +69,6 @@ dependencies {
 	includeImplementation(versionedLibs.findLibrary("lattice").orElse(libs.lattice)!!)
 
 	compileOnly(versionedLibs.library("modmenu"))
-}
-
-fun DependencyHandlerScope.includeImplementation(dependencyNotation: Provider<*>) {
-	this.include(dependencyNotation)
-	this.implementation(dependencyNotation)
 }
 
 loom {
@@ -175,23 +170,6 @@ tasks.register<Jar>("apiSourcesJar") {
 
 tasks.named("assemble") {
 	dependsOn("apiJar", "apiSourcesJar")
-	doLast {
-		val files = listOf("${base.archivesName.get()}-$version.jar", "api/${base.archivesName.get()}-api-$version.jar")
-		for (fileName in files) {
-			val sourceFile = project.projectDir.resolve("build/libs/${fileName}")
-			val targetFile = rootProject.projectDir.resolve("build/libs/${fileName}")
-			targetFile.parentFile.mkdirs()
-			targetFile.writeBytes(sourceFile.readBytes())
-		}
-	}
-}
-
-tasks.named("clean") {
-	doLast {
-		val libsFolder = rootProject.projectDir.resolve("build/libs")
-		if (!libsFolder.exists()) return@doLast
-		delete(libsFolder)
-	}
 }
 
 publishing {
