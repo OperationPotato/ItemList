@@ -38,6 +38,10 @@ object FavoritesManager {
 		}
 	}
 
+	fun resetFavorites() {
+		favorites = Favorites()
+	}
+
 	fun updateFavorites() {
 		SkyBlockItemList.favoriteInstance?.listWidget?.updateChildren()
 		SkyBlockItemList.favoriteInstance?.listWidget?.updatePositionsAsync()
