@@ -49,13 +49,14 @@ object FavoritesManager {
 
 	fun addFavoriteItem(id: SkyBlockId) {
 		if (!favorites.favoriteItems.contains(id)) {
-			favorites = favorites.copy(favoriteItems = favorites.favoriteItems + id)
+			favorites = favorites.copy(favoriteItems = favorites.favoriteItems + id.asDerived(false))
 			save()
 		}
 	}
 
 	fun removeFavoriteItem(id: SkyBlockId) {
-		favorites = favorites.copy(favoriteItems = favorites.favoriteItems.filter { it != id })
+		val itemId = id.asDerived(false)
+		favorites = favorites.copy(favoriteItems = favorites.favoriteItems.filter { it != itemId })
 		save()
 	}
 
