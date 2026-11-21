@@ -1,7 +1,6 @@
 package com.operationpotato.itemlist.gui.favorites
 
 import com.operationpotato.itemlist.Keybinds
-import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
@@ -44,7 +43,6 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 				val stackId = stack.getSkyBlockId()
 				if (stackId != id) {
 					FavoritesManager.removeFavoriteItem(id)
-					SkyBlockItemList.logger.info("[SkyBlock Item List] Removed favorite item with mismatching IDs: $id - $stackId")
 					return@forEach
 				}
 				displays.add(StackDisplay(stack.toLazy(), SkyBlockItemCategory.ALL))
