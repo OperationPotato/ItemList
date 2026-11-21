@@ -1,6 +1,7 @@
 package com.operationpotato.itemlist.gui.favorites
 
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.SkyBlockItemList
 import com.operationpotato.itemlist.config.ConfigManager
 import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.AbstractItemList
@@ -10,6 +11,7 @@ import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import net.minecraft.client.input.KeyEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack.Companion.toLazy
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -39,6 +41,12 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 		FavoritesManager.favorites.favoriteItems.forEach { id ->
 			val stack = id.toItem()
 			if (!stack.isEmpty) {
+				val stackId = stack.getSkyBlockId()
+				if (stackId != id) {
+					FavoritesManager.removeFavoriteItem(id)
+					SkyBlockItemList.logger.info("[SkyBlock Item List] Removed favorite item with mismatching IDs: $id - $stackId")
+					return@forEach
+				}
 				displays.add(StackDisplay(stack.toLazy(), SkyBlockItemCategory.ALL))
 			}
 		}
