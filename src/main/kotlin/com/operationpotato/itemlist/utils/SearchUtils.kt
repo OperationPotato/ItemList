@@ -61,11 +61,12 @@ object SearchUtils {
 		}
 	}
 
-	private fun evaluateSearch(search: Search, stackName: String, combinedLore: String, skyblockId: String?) =
+	private fun evaluateSearch(search: Search, stackName: String, combinedLore: String, skyblockId: String?): Boolean =
 		when (search) {
 			is IdentifierSearch -> if (skyblockId == null) false else search.matches(skyblockId)
-			is TextSearch -> search.matches(stackName) || search.matches(combinedLore)
-			is AndSearch -> search.matches(stackName) || search.matches(combinedLore)
+			is TextSearch -> search.matches(stackName) || search.matches(combinedLore) ||
+				search.matchesAllWords("$stackName $combinedLore")
+			is AndSearch -> search.conditions.all { evaluateSearch(it, stackName, combinedLore, skyblockId) }
 			else -> false
 		}
 

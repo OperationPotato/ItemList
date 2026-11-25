@@ -11,6 +11,7 @@ import com.moulberry.lattice.annotation.widget.LatticeWidgetDropdown
 import com.moulberry.lattice.annotation.widget.LatticeWidgetKeybind
 import com.moulberry.lattice.annotation.widget.LatticeWidgetSlider
 import com.operationpotato.itemlist.Keybinds
+import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.StackDisplay
 import com.operationpotato.itemlist.gui.config.ConfigureFilterScreen
 import com.operationpotato.itemlist.gui.config.CustomConstantsScreen
@@ -71,6 +72,14 @@ class Settings {
 		)
 		@LatticeWidgetDropdown
 		var listSide: ItemListSide = ItemListSide.RIGHT
+
+		@LatticeOption(
+			title = "Scroll to Navigate",
+			description = "Scroll to navigate between the different pages." +
+				"\nDisabling this will not affect Ctrl+Scroll to resize the Items."
+		)
+		@LatticeWidgetButton
+		var scrollToNavigate: Boolean = true
 
 		@LatticeOption(
 			title = "Left Click Action",
@@ -189,6 +198,15 @@ class Settings {
 		@LatticeIntRange(min = 8, max = 48, clampMin = 8, clampMax = 48)
 		@LatticeWidgetSlider
 		var favoritesItemSize: Int = StackDisplay.STACK_SIZE
+
+		@Suppress("unused", "PropertyName")
+		@LatticeOption(
+			title = "Clear Favorites",
+			description = "Clears the list of *ALL* Favorites.\nOnly use this if you are certain!!"
+		)
+		@LatticeWidgetCustom(function = "clearAllFavorites")
+		@Transient
+		var _clearFavoritesButton: Int = 0
 	}
 
 	class CalculatorSettings {
@@ -273,6 +291,15 @@ class Settings {
 		fun openCustomConstantsScreen(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
 			return WidgetFunction.runnableButton {
 				McClient.setScreen(CustomConstantsScreen(McScreen.self))
+			}
+		}
+
+		@Suppress("unused") // used in FavoritesListSettings annotation
+		@JvmStatic
+		fun clearAllFavorites(supplier: Supplier<Int>, consumer: Consumer<Int>): WidgetFunction {
+			return WidgetFunction.runnableButton {
+				FavoritesManager.resetFavorites()
+				McScreen.self?.onClose()
 			}
 		}
 	}

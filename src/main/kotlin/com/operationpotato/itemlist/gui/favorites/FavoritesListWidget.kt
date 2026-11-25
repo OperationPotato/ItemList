@@ -10,6 +10,7 @@ import com.operationpotato.itemlist.utils.RepoLibUtils.toItem
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import net.minecraft.client.input.KeyEvent
+import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId.Companion.getSkyBlockId
 import tech.thatgravyboat.skyblockapi.api.repo.LazyItemStack.Companion.toLazy
 import tech.thatgravyboat.skyblockapi.helpers.McClient
 import tech.thatgravyboat.skyblockapi.helpers.McFont
@@ -39,6 +40,11 @@ class FavoritesListWidget(width: Int, height: Int) : AbstractItemList(width, hei
 		FavoritesManager.favorites.favoriteItems.forEach { id ->
 			val stack = id.toItem()
 			if (!stack.isEmpty) {
+				val stackId = stack.getSkyBlockId()
+				if (stackId != id) {
+					FavoritesManager.removeFavoriteItem(id)
+					return@forEach
+				}
 				displays.add(StackDisplay(stack.toLazy(), SkyBlockItemCategory.ALL))
 			}
 		}

@@ -49,12 +49,23 @@ object SkyBlockRecipeAPI {
 		grouped
 	}
 
+	private val shopRecipesByNpc: Map<String, Set<ShopRecipe>> by registryBoundLazy {
+		RepoAPI.recipes().getRecipes(Recipe.Type.SHOP)
+			.filterIsInstance<ShopRecipe>()
+			.groupBy { it.npc }
+			.mapValues { it.value.toSet() }
+	}
+
 	fun getRecipesForId(id: SkyBlockId): Set<Recipe<*>> {
 		return recipesByOutput[id] ?: emptySet()
 	}
 
 	fun getUsagesForId(id: SkyBlockId): Set<Recipe<*>> {
 		return recipesByInput[id] ?: emptySet()
+	}
+
+	fun getShopRecipesForNpc(npc: String): Set<ShopRecipe> {
+		return shopRecipesByNpc[npc] ?: emptySet()
 	}
 
 	private fun getRecipeOutputId(recipe: Recipe<*>): SkyBlockId? {

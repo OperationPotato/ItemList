@@ -51,7 +51,7 @@
 		"minecraft": "${minecraft}",
 		"java": ">=25",
 		"fabric-api": ">=${fabric_api}",
-		"fabric-language-kotlin": "*",
+		"fabric-language-kotlin": ">=${flk}",
 		"skyblock-api": ">=${sbapi}"
 	}
 }

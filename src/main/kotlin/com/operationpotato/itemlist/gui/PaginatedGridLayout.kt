@@ -161,11 +161,9 @@ class PaginatedGridLayout(private var x: Int, private var y: Int) : Layout {
 		return getPageLayout(activePage)?.height ?: -1
 	}
 
-	//? if >=26.2 {
 	override fun removeChildren() {
 		gridLayouts.forEach { it.removeChildren() }
 	}
-	//? }
 
 	class MarkedGridLayout(x: Int, y: Int) : GridLayout(x, y) {
 		val children: List<AbstractWidget> by lazy { getWidgets() }

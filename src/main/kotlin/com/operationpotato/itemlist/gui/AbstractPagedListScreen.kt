@@ -11,10 +11,12 @@ import com.operationpotato.itemlist.gui.recipe.CraftingRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.ForgeRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.KatRecipeWidget
 import com.operationpotato.itemlist.gui.recipe.MobDropWidget
+import com.operationpotato.itemlist.gui.recipe.NpcShopWidget
 import com.operationpotato.itemlist.gui.recipe.RecipeScreen
 import com.operationpotato.itemlist.gui.recipe.ShopRecipeWidget
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo
 import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.getMobId
+import com.operationpotato.itemlist.utils.SkyBlockMobsRepo.isNpc
 import com.operationpotato.itemlist.utils.SkyBlockRecipeAPI
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractContainerWidget
@@ -187,17 +189,33 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 		fun handleMob(stack: ItemStack, parent: Screen? = null): Boolean {
 			val mobId = stack.getMobId()
 			if (mobId != null) {
-				val mob = SkyBlockMobsRepo.get(mobId)
-				if (mob != null && mob.lootTables.isNotEmpty()) {
-					handleMob(mob, parent)
+				val type: String
+				if (stack.isNpc()) {
+					// Handle NPC Shop Recipes
+					val npcRecipes = SkyBlockRecipeAPI.getShopRecipesForNpc(mobId)
+
+					if (npcRecipes.isNotEmpty()) {
+						val condensed = NpcShopWidget(mobId)
+						val widgets = listOf(condensed) + npcRecipes.toWidgets()
+						McClient.setScreen(RecipeScreen(parent, widgets))
+						return true
+					}
+					type = "shop recipes"
 				} else {
-					Text.of("No loot tables found for ") {
-						color = TextColor.RED
-						append(stack.cleanName, TextColor.LIGHT_PURPLE)
-						append("!")
-					}.send()
+					// Handle Mob Loot Tables
+					val mob = SkyBlockMobsRepo.get(mobId)
+					if (mob != null && mob.lootTables.isNotEmpty()) {
+						handleMob(mob, parent)
+						return true
+					}
+					type = "loot tables"
 				}
-				return true
+
+				Text.of("No $type found for ") {
+					color = TextColor.RED
+					append(stack.cleanName, TextColor.LIGHT_PURPLE)
+					append("!")
+				}.send()
 			}
 			return false
 		}
@@ -216,10 +234,15 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 				.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
 				.mapNotNull { getWidgetForRecipe(it) }
 
+			val shopWidgets = matchingRecipes.filterIsInstance<ShopRecipe>()
+				.map { it.npc }
+				.distinct()
+				.map { NpcShopWidget(it) }
+
 			val droppingMobs = SkyBlockMobsRepo.getMobsForId(targetId)
 			val mobWidgets = droppingMobs.map { MobDropWidget(it) }
 
-			val allObtainingWidgets = recipeWidgets + mobWidgets
+			val allObtainingWidgets = recipeWidgets + shopWidgets + mobWidgets
 
 			if (allObtainingWidgets.isNotEmpty()) {
 				McClient.setScreen(RecipeScreen(parent, allObtainingWidgets))
@@ -260,12 +283,13 @@ abstract class AbstractPagedListScreen<T : AbstractWidget>(
 		}
 
 		fun openRecipe(recipes: Set<Recipe<*>>, parent: Screen? = null) {
-			val widgets = recipes
-				.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
-				.mapNotNull { getWidgetForRecipe(it) }
-				.takeUnless { it.isEmpty() } ?: return
-
+			val widgets = recipes.toWidgets()
 			McClient.setScreen(RecipeScreen(parent, widgets))
 		}
+
+		fun Set<Recipe<*>>.toWidgets(): List<AbstractRecipeWidget> = this
+			.sortedByDescending { FavoritesManager.isFavoriteRecipe(it) }
+			.mapNotNull { getWidgetForRecipe(it) }
+			.takeUnless { it.isEmpty() } ?: listOf()
 	}
 }

@@ -27,9 +27,11 @@ import tech.thatgravyboat.repolib.api.recipes.ingredient.ItemIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PetIngredient
 import tech.thatgravyboat.repolib.api.recipes.ingredient.PotionIngredient
 import tech.thatgravyboat.skyblockapi.api.remote.api.SkyBlockId
+import tech.thatgravyboat.skyblockapi.utils.extentions.cleanName
 import tech.thatgravyboat.skyblockapi.utils.extentions.getLore
 import tech.thatgravyboat.skyblockapi.utils.extentions.toFormattedString
 import tech.thatgravyboat.skyblockapi.utils.text.Text
+import tech.thatgravyboat.skyblockapi.utils.text.TextBuilder.append
 import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.color
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.italic
@@ -167,6 +169,40 @@ object RepoLibUtils {
 			}
 		}
 
+		copy.set(DataComponents.LORE, ItemLore(newLoreList, newLoreList))
+		return copy
+	}
+
+	fun ShopRecipe.toDisplayStack(): ItemStack? {
+		val stack = this.result.toItem()?.takeIf { !it.isEmpty } ?: return null
+		val costs = this.inputs.mapNotNull { ingredient ->
+			ingredient.toItem(withStackSize = false)?.takeIf { !it.isEmpty }?.let { ingredient to it }
+		}
+		if (costs.isEmpty()) return stack
+
+		val copy = stack.copy()
+
+		val newLoreList = buildList {
+			val originalLore = copy.getLore()
+			if (originalLore.isNotEmpty()) {
+				addAll(originalLore)
+				add(Text.of("           ") {
+					strikethrough = true
+				})
+			}
+
+			add(Text.of("Cost:") {
+				color = TextColor.GRAY
+				italic = false
+			})
+			costs.forEach { (ingredient, cost) ->
+				add(Text.of("") {
+					italic = false
+						append("${ingredient.count().toFormattedString()}x ", TextColor.GREEN)
+						append(cost.cleanName, TextColor.GOLD)
+				})
+			}
+		}
 		copy.set(DataComponents.LORE, ItemLore(newLoreList, newLoreList))
 		return copy
 	}
