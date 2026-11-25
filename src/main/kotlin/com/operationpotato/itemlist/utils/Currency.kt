@@ -204,6 +204,7 @@ sealed class Currency(val itemName: MutableComponent) {
 			"gemstone", "gemstone_powder", "powder_gemstone" -> Gemstone
 			"glacite", "glacite_powder", "powder_glacite" -> Glacite
 			"forest", "forest_whispers", "whispers_forest" -> Forest
+			"enigma_soul" -> EnigmaSoul
 			else -> Unknown(id)
 		}
 	}
