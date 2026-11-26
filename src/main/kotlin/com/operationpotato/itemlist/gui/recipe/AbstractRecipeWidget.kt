@@ -40,6 +40,7 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 
 	private val requirementArrowOverlay = SkyBlockItemList.id("recipe/requirement_arrow")
 	protected val container = FrameLayout(0, 0, width, height)
+	private var dragTarget: AbstractWidget? = null
 
 	// TODO: use RepoLib stuff when that updates
 	protected val requirement: List<Requirement>? = if (RepoAPI.isInitialized()) {
@@ -125,16 +126,38 @@ abstract class AbstractRecipeWidget(val recipe: Recipe<*>, width: Int, height: I
 
 	override fun onClick(event: MouseButtonEvent, doubleClick: Boolean) {
 		var handled = false
+		dragTarget = null
 		container.visitWidgets { widget ->
 			if (widget.isHovered) {
 				widget.onClick(event, doubleClick)
 				handled = true
+				dragTarget = widget
 			}
 		}
 
 		if (!handled) {
 			super.onClick(event, doubleClick)
 		}
+	}
+
+	override fun mouseDragged(event: MouseButtonEvent, dragX: Double, dragY: Double): Boolean {
+		val target = dragTarget ?: return super.mouseDragged(event, dragX, dragY)
+		return target.mouseDragged(event, dragX, dragY)
+	}
+
+	override fun mouseReleased(event: MouseButtonEvent): Boolean {
+		val target = dragTarget
+		dragTarget = null
+		if (target != null && target.mouseReleased(event)) return true
+		return super.mouseReleased(event)
+	}
+
+	override fun mouseScrolled(x: Double, y: Double, scrollX: Double, scrollY: Double): Boolean {
+		var handled = false
+		container.visitWidgets { widget ->
+			if (widget.isHovered && widget.mouseScrolled(x, y, scrollX, scrollY)) handled = true
+		}
+		return handled
 	}
 
 	override fun keyPressed(event: KeyEvent): Boolean {

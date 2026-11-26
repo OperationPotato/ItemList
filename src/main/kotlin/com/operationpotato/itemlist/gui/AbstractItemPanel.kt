@@ -42,7 +42,11 @@ abstract class AbstractItemPanel(
 
 	final override fun mouseScrolled(x: Double, y: Double, scrollX: Double, scrollY: Double): Boolean {
 		if (!visible) return false
-		return getListWidget().mouseScrolled(x, y, scrollX, scrollY)
+		val listWidget = getListWidget()
+		for (child in children()) {
+			if (child !== listWidget && child.mouseScrolled(x, y, scrollX, scrollY)) return true
+		}
+		return listWidget.mouseScrolled(x, y, scrollX, scrollY)
 	}
 
 	override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
