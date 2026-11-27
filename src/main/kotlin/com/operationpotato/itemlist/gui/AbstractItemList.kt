@@ -89,7 +89,17 @@ abstract class AbstractItemList(width: Int, height: Int) :
 		currentPage = if (maxPages == 0) 0 else currentPage.coerceIn(1, maxPages)
 	}
 
-	fun scaleChildren() = getAllItems().forEach { it.scale(itemSize) }
+	private var scaledList: List<StackDisplay>? = null
+	private var scaledSize: Int = -1
+
+	fun scaleChildren() {
+		val all = getAllItems()
+		// Runs on the render thread whenever a screen opens, so skip the pass if nothing changed
+		if (all === scaledList && scaledSize == itemSize) return
+		all.forEach { it.scale(itemSize) }
+		scaledList = all
+		scaledSize = itemSize
+	}
 
 	override fun contentHeight(): Int {
 		return height
