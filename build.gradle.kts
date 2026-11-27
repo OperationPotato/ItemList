@@ -13,7 +13,6 @@ plugins {
 }
 
 version = providers.gradleProperty("mod_version").get() + "+" + sc.current.version
-group = providers.gradleProperty("maven_group").get()
 base.archivesName = rootProject.name
 
 repositories {
@@ -186,13 +185,14 @@ publishing {
 	}
 	publications {
 		register<MavenPublication>("api") {
+			artifactId = "${rootProject.name}-api"
+			groupId = providers.gradleProperty("maven_group").get()
 			pom {
 				name.set("ItemList-API")
 				url.set("https://github.com/OperationPotato/ItemList")
 				if (!isFullRelease) {
 					version += "-SNAPSHOT"
 				}
-				artifactId = "${rootProject.name}-api"
 			}
 			artifact(tasks.named("apiJar"))
 			artifact(tasks.named("apiSourcesJar"))
