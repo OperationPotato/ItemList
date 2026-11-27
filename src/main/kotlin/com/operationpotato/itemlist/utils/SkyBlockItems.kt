@@ -9,18 +9,17 @@ import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockItemsRepo
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockPetsRepo
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockPotionsRepo
 import tech.thatgravyboat.skyblockapi.api.repo.apis.SkyBlockRunesRepo
-import tech.thatgravyboat.skyblockapi.utils.lazy.registryBoundLazy
 
 object SkyBlockItems {
-	val items by registryBoundLazy { getAllItems() }
+	val items by reloadableLazy<List<Item>>(cacheable = { it.isNotEmpty() }) { getAllItems() }
 
-	private val attributeNames by registryBoundLazy { getAllAttributeNames() }
-	private val enchantNames by registryBoundLazy { getAllEnchantmentNames() }
-	private val itemNames by registryBoundLazy { getAllItemNames() }
-	private val entityNames by registryBoundLazy { getAllEntityNames() }
-	private val petNames by registryBoundLazy { getAllPetNames() }
-	private val potionNames by registryBoundLazy { getAllPotionNames() }
-	private val runeNames by registryBoundLazy { getAllRuneNames() }
+	private val attributeNames by reloadableLazy { getAllAttributeNames() }
+	private val enchantNames by reloadableLazy { getAllEnchantmentNames() }
+	private val itemNames by reloadableLazy { getAllItemNames() }
+	private val entityNames by reloadableLazy { getAllEntityNames() }
+	private val petNames by reloadableLazy { getAllPetNames() }
+	private val potionNames by reloadableLazy { getAllPotionNames() }
+	private val runeNames by reloadableLazy { getAllRuneNames() }
 
 	private val numeralPattern = Regex("[_;]([0-9]+)$")
 

@@ -5,8 +5,8 @@ import com.operationpotato.itemlist.utils.SearchUtils
 import com.operationpotato.itemlist.utils.search.TextSearch
 import com.operationpotato.itemlist.utils.SkyBlockItemCategory
 import com.operationpotato.itemlist.utils.SkyBlockItems
+import com.operationpotato.itemlist.utils.reloadableLazy
 import tech.thatgravyboat.repolib.api.RepoAPI
-import tech.thatgravyboat.skyblockapi.utils.lazy.registryBoundLazy
 
 class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height) {
 	var visibleChildren: List<StackDisplay> = listOf()
@@ -56,8 +56,8 @@ class EntireListWidget(width: Int, height: Int) : AbstractItemList(width, height
 	override fun getAllItems(): List<StackDisplay> = children
 
 	companion object {
-		private val groupedChildren: List<StackDisplay> by registryBoundLazy { getGroupedItems() }
-		private val normalChildren: List<StackDisplay> by registryBoundLazy { getItems() }
+		private val groupedChildren: List<StackDisplay> by reloadableLazy<List<StackDisplay>>(cacheable = { it.isNotEmpty() }) { getGroupedItems() }
+		private val normalChildren: List<StackDisplay> by reloadableLazy<List<StackDisplay>>(cacheable = { it.isNotEmpty() }) { getItems() }
 
 		val children: List<StackDisplay>
 			get() = if (ConfigManager.get().mainList.groupFamilies) groupedChildren else normalChildren
