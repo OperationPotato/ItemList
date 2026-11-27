@@ -46,6 +46,14 @@ open class StackDisplay(
 
 	open val hoveredStack: ItemStack get() = stack
 
+	// Off-Thread
+	open fun warmUp() {
+		createStackIfEmpty()
+		stackName
+		loreLines
+		itemId
+	}
+
 	protected fun createStackIfEmpty() {
 		if (stack.isEmpty) stack = lazyStack.create()
 	}
