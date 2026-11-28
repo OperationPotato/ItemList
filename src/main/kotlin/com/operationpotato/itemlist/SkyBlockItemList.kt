@@ -7,6 +7,7 @@ import com.operationpotato.itemlist.favorites.FavoritesManager
 import com.operationpotato.itemlist.gui.ExclusionZoneDebugWidget
 import com.operationpotato.itemlist.gui.ItemPanel
 import com.operationpotato.itemlist.gui.favorites.FavoritesPanel
+import com.operationpotato.itemlist.utils.ItemListPreloader
 import com.operationpotato.itemlist.utils.ItemListSide
 import com.operationpotato.itemlist.utils.ScaledItemRenderer
 import net.fabricmc.api.ClientModInitializer
@@ -42,6 +43,7 @@ object SkyBlockItemList : ClientModInitializer {
 		ConfigManager.load()
 		FavoritesManager.load()
 		Keybinds.init()
+		ItemListPreloader.init()
 		ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, latePhase)
 		ScreenEvents.AFTER_INIT.register(latePhase, ::addItemListWidget)
 		ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> resetWidget() }
