@@ -25,7 +25,7 @@ import tech.thatgravyboat.skyblockapi.platform.pushPop
 import tech.thatgravyboat.skyblockapi.platform.translate
 
 class IngredientDisplay(
-	val stack: ItemStack,
+	var stack: ItemStack,
 	val showStackSize: Boolean = true,
 	private val clickOverride: ((MouseButtonEvent) -> Boolean)? = null,
 	private val extraTooltip: List<Component> = emptyList(),
